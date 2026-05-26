@@ -1,0 +1,532 @@
+2026-05-15T04:07:46.767Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-15T04:07:46.777Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      [length]: 31
+    ]
+  }
+} %o
+2026-05-15T04:07:46.801Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-15T04:07:46.875Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-15T04:07:46.877Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-15T04:07:46.877Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-15T04:07:46.878Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-15T04:07:46.878Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-15T04:07:46.878Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-15T07:42:33.389Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-15T07:42:33.389Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-15T14:54:09.501Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-15T14:54:09.511Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      [length]: 31
+    ]
+  }
+} %o
+2026-05-15T14:54:09.541Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-15T14:54:09.776Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-15T14:54:09.778Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-15T14:54:09.778Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-15T14:54:09.778Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-15T14:54:09.778Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-15T14:54:09.779Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-16T01:36:07.505Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-16T01:36:07.505Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-19T04:17:02.489Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-19T04:17:02.568Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-19T04:17:02.615Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-19T04:17:02.675Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.0.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-19T04:17:02.680Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-19T04:17:02.680Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-19T04:17:02.680Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-19T04:17:02.681Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T04:17:02.681Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T04:45:31.960Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T04:45:31.959Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-19T14:59:49.300Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-19T14:59:49.319Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-19T14:59:49.358Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-19T14:59:49.447Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-19T14:59:49.449Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-19T14:59:49.450Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-19T14:59:49.450Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-19T14:59:49.450Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T14:59:49.450Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T14:59:49.867Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T14:59:49.867Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-19T14:59:49.868Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-19T14:59:49.885Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-19T14:59:49.928Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-19T14:59:49.982Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-19T14:59:49.982Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-19T14:59:49.982Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-19T14:59:49.982Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-19T14:59:49.983Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T14:59:49.983Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:03:48.772Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:03:48.772Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-19T16:03:55.182Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-19T16:03:55.227Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-19T16:03:55.251Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-19T16:03:55.306Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-19T16:03:55.307Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-19T16:03:55.307Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-19T16:03:55.307Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-19T16:03:55.307Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:03:55.307Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:37:16.224Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:37:16.224Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-19T16:37:22.031Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-19T16:37:22.253Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-19T16:37:22.286Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-19T16:37:22.340Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-19T16:37:22.342Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-19T16:37:22.342Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-19T16:37:22.343Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-19T16:37:22.343Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T16:37:22.343Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T17:27:26.922Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-19T17:27:26.922Z [Windows-MCP] [info] Shutting down server... { metadata: undefined }
+2026-05-20T02:38:03.279Z [Windows-MCP] [info] Initializing server... { metadata: undefined }
+2026-05-20T02:38:03.289Z [Windows-MCP] [info] Using MCP server command: uv with args and path: {
+  metadata: {
+    args: [
+      '--directory',
+      'C:\\Users\\nuoya\\AppData\\Roaming\\Claude\\Claude Extensions\\ant.dir.cursortouch.windows-mcp',
+      'run',
+      'windows-mcp',
+      [length]: 4
+    ],
+    paths: [
+      'C:\\Program Files\\nodejs',
+      'C:\\Python314',
+      'C:\\Python314\\Scripts\\',
+      'C:\\Python314\\',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\java8path',
+      'C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath',
+      'C:\\Windows\\system32',
+      'C:\\Windows',
+      'C:\\Windows\\System32\\Wbem',
+      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\',
+      'C:\\Windows\\System32\\OpenSSH\\',
+      'C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common',
+      'C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR',
+      'C:\\Program Files\\dotnet\\',
+      'C:\\Program Files\\nodejs\\',
+      'C:\\ProgramData\\chocolatey\\bin',
+      'C:\\Program Files\\nodejs\\node_global\\node_modules',
+      'C:\\Program Files\\Docker\\Docker\\resources\\bin',
+      'C:\\msys64\\mingw64\\bin',
+      'D:\\anzhaung\\Git\\cmd',
+      'D:\\Python\\Scripts\\',
+      'D:\\Python\\',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WindowsApps',
+      'D:\\Pycharm\\PyCharm 2024.3.1.1\\bin',
+      'D:\\anzhaung\\CodeBuddy CN\\bin',
+      'C:\\Program Files\\nodejs\\node_global',
+      'D:\\anzhaung\\CodeBuddy\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Programs\\Antigravity\\bin',
+      'C:\\Users\\nuoya\\.local\\bin',
+      'C:\\Users\\nuoya\\AppData\\Local\\Microsoft\\WinGet\\Packages\\JohnMacFarlane.Pandoc_Microsoft.Winget.Source_8wekyb3d8bbwe\\pandoc-3.9.0.2',
+      'C:\\Users\\nuoya\\bin\\tectonic',
+      'C:\\Users\\nuoya\\.bun\\bin',
+      [length]: 32
+    ]
+  }
+} %o
+2026-05-20T02:38:03.318Z [Windows-MCP] [info] Server started and connected successfully { metadata: undefined }
+'uv'      ڲ    ⲿ   Ҳ   ǿ    еĳ   
+         ļ   
+2026-05-20T02:38:03.380Z [Windows-MCP] [error] spawn uv ENOENT {
+  metadata: {
+    context: 'connection',
+    stack: 'Error: spawn uv ENOENT\n' +
+      '    at A (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14719)\n' +
+      '    at i (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:15046)\n' +
+      '    at n.emit (C:\\Program Files\\WindowsApps\\Claude_1.7196.3.0_x64__pzs8sxrjxfjjc\\app\\resources\\app.asar\\.vite\\build\\index.js:200:14937)\n' +
+      '    at ChildProcess._handle.onexit (node:internal/child_process:295:12)'
+  }
+}
+2026-05-20T02:38:03.380Z [Windows-MCP] [info] Server transport closed { metadata: undefined }
+2026-05-20T02:38:03.380Z [Windows-MCP] [info] Server transport closed unexpectedly, this is likely due to the process exiting early. If you are developing this MCP server you can add output to stderr (i.e. `console.error('...')` in JavaScript, `print('...', file=sys.stderr)` in python) and it will appear in this log. { metadata: undefined }
+2026-05-20T02:38:03.380Z [Windows-MCP] [error] Server disconnected. For troubleshooting guidance, please visit our [debugging documentation](https://modelcontextprotocol.io/docs/tools/debugging) { metadata: { context: 'connection', stack: undefined } }
+2026-05-20T02:38:03.380Z [Windows-MCP] [info] Client transport closed { metadata: undefined }
+2026-05-20T02:38:03.380Z [Windows-MCP] [info] Client transport closed { metadata: undefined }

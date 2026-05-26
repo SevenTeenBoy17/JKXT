@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1440" />
+<title>排监考系统 · 仪表盘</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600;700&family=Archivo+Black&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Geist', 'Source Han Sans CN', 'system-ui', 'sans-serif'],
+          mono: ['Geist Mono', 'JetBrains Mono', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --bg-base: #F5F7FA;
+    --bg-elevated: #FFFFFF;
+    --border-soft: #E4E7EC;
+    --border-strong: #CBD5E1;
+    --text-strong: #0F172A;
+    --text-medium: #475569;
+    --text-soft: #94A3B8;
+
+    --brand: #4F46E5;
+    --brand-hover: #4338CA;
+    --brand-soft: #EEF2FF;
+
+    --success: #10B981;
+    --success-soft: #DCFCE7;
+    --warning: #F59E0B;
+    --warning-soft: #FEF3C7;
+    --danger: #EF4444;
+    --danger-soft: #FEE2E2;
+    --info: #0EA5E9;
+    --info-soft: #E0F2FE;
+
+    --kpi-1-bg: #EEF2FF;  --kpi-1-fg: #4F46E5;
+    --kpi-2-bg: #ECFDF5;  --kpi-2-fg: #059669;
+    --kpi-3-bg: #FFF7ED;  --kpi-3-fg: #D97706;
+    --kpi-4-bg: #FAF5FF;  --kpi-4-fg: #9333EA;
+
+    --pill-1: #6366F1;
+    --pill-2: #10B981;
+    --pill-3: #F59E0B;
+    --pill-4: #EF4444;
+    --pill-5: #06B6D4;
+    --pill-6: #EC4899;
+
+    --shadow-card: 0 1px 0 rgba(255,255,255,.85) inset, 0 1px 3px rgba(15, 23, 42, .04), 0 4px 12px -4px rgba(15, 23, 42, .06);
+    --shadow-hover: 0 1px 0 rgba(255,255,255,.85) inset, 0 4px 8px rgba(15, 23, 42, .06), 0 16px 32px -8px rgba(15, 23, 42, .12);
+    --elevation-1: 0 1px 0 rgba(255,255,255,.85) inset, 0 1px 3px rgba(15,23,42,.04), 0 1px 2px rgba(15,23,42,.02);
+    --elevation-2: 0 1px 0 rgba(255,255,255,.85) inset, 0 2px 6px rgba(15,23,42,.06), 0 8px 18px -4px rgba(15,23,42,.08);
+    --elevation-3: 0 1px 0 rgba(255,255,255,.85) inset, 0 4px 12px rgba(15,23,42,.10), 0 18px 36px -8px rgba(15,23,42,.14);
+
+    --ease: cubic-bezier(.4, 0, .2, 1);
+  }
+  html, body {
+    background: var(--bg-base);
+    color: var(--text-strong);
+    font-family: 'Geist', 'Source Han Sans CN', system-ui, sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-mono, .num {
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-hover { box-shadow: var(--shadow-hover); }
+  .elev-1 { box-shadow: var(--elevation-1); }
+  .elev-2 { box-shadow: var(--elevation-2); }
+  .elev-3 { box-shadow: var(--elevation-3); }
+
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+
+  /* tactile transitions */
+  .hover-lift {
+    transition: transform 160ms var(--ease), box-shadow 160ms var(--ease);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* kbd */
+  .kbd {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid #E2E8F0;
+    border-bottom-width: 1.5px;
+    border-radius: 4px;
+    padding: 1px 5px;
+    line-height: 1;
+  }
+
+  /* timeline pill subtle inset highlight */
+  .timeline-pill {
+    box-shadow: var(--elevation-1), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+
+  /* sparkline accent */
+  .spark-grid line { stroke: rgba(15,23,42,.04); }
+
+  /* loading skeleton (unused but kept as token) */
+  @keyframes sweep { 0%{background-position: -200% 0} 100%{background-position: 200% 0} }
+</style>
+</head>
+<body class="min-w-[1440px]">
+  <div id="root"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="src/icons.jsx"></script>
+  <script type="text/babel" src="src/overlay.jsx"></script>
+  <script type="text/babel" src="src/common.jsx"></script>
+  <script type="text/babel" src="src/super-ui.jsx"></script>
+  <script type="text/babel" src="src/charts.jsx"></script>
+  <script type="text/babel" src="src/tweaks-panel.jsx"></script>
+  <script type="text/babel" src="src/onboarding.jsx"></script>
+  <script type="text/babel" src="src/topbar.jsx"></script>
+  <script type="text/babel" src="src/sidebar.jsx"></script>
+  <script type="text/babel" src="src/kpis.jsx"></script>
+  <script type="text/babel" src="src/timeline.jsx"></script>
+  <script type="text/babel" src="src/tasks.jsx"></script>
+  <script type="text/babel" src="src/quickactions.jsx"></script>
+  <script type="text/babel" src="src/pages/login.jsx"></script>
+  <script type="text/babel" src="src/pages/dashboard.jsx"></script>
+  <script type="text/babel" src="src/pages/quick.jsx"></script>
+  <script type="text/babel" src="src/pages/ai-policy.jsx"></script>
+  <script type="text/babel" src="src/pages/edit.jsx"></script>
+  <script type="text/babel" src="src/pages/tasks-page.jsx"></script>
+  <script type="text/babel" src="src/pages/stats-supervise.jsx"></script>
+  <script type="text/babel" src="src/pages/people.jsx"></script>
+  <script type="text/babel" src="src/pages/classrooms.jsx"></script>
+  <script type="text/babel" src="src/pages/classes-subjects.jsx"></script>
+  <script type="text/babel" src="src/pages/history.jsx"></script>
+  <script type="text/babel" src="src/pages/settings.jsx"></script>
+  <script type="text/babel" src="src/pages/task-detail.jsx"></script>
+  <script type="text/babel" src="src/pages/super.jsx"></script>
+  <script type="text/babel" src="src/app.jsx"></script>
+</body>
+</html>
