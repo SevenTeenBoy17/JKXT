@@ -106,9 +106,11 @@ class RealDataScheduleFlowIntegrationTest {
     Cookie session = login();
     UUID taskId = createTask(session, "Empty task should not schedule");
 
-    // Decision R2: never silently fabricate a schedule — surface the missing input.
+    // Decision R2: never silently fabricate a schedule — surface the missing input with a stable
+    // machine code the frontend can branch on to route the user back to data import.
     mockMvc.perform(post("/api/v1/exam-tasks/{taskId}/schedule-jobs", taskId).cookie(session))
-        .andExpect(status().isBadRequest());
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("SCHEDULE_INPUT_INCOMPLETE"));
 
     // The task must NOT have advanced past draft on a rejected schedule attempt.
     mockMvc.perform(get("/api/v1/exam-tasks/{taskId}", taskId).cookie(session))

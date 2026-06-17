@@ -3,6 +3,7 @@ package com.jkxt.scheduling.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jkxt.common.tenant.TenantContext;
+import com.jkxt.common.web.ApiException;
 import com.jkxt.masterdata.domain.Classroom;
 import com.jkxt.masterdata.domain.Teacher;
 import com.jkxt.masterdata.repo.ClassroomRepository;
@@ -340,8 +341,9 @@ public class ScheduleJobService {
     return new PreparedRun(run.getId(), task.getId(), fixture);
   }
 
-  private static ResponseStatusException incompleteInput(String message) {
-    return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+  private static ApiException incompleteInput(String message) {
+    // Stable machine code (decision R2) so the frontend can route the user back to data import.
+    return new ApiException(HttpStatus.BAD_REQUEST, "SCHEDULE_INPUT_INCOMPLETE", message);
   }
 
   private static int intSetting(Exam exam, String key, int fallback) {

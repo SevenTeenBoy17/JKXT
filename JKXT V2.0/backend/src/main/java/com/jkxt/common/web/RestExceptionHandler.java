@@ -29,6 +29,17 @@ public class RestExceptionHandler {
         ));
   }
 
+  @ExceptionHandler(ApiException.class)
+  ResponseEntity<ApiErrorResponse> handleApi(ApiException exception) {
+    return ResponseEntity
+        .status(exception.getStatus())
+        .body(ApiErrorResponse.of(
+            exception.getCode(),
+            exception.getMessage(),
+            exception.getStatus().value()
+        ));
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   ResponseEntity<ApiErrorResponse> handleValidation(MethodArgumentNotValidException exception) {
     List<ApiErrorResponse.FieldError> errors = exception.getBindingResult().getFieldErrors().stream()
