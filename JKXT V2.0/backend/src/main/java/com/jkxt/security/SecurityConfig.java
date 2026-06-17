@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -23,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
   @Bean
@@ -64,6 +66,10 @@ public class SecurityConfig {
                 "/swagger-ui/**",
                 "/swagger-ui.html"
             ).permitAll()
+            // Platform-operator surface (cross-tenant tenant/account/security/backup/announcement
+            // management) must require the SUPER_ADMIN role — a tenant ADMIN must NOT reach it.
+            // This coarse matcher backstops the method-level @PreAuthorize on AdminPlatformController.
+            .requestMatchers("/api/v1/admin/**").hasRole("SUPER_ADMIN")
             .requestMatchers("/api/v1/**").authenticated()
             .anyRequest().permitAll()
         );
