@@ -9,6 +9,7 @@ import com.jkxt.importer.domain.ImportBatch;
 import com.jkxt.importer.domain.UploadedFile;
 import com.jkxt.importer.repo.ImportBatchRepository;
 import com.jkxt.importer.repo.UploadedFileRepository;
+import com.jkxt.importer.service.ImportCommitService;
 import com.jkxt.importer.service.ImportValidationService;
 import com.jkxt.masterdata.domain.Classroom;
 import com.jkxt.masterdata.domain.Teacher;
@@ -77,6 +78,7 @@ public class ExamTaskService {
   private final TeacherRepository teacherRepository;
   private final ClassroomRepository classroomRepository;
   private final ImportValidationService validationService;
+  private final ImportCommitService importCommitService;
   private final ScheduleJobService scheduleJobService;
 
   public ExamTaskService(
@@ -89,6 +91,7 @@ public class ExamTaskService {
       TeacherRepository teacherRepository,
       ClassroomRepository classroomRepository,
       ImportValidationService validationService,
+      ImportCommitService importCommitService,
       ScheduleJobService scheduleJobService
   ) {
     this.examTaskRepository = examTaskRepository;
@@ -100,6 +103,7 @@ public class ExamTaskService {
     this.teacherRepository = teacherRepository;
     this.classroomRepository = classroomRepository;
     this.validationService = validationService;
+    this.importCommitService = importCommitService;
     this.scheduleJobService = scheduleJobService;
   }
 
@@ -167,6 +171,14 @@ public class ExamTaskService {
       batch.setValidCount(Math.max(0, rowCount - report.counts().error()));
       batch.setErrorCount(report.counts().error());
       importBatchRepository.save(batch);
+
+      // Real data flow (Epic 1, R6): a clean upload is PERSISTED into the DB, not just validated.
+      // Roster kinds (teacher/classroom) upsert the org roster; exam rows bind to this task so the
+      // scheduler can read them via buildFixtureFromTask instead of solving a hardcoded fixture.
+      if (report.counts().error() == 0) {
+        UUID commitTaskId = "exam".equals(kind) ? taskId : null;
+        importCommitService.commit(templateKind, commitTaskId, new BytesMultipartFile(originalName, bytes));
+      }
 
       task.setStatus("importing");
       examTaskRepository.save(task);

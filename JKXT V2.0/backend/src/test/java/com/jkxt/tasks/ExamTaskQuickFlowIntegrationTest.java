@@ -99,7 +99,12 @@ class ExamTaskQuickFlowIntegrationTest {
 
     assertThat(done.get("taskId").asText()).isEqualTo(taskId.toString());
     assertThat(done.get("status").asText()).isEqualTo("succeeded");
-    assertThat(done.get("assignments")).isNotEmpty();
+    // Real data flow: 2 imported exams × supervisorsPerRoom(2) = 4 invigilation assignments,
+    // and every assignment references a subject the user actually imported (not a hardcoded fixture).
+    assertThat(done.get("assignments")).hasSize(4);
+    assertThat(done.get("assignments").findValuesAsText("subjectName"))
+        .isNotEmpty()
+        .allMatch(subject -> subject.equals("Math") || subject.equals("English"));
     assertThat(done.get("fairness")).hasSize(5);
     assertThat(done.get("ai").get("targets")).hasSize(3);
     assertThat(done.get("ai").get("targets").findValuesAsText("kind")).contains("teacher", "room", "slot");
@@ -116,7 +121,7 @@ class ExamTaskQuickFlowIntegrationTest {
     mockMvc.perform(get("/api/v1/exam-tasks/{taskId}", taskId).cookie(session))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.latestJob.status").value("succeeded"))
-        .andExpect(jsonPath("$.stats.assignments").value(6));
+        .andExpect(jsonPath("$.stats.assignments").value(4));
 
     byte[] xlsx = mockMvc.perform(get("/api/v1/exam-tasks/{taskId}/export", taskId)
             .queryParam("format", "xlsx")

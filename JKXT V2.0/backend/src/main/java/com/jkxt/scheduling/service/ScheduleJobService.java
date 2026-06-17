@@ -34,11 +34,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -48,6 +52,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @Service
 public class ScheduleJobService {
 
+  private static final Logger log = LoggerFactory.getLogger(ScheduleJobService.class);
   private static final TypeReference<List<ConflictItem>> CONFLICT_LIST = new TypeReference<>() {
   };
   private static final TypeReference<List<FairnessItem>> FAIRNESS_LIST = new TypeReference<>() {
@@ -62,6 +67,7 @@ public class ScheduleJobService {
   private final ExamRepository examRepository;
   private final TeacherRepository teacherRepository;
   private final ClassroomRepository classroomRepository;
+  private final JdbcTemplate jdbcTemplate;
   private final TransactionTemplate tx;
   private final Executor executor;
   private final ObjectMapper objectMapper;
@@ -76,6 +82,7 @@ public class ScheduleJobService {
       ExamRepository examRepository,
       TeacherRepository teacherRepository,
       ClassroomRepository classroomRepository,
+      JdbcTemplate jdbcTemplate,
       PlatformTransactionManager transactionManager,
       @Qualifier("scheduleTaskExecutor") Executor executor,
       ObjectMapper objectMapper
@@ -89,6 +96,7 @@ public class ScheduleJobService {
     this.examRepository = examRepository;
     this.teacherRepository = teacherRepository;
     this.classroomRepository = classroomRepository;
+    this.jdbcTemplate = jdbcTemplate;
     this.tx = new TransactionTemplate(transactionManager);
     this.executor = executor;
     this.objectMapper = objectMapper;
@@ -123,9 +131,10 @@ public class ScheduleJobService {
     PreparedRun prepared = tx.execute(status -> {
       ExamTask task = examTaskRepository.findByOrgIdAndId(orgId, taskId)
           .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exam task not found"));
-      task.setStatus("scheduling");
-      examTaskRepository.save(task);
-      return prepareRunForTask(orgId, task, fixtureFactory.feasible());
+      // Killer-bug fix (Epic 1): solve the task's REAL imported data instead of a hardcoded fixture.
+      // buildFixtureFromTask validates the inputs and throws 400 if exams/rooms/teachers are missing.
+      ScheduleFixture fixture = buildFixtureFromTask(orgId, task);
+      return prepareRealRun(orgId, task, fixture);
     });
     if (prepared == null) throw new IllegalStateException("Failed to prepare schedule run");
     publish(prepared.runId(), "pending", "queued", 0, "Quick schedule job queued.");
@@ -218,37 +227,100 @@ public class ScheduleJobService {
     return new PreparedRun(run.getId(), task.getId(), runFixture);
   }
 
-  private PreparedRun prepareRunForTask(UUID orgId, ExamTask task, ScheduleFixture fixture) {
-    PersistedFixtureData persisted = upsertFixtureMasterData(orgId, fixture);
+  /**
+   * Builds the CP-SAT fixture from the task's REAL imported data (Epic 1 killer-bug fix):
+   * the exams bound to this task, their {@code exam_room → classroom} mapping, and the org's
+   * active teacher roster. Replaces the hardcoded {@code fixtureFactory.feasible()} that every
+   * quick run used to solve, so the schedule now reflects what the user actually imported.
+   *
+   * <p>Decision R2: on incomplete input we surface a 400 and let the user fix the data — we
+   * never silently relax constraints or fabricate rows.
+   */
+  private ScheduleFixture buildFixtureFromTask(UUID orgId, ExamTask task) {
+    List<Exam> exams = examRepository.findByOrgIdAndExamTaskId(orgId, task.getId());
+    if (exams.isEmpty()) {
+      throw incompleteInput("该任务尚未导入任何考试安排，请先导入考试安排后再排考。");
+    }
+
+    // exam_id -> classroom_id(s) from the keyless exam_room join table (org-scoped).
+    Map<UUID, List<UUID>> roomsByExam = new LinkedHashMap<>();
+    for (Map<String, Object> joinRow : jdbcTemplate.queryForList(
+        "SELECT exam_id, classroom_id FROM exam_room WHERE org_id = ?", orgId)) {
+      UUID examId = (UUID) joinRow.get("exam_id");
+      UUID roomId = (UUID) joinRow.get("classroom_id");
+      roomsByExam.computeIfAbsent(examId, key -> new ArrayList<>()).add(roomId);
+    }
+
+    Map<UUID, Classroom> roomById = new LinkedHashMap<>();
+    List<ExamRoomInput> examRooms = new ArrayList<>();
+    for (Exam exam : exams) {
+      List<UUID> roomIds = roomsByExam.getOrDefault(exam.getId(), List.of());
+      if (roomIds.isEmpty()) {
+        throw incompleteInput("考试『%s』未绑定考场，请为其指定考场后再排考。".formatted(exam.getSubjectName()));
+      }
+      int seatDemand = intSetting(exam, "seatDemand", 1);
+      int supervisors = Math.max(1, intSetting(exam, "supervisorsPerRoom", 2));
+      for (UUID roomId : roomIds) {
+        Classroom room = roomById.computeIfAbsent(roomId,
+            id -> classroomRepository.findByOrgIdAndId(orgId, id).orElse(null));
+        if (room == null) {
+          throw incompleteInput(
+              "考试『%s』绑定的考场不存在或已删除，请重新维护考场后再排考。".formatted(exam.getSubjectName()));
+        }
+        examRooms.add(new ExamRoomInput(
+            exam.getId(),
+            null, // exam_class is not populated by quick import; a null classId is solver-safe.
+            room.getId(),
+            exam.getSubjectName(),
+            exam.getGrade(),
+            exam.getExamDate(),
+            exam.getStartTime(),
+            exam.getEndTime(),
+            seatDemand,
+            supervisors
+        ));
+      }
+    }
+
+    List<RoomInput> rooms = roomById.values().stream()
+        .map(room -> new RoomInput(room.getId(), room.getCode(), room.getName(), Math.max(1, room.getExamCapacity())))
+        .toList();
+
+    List<TeacherInput> teachers = teacherRepository.findByOrgIdOrderByTeacherNoAsc(orgId).stream()
+        .filter(teacher -> !"inactive".equalsIgnoreCase(teacher.getStatus()))
+        .map(teacher -> new TeacherInput(
+            teacher.getId(),
+            teacher.getTeacherNo(),
+            teacher.getName(),
+            teacher.getGrade(),
+            teacher.isHomeroom(),
+            teacher.getHomeroomClassId() == null ? Set.<UUID>of() : Set.of(teacher.getHomeroomClassId())
+        ))
+        .toList();
+    if (teachers.isEmpty()) {
+      throw incompleteInput("教师名册为空，请先导入教师名册后再排考。");
+    }
+
+    return new ScheduleFixture(
+        "task-" + task.getId(),
+        task.getName() == null ? "排考任务" : task.getName(),
+        task.getId().getMostSignificantBits() & Long.MAX_VALUE,
+        teachers,
+        rooms,
+        examRooms
+    );
+  }
+
+  /**
+   * Prepares a run over real task data. Unlike {@link #prepareRun}, it does NOT upsert master
+   * data or create new exam rows — the fixture already carries the persisted exam/room/teacher
+   * IDs, so the solver's assignments reference real rows directly.
+   */
+  private PreparedRun prepareRealRun(UUID orgId, ExamTask task, ScheduleFixture fixture) {
     task.setStatus("scheduling");
     task.setStartsOn(fixture.examRooms().stream().map(ExamRoomInput::date).min(LocalDate::compareTo).orElse(LocalDate.now()));
     task.setEndsOn(fixture.examRooms().stream().map(ExamRoomInput::date).max(LocalDate::compareTo).orElse(LocalDate.now()));
-    task = examTaskRepository.saveAndFlush(task);
-
-    List<ExamRoomInput> remapped = new ArrayList<>();
-    for (ExamRoomInput input : fixture.examRooms()) {
-      Exam exam = new Exam();
-      exam.setOrgId(orgId);
-      exam.setExamTaskId(task.getId());
-      exam.setSubjectName(input.subjectName());
-      exam.setExamDate(input.date());
-      exam.setStartTime(input.start());
-      exam.setEndTime(input.end());
-      exam.setGrade(input.grade());
-      exam = examRepository.saveAndFlush(exam);
-      remapped.add(new ExamRoomInput(
-          exam.getId(),
-          input.classId(),
-          persisted.roomIds().getOrDefault(input.roomId(), input.roomId()),
-          input.subjectName(),
-          input.grade(),
-          input.date(),
-          input.start(),
-          input.end(),
-          input.seatDemand(),
-          input.supervisorsPerRoom()
-      ));
-    }
+    examTaskRepository.saveAndFlush(task);
 
     ScheduleRun run = new ScheduleRun();
     run.setOrgId(orgId);
@@ -258,24 +330,33 @@ public class ScheduleJobService {
     run.setProgress(0);
     run.setSeed(fixture.seed());
     run.setStats(new LinkedHashMap<>(Map.of(
-        "fixture", fixture.id(),
-        "inputSource", "quick-task",
+        "inputSource", "task-import",
         "solver", "ortools-cpsat",
         "teachers", fixture.teachers().size(),
         "rooms", fixture.rooms().size(),
         "exams", fixture.examRooms().size()
     )));
     run = runRepository.saveAndFlush(run);
+    return new PreparedRun(run.getId(), task.getId(), fixture);
+  }
 
-    ScheduleFixture runFixture = new ScheduleFixture(
-        fixture.id(),
-        fixture.name(),
-        fixture.seed(),
-        remapTeachers(fixture, persisted.teacherIds()),
-        remapRooms(fixture, persisted.roomIds()),
-        remapped
-    );
-    return new PreparedRun(run.getId(), task.getId(), runFixture);
+  private static ResponseStatusException incompleteInput(String message) {
+    return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+  }
+
+  private static int intSetting(Exam exam, String key, int fallback) {
+    Object value = exam.getSettings() == null ? null : exam.getSettings().get(key);
+    if (value instanceof Number number) {
+      return number.intValue();
+    }
+    if (value instanceof String text && !text.isBlank()) {
+      try {
+        return Integer.parseInt(text.trim());
+      } catch (NumberFormatException ignored) {
+        return fallback;
+      }
+    }
+    return fallback;
   }
 
   private PersistedFixtureData upsertFixtureMasterData(UUID orgId, ScheduleFixture fixture) {
@@ -351,7 +432,10 @@ public class ScheduleJobService {
           finalMessage(result)
       );
     } catch (Exception ex) {
-      String message = truncateError(ex.getMessage());
+      // Observability: never silently swallow a solver failure — log the full stack trace and
+      // record a non-null, typed error message so the run row explains what went wrong.
+      log.error("Schedule run {} failed during solve", runId, ex);
+      String message = truncateError(describeError(ex));
       tx.executeWithoutResult(status -> {
         ScheduleRun run = runRepository.findByOrgIdAndId(orgId, runId).orElseThrow();
         run.setStatus("failed");
@@ -449,6 +533,12 @@ public class ScheduleJobService {
   private String truncateError(String message) {
     if (message == null) return null;
     return message.length() <= 480 ? message : message.substring(0, 480);
+  }
+
+  private static String describeError(Throwable ex) {
+    String raw = ex.getMessage();
+    String type = ex.getClass().getSimpleName();
+    return raw == null || raw.isBlank() ? type : type + ": " + raw;
   }
 
   private RunSnapshot toSnapshot(ScheduleRun run, List<Assignment> assignments) {

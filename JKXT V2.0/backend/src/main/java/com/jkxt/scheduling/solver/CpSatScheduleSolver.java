@@ -323,7 +323,11 @@ public class CpSatScheduleSolver {
   }
 
   private boolean eligible(TeacherInput teacher, ExamRoomInput examRoom) {
-    if (teacher.homeroomClassIds().contains(examRoom.classId())) return false;
+    // Homeroom-class avoidance only applies when the exam-room is bound to a class. A null classId
+    // means "no class binding" — skip it. (Set.of(...).contains(null) would also NPE, so the null
+    // guard must come first regardless of the set implementation behind homeroomClassIds().)
+    UUID classId = examRoom.classId();
+    if (classId != null && teacher.homeroomClassIds().contains(classId)) return false;
     return !Objects.equals(normalize(teacher.grade()), normalize(examRoom.grade()));
   }
 
