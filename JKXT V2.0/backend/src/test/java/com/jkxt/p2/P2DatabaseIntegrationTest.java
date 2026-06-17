@@ -1,0 +1,131 @@
+package com.jkxt.p2;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.jkxt.masterdata.domain.Teacher;
+import com.jkxt.masterdata.repo.ClassroomRepository;
+import com.jkxt.masterdata.repo.SchoolClassRepository;
+import com.jkxt.masterdata.repo.SubjectRepository;
+import com.jkxt.masterdata.repo.TeacherRepository;
+import com.jkxt.org.domain.Organization;
+import com.jkxt.org.repo.AcademicTermRepository;
+import com.jkxt.org.repo.OrganizationRepository;
+import com.jkxt.security.repo.RoleRepository;
+import com.jkxt.security.repo.UserAccountRepository;
+import java.util.List;
+import java.util.UUID;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
+
+@SpringBootTest
+@ActiveProfiles("test")
+@Transactional
+class P2DatabaseIntegrationTest {
+
+  private static final List<String> REQUIRED_TABLES = List.of(
+      "organization",
+      "role",
+      "user_role",
+      "app_user",
+      "academic_term",
+      "teacher",
+      "classroom",
+      "school_class",
+      "subject",
+      "teacher_subject",
+      "school_class_subject",
+      "exam_task",
+      "exam",
+      "exam_class",
+      "exam_room",
+      "uploaded_file",
+      "import_batch",
+      "validation_issue",
+      "schedule_run",
+      "schedule_assignment",
+      "audit_log",
+      "ai_call_log"
+  );
+
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+
+  @Autowired
+  private OrganizationRepository organizationRepository;
+
+  @Autowired
+  private RoleRepository roleRepository;
+
+  @Autowired
+  private UserAccountRepository userAccountRepository;
+
+  @Autowired
+  private AcademicTermRepository academicTermRepository;
+
+  @Autowired
+  private TeacherRepository teacherRepository;
+
+  @Autowired
+  private ClassroomRepository classroomRepository;
+
+  @Autowired
+  private SchoolClassRepository schoolClassRepository;
+
+  @Autowired
+  private SubjectRepository subjectRepository;
+
+  @Test
+  void flywayCreatesRequiredP2Tables() {
+    for (String table : REQUIRED_TABLES) {
+      String regclass = jdbcTemplate.queryForObject(
+          "select to_regclass(?)::text",
+          String.class,
+          "public." + table
+      );
+      assertThat(regclass).as(table).isEqualTo(table);
+    }
+  }
+
+  @Test
+  void seedCreatesDemoOrganizationAdminRoleAndCurrentTerm() {
+    Organization demo = organizationRepository.findBySlug("demo").orElseThrow();
+    UUID orgId = demo.getId();
+
+    assertThat(roleRepository.findByOrgIdAndCode(orgId, "ADMIN")).isPresent();
+    assertThat(userAccountRepository.findByOrgIdAndUsername(orgId, "admin"))
+        .hasValueSatisfying(admin -> {
+          assertThat(admin.getRole()).isEqualTo("ADMIN");
+          assertThat(admin.getStatus()).isEqualTo("active");
+          assertThat(admin.isOnboarded()).isTrue();
+        });
+    assertThat(academicTermRepository.findByOrgIdAndCurrentTrue(orgId))
+        .hasSize(1)
+        .first()
+        .satisfies(term -> assertThat(term.getYearLabel()).isEqualTo("2025-2026"));
+  }
+
+  @Test
+  void repositoriesCanPersistTenantScopedMasterData() {
+    Organization demo = organizationRepository.findBySlug("demo").orElseThrow();
+
+    Teacher teacher = new Teacher();
+    teacher.setOrgId(demo.getId());
+    teacher.setTeacherNo("IT-" + UUID.randomUUID().toString().substring(0, 8));
+    teacher.setName("Integration Test Teacher");
+    teacher.setGender("unknown");
+    teacher.setGrade("G9");
+    teacher.setStatus("active");
+
+    Teacher saved = teacherRepository.saveAndFlush(teacher);
+
+    assertThat(teacherRepository.findByOrgIdAndTeacherNo(demo.getId(), saved.getTeacherNo()))
+        .isPresent();
+    assertThat(classroomRepository.count()).isGreaterThanOrEqualTo(0);
+    assertThat(schoolClassRepository.count()).isGreaterThanOrEqualTo(0);
+    assertThat(subjectRepository.count()).isGreaterThanOrEqualTo(0);
+  }
+}

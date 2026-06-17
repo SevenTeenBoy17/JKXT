@@ -1,0 +1,13 @@
+jkxt:
+  deploy:
+    mode: saas
+    fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
+    external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:true}
+  auth:
+    cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:true}
+    cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}
+  llm:
+    enabled: ${JKXT_LLM_ENABLED:false}
+    provider: ${JKXT_LLM_PROVIDER:mock}
+    base-url: ${JKXT_LLM_BASE_URL:https://api.llm-token.cn/v1}
+    api-key: ${JKXT_LLM_API_KEY:}
