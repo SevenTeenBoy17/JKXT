@@ -6,7 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "exam")
@@ -32,7 +36,19 @@ public class Exam extends TenantEntity {
 
   private String grade;
 
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(columnDefinition = "jsonb", nullable = false)
+  private Map<String, Object> settings = new LinkedHashMap<>();
+
   public Exam() {
+  }
+
+  public Map<String, Object> getSettings() {
+    return settings;
+  }
+
+  public void setSettings(Map<String, Object> settings) {
+    this.settings = settings == null ? new LinkedHashMap<>() : new LinkedHashMap<>(settings);
   }
 
   public UUID getExamTaskId() {

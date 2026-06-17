@@ -1,7 +1,10 @@
 package com.jkxt.importer.api;
 
+import com.jkxt.importer.api.ImportDtos.CommitResult;
 import com.jkxt.importer.api.ImportDtos.ValidationReport;
+import com.jkxt.importer.service.ImportCommitService;
 import com.jkxt.importer.service.ImportValidationService;
+import java.util.UUID;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,9 +26,14 @@ public class ImportController {
   );
 
   private final ImportValidationService importValidationService;
+  private final ImportCommitService importCommitService;
 
-  public ImportController(ImportValidationService importValidationService) {
+  public ImportController(
+      ImportValidationService importValidationService,
+      ImportCommitService importCommitService
+  ) {
     this.importValidationService = importValidationService;
+    this.importCommitService = importCommitService;
   }
 
   @GetMapping("/templates/{kind}")
@@ -54,6 +62,19 @@ public class ImportController {
   @PostMapping(value = "/{kind}/validate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ValidationReport validateKind(@PathVariable String kind, @RequestParam("file") MultipartFile file) {
     return importValidationService.validate(kind, file);
+  }
+
+  /**
+   * Validate AND persist the import. Roster kinds (teachers/classrooms/classes/subjects)
+   * upsert the school roster; {@code exams} bind the exam schedule to {@code taskId}.
+   */
+  @PostMapping(value = "/{kind}/commit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public CommitResult commit(
+      @PathVariable String kind,
+      @RequestParam(value = "taskId", required = false) UUID taskId,
+      @RequestParam("file") MultipartFile file
+  ) {
+    return importCommitService.commit(kind, taskId, file);
   }
 
   private ResponseEntity<byte[]> templateResponse(String kind) {

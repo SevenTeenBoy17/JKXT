@@ -57,6 +57,56 @@ public class ImportValidationService {
     return "jkxt-" + spec(kind).kind() + "-template.xlsx";
   }
 
+  /** Canonical kind id (teachers/classrooms/classes/subjects/exams). */
+  public String normalizeKind(String kind) {
+    return spec(kind).kind();
+  }
+
+  /** One parsed, non-blank data row mapped by template field name. */
+  public record ParsedRow(int rowNo, Map<String, String> values) {
+    public String get(String field) {
+      return values.getOrDefault(field, "");
+    }
+  }
+
+  /**
+   * Parse a workbook into typed, header-mapped data rows for the given kind.
+   * Reuses the same column/alias spec and cell extraction as {@link #validate}.
+   * Callers should run {@link #validate} first and only commit when error count is 0.
+   */
+  public List<ParsedRow> parseRows(String kind, MultipartFile file) {
+    TemplateSpec spec = spec(kind);
+    List<ParsedRow> rows = new ArrayList<>();
+    if (file == null || file.isEmpty()) {
+      return rows;
+    }
+    try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
+      Sheet sheet = workbook.getNumberOfSheets() == 0 ? null : workbook.getSheetAt(0);
+      if (sheet == null || sheet.getPhysicalNumberOfRows() == 0) {
+        return rows;
+      }
+      Map<String, Integer> indexes = readHeaderIndexes(spec, sheet.getRow(0));
+      for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
+        Row row = sheet.getRow(rowIndex);
+        if (isBlank(row)) {
+          continue;
+        }
+        Map<String, String> values = new LinkedHashMap<>();
+        for (ColumnSpec column : spec.columns()) {
+          String cell = value(row, indexes.get(column.field()));
+          if (!isBlank(cell)) {
+            values.put(column.field(), cell.trim());
+          }
+        }
+        rows.add(new ParsedRow(rowIndex + 1, values));
+      }
+      return rows;
+    } catch (IOException exception) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "无法读取上传文件，可能不是有效的 xlsx/xls", exception);
+    }
+  }
+
   public ValidationReport validate(String kind, MultipartFile file) {
     TemplateSpec spec = spec(kind);
     IssueCollector collector = new IssueCollector(spec.source());

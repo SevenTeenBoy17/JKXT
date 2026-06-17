@@ -18,6 +18,17 @@ public final class ImportDtos {
   ) {
   }
 
+  /** Result of persisting a validated import into the database. */
+  public record CommitResult(
+      String kind,
+      int rows,
+      int inserted,
+      int updated,
+      int skipped,
+      List<String> warnings
+  ) {
+  }
+
   public record Overview(
       int completeness,
       int teachers,
