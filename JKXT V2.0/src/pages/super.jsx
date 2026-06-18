@@ -572,70 +572,71 @@ function SuperDashboardPage() {
 
 // ── 2. Tenants ────────────────────────────────────────────────────────
 
-// Open the New Tenant registration wizard (5-step modal)
-function openNewTenantModal() {
+// 新增租户 — 真实写入后端 (POST /api/v1/admin/tenants，SUPER_ADMIN)。
+// 私有部署固定单租户时后端会返回 403，表单会如实提示。
+function SuperTenantFormModal({ onSaved }) {
+  const [form, setForm] = React.useState({ name: '', city: '天津', plan: 'trial', students: '', contactName: '', contactPhone: '' });
+  const [saving, setSaving] = React.useState(false);
+  const [err, setErr] = React.useState('');
+  const bind = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const submit = async () => {
+    if (saving) return;
+    if (!form.name.trim()) { setErr('学校名称为必填项'); return; }
+    setSaving(true); setErr('');
+    try {
+      await window.api.post('/admin/tenants', {
+        name: form.name.trim(), city: form.city.trim() || null, plan: form.plan,
+        students: parseInt(form.students, 10) || 0,
+        contactName: form.contactName.trim() || null, contactPhone: form.contactPhone.trim() || null,
+      });
+      window.ui.closeModal();
+      window.ui.toast('租户已创建', { kind: 'success', desc: form.name.trim() + ' · 审计已记录' });
+      if (onSaved) onSaved();
+    } catch (e) {
+      setErr(e.message || '创建失败（私有部署固定单租户时不支持新增）');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      {[
+        ['学校名称 *', 'name', '例:天津市第二实验小学'],
+        ['所在城市', 'city', '例:天津 · 河西区'],
+        ['预估学生数', 'students', '例:1200'],
+        ['联系人姓名', 'contactName', '例:张明远'],
+        ['联系电话', 'contactPhone', '13800138000'],
+      ].map(([label, key, ph]) => (
+        <div key={key} className="grid grid-cols-[100px_1fr] gap-3 items-center">
+          <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>{label}</label>
+          <input style={SUPER_FIELD_STYLE} value={form[key]} onChange={bind(key)} placeholder={ph} />
+        </div>
+      ))}
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>套餐</label>
+        <select style={SUPER_FIELD_STYLE} value={form.plan} onChange={bind('plan')}>
+          <option value="trial">试用 (trial)</option>
+          <option value="standard">标准 (standard)</option>
+          <option value="premium">旗舰 (premium)</option>
+        </select>
+      </div>
+      {err && <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>}
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconCheck} disabled={saving} onClick={submit}>{saving ? '创建中…' : '创建租户'}</Button>
+      </div>
+    </div>
+  );
+}
+
+// Open the New Tenant registration modal. onSaved (optional) reloads the tenant list.
+function openNewTenantModal(onSaved) {
   window.ui.modal({
     title: '注册新租户',
-    subtitle: '5 步引导:基础信息 → 套餐 → 管理员 → 域名 → 确认',
-    size: 'lg',
-    content: (
-      <div className="space-y-4">
-        {/* Step indicator */}
-        <div className="flex items-center gap-2 px-1">
-          {['基础信息', '套餐', '主管理员', '域名', '确认'].map((s, i) => (
-            <React.Fragment key={s}>
-              <div className={`flex items-center gap-1.5 text-[11.5px] ${i === 0 ? 'font-semibold' : ''}`}
-                style={{ color: i === 0 ? 'var(--brand)' : 'var(--text-soft)' }}>
-                <span className="w-5 h-5 rounded-full inline-flex items-center justify-center font-mono font-bold text-[10px]"
-                  style={{ background: i === 0 ? 'var(--brand)' : '#F1F5F9', color: i === 0 ? '#fff' : 'var(--text-soft)' }}>
-                  {i + 1}
-                </span>
-                {s}
-              </div>
-              {i < 4 && <span className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />}
-            </React.Fragment>
-          ))}
-        </div>
-
-        {/* Step 1 fields */}
-        <div className="space-y-3 mt-4">
-          {[
-            { l: '学校名称 *',   ph: '例:天津市第二实验小学' },
-            { l: '所在城市 *',   ph: '例:天津 · 河西区' },
-            { l: '学段类型 *',   ph: '完全中学 / 初中 / 高中 / 小学', kind: 'select', opts: ['完全中学', '初中', '高中', '小学', '九年一贯制'] },
-            { l: '预估学生数 *', ph: '例:1200', mono: true },
-            { l: '联系人姓名 *', ph: '例:张明远' },
-            { l: '联系电话 *',   ph: '13800138000', mono: true },
-          ].map((f) => (
-            <div key={f.l} className="grid grid-cols-[110px_1fr] gap-3 items-center">
-              <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>{f.l}</label>
-              {f.kind === 'select' ? (
-                <select className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                  style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
-                  {f.opts.map(o => <option key={o}>{o}</option>)}
-                </select>
-              ) : (
-                <input placeholder={f.ph}
-                  className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                  style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', fontFamily: f.mono ? 'Geist Mono' : undefined }} />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="text-[11.5px] mt-2 px-2" style={{ color: 'var(--text-soft)' }}>
-          完成本步后,后续步骤将自动展开。所有信息可在租户管理页面修改。
-        </div>
-      </div>
-    ),
-    footer: (
-      <>
-        <Button onClick={() => window.ui.closeModal()}>取消</Button>
-        <Button variant="primary" icon={IconChevron} onClick={() => { window.ui.closeModal(); window.ui.toast('已保存草稿 · 进入下一步', { kind: 'success', desc: '可在「租户管理 → 草稿」继续' }); }}>
-          下一步:套餐选择
-        </Button>
-      </>
-    ),
+    subtitle: '填写学校基础信息,创建后可在租户管理继续完善',
+    size: 'md',
+    content: <SuperTenantFormModal onSaved={typeof onSaved === 'function' ? onSaved : undefined} />,
   });
 }
 
