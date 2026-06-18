@@ -240,20 +240,42 @@ function OnboardingModal({ onClose, onFinish }) {
   const isLast = step === total - 1;
   const isFirst = step === 0;
 
-  const finish = () => {
+  // 服务端持久化 onboarded 标记 — best-effort、不阻塞关闭 modal。
+  // 若不回写后端，下次登录时 /auth/me 仍返回 onboarded=false，引导会被错误地重新触发。
+  const persistOnboarded = () => {
     try { localStorage.setItem('jkxt:onboarded', '1'); } catch {}
+    try { window.api?.post('/auth/me/onboarded', {})?.catch?.(() => {}); } catch {}
+  };
+
+  const finish = () => {
+    persistOnboarded();
     onFinish?.();
     onClose();
     window.ui.toast('引导已完成', { kind: 'success', desc: '随时可在「帮助 ❓」中重新查看' });
   };
-  const skip = async () => {
-    const ok = await window.ui.confirm({
-      title: '跳过新手引导?',
-      desc: '随时可在顶栏「帮助 ❓」中重新打开引导',
-      confirmText: '跳过引导',
+  // 跳过 — 非阻塞即时关闭 (此前用 async confirm 弹窗会阻塞浏览器自动化导航，P1)。
+  // 用一条可撤销的 toast 替代二次确认弹窗，既不打断流程又可挽回误触。
+  const skip = () => {
+    persistOnboarded();
+    onFinish?.();
+    onClose();
+    window.ui.toast('已跳过新手引导', {
+      kind: 'info',
+      desc: '随时可在顶栏「帮助 ❓」重新打开',
+      action: { label: '重新打开', onClick: () => window.__openOnboarding?.() },
     });
-    if (ok) finish();
   };
+
+  // 键盘流：Esc 跳过 · ← / → 翻页 (可访问性)
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') { e.preventDefault(); skip(); }
+      else if (e.key === 'ArrowRight') { setStep((s) => Math.min(total - 1, s + 1)); }
+      else if (e.key === 'ArrowLeft')  { setStep((s) => Math.max(0, s - 1)); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [total]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center px-6"

@@ -31,6 +31,47 @@ class AuthIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  @Autowired
+  private org.springframework.jdbc.core.JdbcTemplate jdbcTemplate;
+
+  @Test
+  void markOnboardedPersistsServerSideAcrossSessions() throws Exception {
+    // Force a known "not yet onboarded" state so we exercise the false -> true transition.
+    jdbcTemplate.update("update app_user set onboarded = false where username = 'jwc.demo'");
+
+    CaptchaResponse captcha = captcha();
+    MvcResult login = mockMvc.perform(post("/api/v1/auth/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                {
+                  "username": "jwc.demo",
+                  "password": "Demo@2025",
+                  "captchaId": "%s",
+                  "captcha": "%s"
+                }
+                """.formatted(captcha.captchaId(), captcha.debugAnswer())))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.onboarded").value(false))
+        .andReturn();
+    Cookie session = login.getResponse().getCookie("JKXT_SESSION");
+
+    // Marking onboarded returns the refreshed profile with onboarded=true.
+    mockMvc.perform(post("/api/v1/auth/me/onboarded").cookie(session))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.onboarded").value(true))
+        .andExpect(jsonPath("$.user.username").value("jwc.demo"));
+
+    // Persisted: a fresh /me reflects it (so re-login on any device will not re-trigger onboarding).
+    mockMvc.perform(get("/api/v1/auth/me").cookie(session))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.onboarded").value(true));
+
+    // Unauthenticated callers are rejected, like every other authenticated surface.
+    mockMvc.perform(post("/api/v1/auth/me/onboarded"))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.code").value("AUTH_UNAUTHENTICATED"));
+  }
+
   @Test
   void loginMeAndLogoutUseHttpOnlyCookieSession() throws Exception {
     CaptchaResponse captcha = captcha();

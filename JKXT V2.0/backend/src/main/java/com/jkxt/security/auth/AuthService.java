@@ -158,6 +158,21 @@ public class AuthService {
     sessionService.revoke(principal.sessionId());
   }
 
+  @Transactional
+  public MeResponse markOnboarded(SessionPrincipal principal) {
+    UserAccount user = userRepository.findById(principal.userId())
+        .orElseThrow(() -> new AuthException(HttpStatus.UNAUTHORIZED, "AUTH_UNAUTHENTICATED", "Session user is gone"));
+    if (!user.isOnboarded()) {
+      user.setOnboarded(true);
+      userRepository.save(user);
+      audit(user.getOrgId(), user.getId(), "AUTH_ONBOARDED", "auth", "info");
+    }
+    Organization org = organizationRepository.findById(principal.orgId())
+        .orElseThrow(() -> new AuthException(HttpStatus.FORBIDDEN, "TENANT_VIOLATION", "Tenant is unavailable"));
+    List<String> permissions = permissions(principal.orgId(), user.getRole());
+    return toMeResponse(user, org, permissions);
+  }
+
   private LoginResponse toLoginResponse(UserAccount user, Organization org, List<String> permissions) {
     return new LoginResponse(
         userView(user),

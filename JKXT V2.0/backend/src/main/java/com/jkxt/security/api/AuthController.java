@@ -61,6 +61,11 @@ public class AuthController {
     return authService.me(principal(request));
   }
 
+  @PostMapping("/me/onboarded")
+  public MeResponse markOnboarded(HttpServletRequest request) {
+    return authService.markOnboarded(principal(request));
+  }
+
   @PostMapping("/logout")
   public LogoutResponse logout(HttpServletRequest request, HttpServletResponse response) {
     SessionPrincipal principal = principal(request);
