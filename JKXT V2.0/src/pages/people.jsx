@@ -153,7 +153,7 @@ function TeacherScheduleTimeline({ teacher }) {
         </div>
         <div>
           <div className="text-[10.5px] uppercase tracking-wider font-mono" style={{ color: 'var(--text-soft)' }}>累计津贴</div>
-          <div className="mt-1 num text-[20px] font-bold" style={{ color: 'var(--text-strong)' }}>¥{(teacher?.supCount || 0) * 120}</div>
+          <div className="mt-1 num text-[20px] font-bold" style={{ color: 'var(--text-strong)' }}>¥{Number(teacher?.allowance || 0).toLocaleString()}</div>
         </div>
         <div>
           <div className="text-[10.5px] uppercase tracking-wider font-mono" style={{ color: 'var(--text-soft)' }}>本年级均值</div>
@@ -164,13 +164,314 @@ function TeacherScheduleTimeline({ teacher }) {
   );
 }
 
-function PeoplePage() {
-  const [selectedTeacher, setSelectedTeacher] = React.useState(MOCK_TEACHERS[0]);
+function normalizeTeacherRow(row, index) {
+  const gender = row.gender === 'male' ? '男' : row.gender === 'female' ? '女' : '未知';
+  return {
+    id: row.teacherNo || row.id || row.uuid || `T-${index + 1}`,
+    uuid: row.uuid,
+    name: row.name || '未命名教师',
+    gender,
+    grade: row.grade || '未设置',
+    gradeColor: row.gradeColor || teacherGradeColor(row.grade),
+    subjects: Array.isArray(row.subjects) ? row.subjects : [],
+    isHomeroom: Boolean(row.isHomeroom ?? row.homeroom),
+    homeroomOf: row.homeroomOf || '',
+    age: row.age || 0,
+    seniority: row.seniority || 0,
+    edu: row.edu || '未录入',
+    phone: row.phone || '-',
+    email: row.email || '-',
+    supCount: Number(row.supCount || 0),
+    allowance: Number(row.allowance || 0),
+    status: row.status === 'active' ? 'active' : 'leave',
+  };
+}
 
-  const total = MOCK_TEACHERS.length;
-  const homerooms = MOCK_TEACHERS.filter(t => t.isHomeroom).length;
-  const onLeave = MOCK_TEACHERS.filter(t => t.status === 'leave').length;
-  const totalSup = MOCK_TEACHERS.reduce((a, b) => a + b.supCount, 0);
+function teacherGradeColor(grade) {
+  const text = String(grade || '');
+  if (text.includes('高三') || text.includes('12')) return 'rose';
+  if (text.includes('高二') || text.includes('11')) return 'amber';
+  if (text.includes('高一') || text.includes('10')) return 'cyan';
+  if (text.includes('初三') || text.includes('9')) return 'indigo';
+  if (text.includes('初二') || text.includes('8')) return 'emerald';
+  if (text.includes('初一') || text.includes('七')) return 'violet';
+  return 'slate';
+}
+
+function MasterDataState({ title, sub, action, icon: Icon = IconUsers }) {
+  return (
+    <div className="bg-white rounded-xl py-14 flex flex-col items-center text-center"
+      style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
+      <div className="w-12 h-12 rounded-full flex items-center justify-center mb-3"
+        style={{ background: '#EEF2FF', color: 'var(--brand)' }}>
+        <Icon size={20} strokeWidth={2} />
+      </div>
+      <div className="text-[14px] font-semibold" style={{ color: 'var(--text-strong)' }}>{title}</div>
+      {sub && <div className="text-[12px] mt-1 max-w-md" style={{ color: 'var(--text-soft)' }}>{sub}</div>}
+      {action && <div className="mt-4">{action}</div>}
+    </div>
+  );
+}
+
+// 教师档案表单输入样式 — 与全站圆角/边框/字号一致
+const TEACHER_FIELD_STYLE = {
+  border: '1px solid var(--border-soft)', borderRadius: 10, padding: '8px 11px',
+  fontSize: 13, color: 'var(--text-strong)', background: '#fff', width: '100%', outline: 'none',
+};
+
+function TeacherField({ label, required, children }) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-[11.5px] font-medium" style={{ color: 'var(--text-medium)' }}>
+        {label}{required && <span style={{ color: '#EF4444' }}> *</span>}
+      </span>
+      {children}
+    </label>
+  );
+}
+
+// 新增 / 编辑 教师 — 真实写入后端 (POST / PUT /api/v1/teachers)
+function TeacherFormModal({ teacher, onSaved }) {
+  const isEdit = Boolean(teacher && teacher.uuid);
+  const [form, setForm] = React.useState({
+    teacherNo: '', name: '', gender: 'male', grade: '', phone: '', email: '', status: 'active', isHomeroom: false,
+  });
+  const [loading, setLoading] = React.useState(isEdit);
+  const [saving, setSaving] = React.useState(false);
+  const [err, setErr] = React.useState('');
+
+  React.useEffect(() => {
+    if (!isEdit) return undefined;
+    let alive = true;
+    // 拉取规范记录（含未脱敏的电话/邮箱、原始性别/状态），避免用列表展示值回写造成数据损坏
+    window.api.get('/teachers/' + teacher.uuid)
+      .then((d) => {
+        if (!alive) return;
+        setForm({
+          teacherNo: d.teacherNo || '', name: d.name || '', gender: d.gender || 'male',
+          grade: d.grade || '', phone: d.phone || '', email: d.email || '',
+          status: d.status || 'active', isHomeroom: Boolean(d.isHomeroom),
+        });
+      })
+      .catch((e) => { if (alive) setErr(e.message || '读取教师档案失败'); })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
+  }, [isEdit, teacher]);
+
+  const bind = (key) => (e) => {
+    const value = e && e.target ? e.target.value : e;
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const submit = async () => {
+    if (saving) return;
+    if (!form.teacherNo.trim() || !form.name.trim()) { setErr('工号和姓名为必填项'); return; }
+    setSaving(true); setErr('');
+    const body = {
+      teacherNo: form.teacherNo.trim(), name: form.name.trim(), gender: form.gender,
+      grade: form.grade.trim() || null, phone: form.phone.trim() || null,
+      email: form.email.trim() || null, status: form.status, isHomeroom: form.isHomeroom,
+    };
+    try {
+      if (isEdit) await window.api.put('/teachers/' + teacher.uuid, body);
+      else await window.api.post('/teachers', body);
+      window.ui.closeModal();
+      window.ui.toast(isEdit ? '教师档案已更新' : '教师已新增', { kind: 'success', desc: body.name + '（' + body.teacherNo + '）' });
+      if (onSaved) onSaved();
+    } catch (e) {
+      setErr(e.message || '保存失败');
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="py-10 text-center text-[13px]" style={{ color: 'var(--text-soft)' }}>正在读取教师档案…</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <TeacherField label="工号" required>
+          <input style={TEACHER_FIELD_STYLE} value={form.teacherNo} onChange={bind('teacherNo')} placeholder="如 T240101" />
+        </TeacherField>
+        <TeacherField label="姓名" required>
+          <input style={TEACHER_FIELD_STYLE} value={form.name} onChange={bind('name')} placeholder="如 王伟明" />
+        </TeacherField>
+        <TeacherField label="性别">
+          <select style={TEACHER_FIELD_STYLE} value={form.gender} onChange={bind('gender')}>
+            <option value="male">男</option>
+            <option value="female">女</option>
+            <option value="unknown">未知</option>
+          </select>
+        </TeacherField>
+        <TeacherField label="任教年级">
+          <input style={TEACHER_FIELD_STYLE} value={form.grade} onChange={bind('grade')} placeholder="如 高三" />
+        </TeacherField>
+        <TeacherField label="联系电话">
+          <input style={TEACHER_FIELD_STYLE} value={form.phone} onChange={bind('phone')} placeholder="如 13800001234" />
+        </TeacherField>
+        <TeacherField label="邮箱">
+          <input style={TEACHER_FIELD_STYLE} value={form.email} onChange={bind('email')} placeholder="name@school.edu.cn" />
+        </TeacherField>
+        <TeacherField label="状态">
+          <select style={TEACHER_FIELD_STYLE} value={form.status} onChange={bind('status')}>
+            <option value="active">在职</option>
+            <option value="leave">请假</option>
+            <option value="inactive">停用</option>
+          </select>
+        </TeacherField>
+        <TeacherField label="班主任">
+          <label style={{ height: 38, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+            <input type="checkbox" checked={form.isHomeroom}
+              onChange={(e) => setForm((prev) => ({ ...prev, isHomeroom: e.target.checked }))} />
+            <span className="text-[12.5px]" style={{ color: 'var(--text-medium)' }}>担任班主任</span>
+          </label>
+        </TeacherField>
+      </div>
+
+      {err && (
+        <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>
+      )}
+
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconCheck} disabled={saving} onClick={submit}>
+          {saving ? '保存中…' : isEdit ? '保存修改' : '确认新增'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// 批量导入教师 — 真实落库 (POST /api/v1/import/teachers/commit，复用 Epic1 导入提交)
+function TeacherImportModal({ onDone }) {
+  const [file, setFile] = React.useState(null);
+  const [busy, setBusy] = React.useState(false);
+  const [err, setErr] = React.useState('');
+  const inputRef = React.useRef(null);
+
+  const submit = async () => {
+    if (busy) return;
+    if (!file) { setErr('请先选择 Excel 文件'); return; }
+    setBusy(true); setErr('');
+    try {
+      const res = await window.api.upload('/import/teachers/commit', file, {});
+      window.ui.closeModal();
+      window.ui.toast('导入完成', {
+        kind: 'success',
+        desc: '新增 ' + (res.inserted || 0) + ' · 更新 ' + (res.updated || 0) + ' · 跳过 ' + (res.skipped || 0),
+      });
+      if (onDone) onDone();
+    } catch (e) {
+      setErr(e.message || '导入失败：请检查表头与必填字段');
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <input ref={inputRef} type="file" accept=".xlsx,.xls" className="hidden"
+        onChange={(e) => { setErr(''); setFile(e.target.files && e.target.files[0] ? e.target.files[0] : null); }} />
+      <div className="rounded-xl p-5 flex flex-col items-center text-center cursor-pointer"
+        style={{ background: '#F8FAFC', border: '1.5px dashed #CBD5E1' }}
+        onClick={() => inputRef.current && inputRef.current.click()}>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-white" style={{ boxShadow: 'var(--elevation-1)', color: 'var(--brand)' }}>
+          <IconUpload size={20} strokeWidth={2} />
+        </div>
+        <div className="text-[13px] font-medium" style={{ color: 'var(--text-strong)' }}>
+          {file ? file.name : '点击选择 Excel 文件'}
+        </div>
+        <div className="text-[11px] mt-1" style={{ color: 'var(--text-soft)' }}>
+          {file ? (Math.max(1, Math.round(file.size / 1024)) + ' KB · 点击可重新选择') : '支持 .xlsx / .xls，需包含 工号 / 姓名 等表头'}
+        </div>
+      </div>
+      <div className="rounded-lg p-3 flex items-start gap-2.5" style={{ background: '#EEF2FF' }}>
+        <IconHelp size={14} className="shrink-0 mt-0.5" style={{ color: '#4F46E5' }} />
+        <div className="text-[11.5px]" style={{ color: '#3730A3' }}>
+          导入将真实写入本校教师名册（按工号去重 upsert）；校验未通过的文件会被拒绝。
+        </div>
+      </div>
+      {err && (
+        <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>
+      )}
+      <div className="flex items-center justify-end gap-2">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconUpload} disabled={busy} onClick={submit}>{busy ? '导入中…' : '开始导入'}</Button>
+      </div>
+    </div>
+  );
+}
+
+function PeoplePage() {
+  const [selectedTeacher, setSelectedTeacher] = React.useState(null);
+  const [teachers, setTeachers] = React.useState([]);
+  const [loadingTeachers, setLoadingTeachers] = React.useState(true);
+  const [teacherError, setTeacherError] = React.useState('');
+  const [search, setSearch] = React.useState('');
+  const DEFAULT_FILTERS = { grade: '全部', subject: '全部', homeroom: '全部', status: '全部' };
+  const [filters, setFilters] = React.useState(DEFAULT_FILTERS);
+
+  const loadTeachers = React.useCallback(() => {
+    let alive = true;
+    setLoadingTeachers(true);
+    setTeacherError('');
+    window.api.get('/teachers')
+      .then((rows) => {
+        if (!alive) return;
+        const next = Array.isArray(rows) ? rows.map(normalizeTeacherRow) : [];
+        setTeachers(next);
+        setSelectedTeacher((current) => {
+          if (!next.length) return null;
+          return current && next.some((teacher) => teacher.id === current.id) ? current : next[0];
+        });
+      })
+      .catch((error) => {
+        if (!alive) return;
+        setTeachers([]);
+        setTeacherError(error.message || '教师数据加载失败');
+      })
+      .finally(() => {
+        if (alive) setLoadingTeachers(false);
+      });
+    return () => { alive = false; };
+  }, []);
+
+  React.useEffect(() => loadTeachers(), [loadTeachers]);
+
+  // KPI 概览始终基于全量花名册 (汇总指标),与下方表格筛选解耦
+  const total = teachers.length;
+  const homerooms = teachers.filter(t => t.isHomeroom).length;
+  const onLeave = teachers.filter(t => t.status === 'leave').length;
+  const totalSup = teachers.reduce((a, b) => a + b.supCount, 0);
+
+  // 选项从真实数据派生 — 杜绝"选了没有结果"的死选项
+  const STATUS_LABEL = { active: '在职', leave: '请假' };
+  const gradeOpts = ['全部', ...Array.from(new Set(teachers.map(t => t.grade).filter(Boolean)))];
+  const subjectOpts = ['全部', ...Array.from(new Set(teachers.flatMap(t => t.subjects)))];
+
+  // 真实筛选：搜索 (姓名/工号/电话/邮箱) + 年级 + 科目 + 班主任 + 状态
+  const q = search.trim().toLowerCase();
+  const filteredTeachers = teachers.filter((t) => {
+    if (q) {
+      const hay = `${t.name} ${t.id} ${t.phone} ${t.email}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (filters.grade !== '全部' && t.grade !== filters.grade) return false;
+    if (filters.subject !== '全部' && !t.subjects.includes(filters.subject)) return false;
+    if (filters.homeroom === '是' && !t.isHomeroom) return false;
+    if (filters.homeroom === '否' && t.isHomeroom) return false;
+    if (filters.status !== '全部' && STATUS_LABEL[t.status] !== filters.status) return false;
+    return true;
+  });
+
+  const setF = (key) => (v) => setFilters((prev) => ({ ...prev, [key]: v }));
+  const activeFilterCount =
+    (q ? 1 : 0) + Object.keys(DEFAULT_FILTERS).filter((k) => filters[k] !== DEFAULT_FILTERS[k]).length;
+  const resetAll = () => {
+    setSearch('');
+    setFilters(DEFAULT_FILTERS);
+    window.ui?.toast?.('已清空全部筛选', { kind: 'info' });
+  };
 
   const columns = [
     { key: 'id', label: '工号', width: 90, mono: true,
@@ -221,14 +522,17 @@ function PeoplePage() {
         ? <Tag color="amber" dot>请假</Tag>
         : <Tag color="emerald" dot>在职</Tag>,
     },
-    { key: 'actions', label: '操作', width: 110, align: 'right',
+    { key: 'actions', label: '操作', width: 150, align: 'right',
       render: (r) => (
         <div className="inline-flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
           <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--brand)' }}
             onClick={() => openTeacherDetail(r)}>查看</button>
           <span className="text-slate-300">·</span>
           <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--text-medium)' }}
-            onClick={() => window.ui.toast(`打开 ${r.name} 编辑面板`, { kind: 'info' })}>编辑</button>
+            onClick={() => openTeacherForm(r)}>编辑</button>
+          <span className="text-slate-300">·</span>
+          <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: '#DC2626' }}
+            onClick={() => removeTeacher(r)}>删除</button>
         </div>
       ),
     },
@@ -290,10 +594,37 @@ function PeoplePage() {
         <>
           <Button onClick={() => window.ui.closeDrawer()}>关闭</Button>
           <Button icon={IconCalendar} onClick={() => window.ui.toast(`查看 ${t.name} 详细排班`, { kind: 'info' })}>查看排班</Button>
-          <Button variant="primary" icon={IconEdit} onClick={() => window.ui.toast(`编辑 ${t.name} 信息`, { kind: 'info' })}>编辑档案</Button>
+          <Button variant="primary" icon={IconEdit} onClick={() => { window.ui.closeDrawer(); openTeacherForm(t); }}>编辑档案</Button>
         </>
       ),
     });
+  };
+
+  const openTeacherForm = (teacher) => {
+    window.ui.modal({
+      title: teacher ? '编辑教师' : '新增教师',
+      subtitle: teacher ? `${teacher.name} · ${teacher.id}` : '录入教师基本档案，保存后写入本校名册',
+      size: 'md',
+      content: <TeacherFormModal teacher={teacher} onSaved={loadTeachers} />,
+    });
+  };
+
+  const removeTeacher = async (teacher) => {
+    const ok = await window.ui.confirm({
+      title: '删除该教师?',
+      desc: `将永久删除「${teacher.name}（${teacher.id}）」。若其为某班班主任，将自动解除关联。此操作不可撤销。`,
+      confirmText: '确认删除',
+      cancelText: '取消',
+      danger: true,
+    });
+    if (!ok) return;
+    try {
+      await window.api.del('/teachers/' + teacher.uuid);
+      window.ui.toast('教师已删除', { kind: 'success', desc: `${teacher.name}（${teacher.id}）` });
+      loadTeachers();
+    } catch (e) {
+      window.ui.toast('删除失败', { kind: 'error', desc: e.message || '请稍后重试' });
+    }
   };
 
   return (
@@ -306,63 +637,58 @@ function PeoplePage() {
         <>
           <Button icon={IconUpload} onClick={() => window.ui.modal({
             title: '批量导入教师',
-            subtitle: '上传教师名单 Excel 表，系统自动识别字段',
+            subtitle: '上传教师名单 Excel，按工号 upsert 写入本校名册',
             size: 'md',
-            content: (
-              <div className="space-y-4">
-                <div className="rounded-xl p-5 flex flex-col items-center text-center"
-                  style={{ background: '#F8FAFC', border: '1.5px dashed #CBD5E1' }}>
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-white" style={{ boxShadow: 'var(--elevation-1)', color: 'var(--brand)' }}>
-                    <IconUpload size={20} strokeWidth={2} />
-                  </div>
-                  <div className="text-[13px] font-medium" style={{ color: 'var(--text-strong)' }}>点击或拖拽 Excel 文件</div>
-                  <div className="text-[11px] mt-1" style={{ color: 'var(--text-soft)' }}>支持 .xlsx / .xls，需包含工号 / 姓名 / 年级 / 科目 字段</div>
-                </div>
-                <div className="rounded-lg p-3 flex items-start gap-2.5" style={{ background: '#EEF2FF' }}>
-                  <IconHelp size={14} className="shrink-0 mt-0.5" style={{ color: '#4F46E5' }} />
-                  <div className="text-[11.5px]" style={{ color: '#3730A3' }}>
-                    首次使用？点击 <a className="font-medium underline">下载标准模板</a>，按表头填写后上传。
-                  </div>
-                </div>
-              </div>
-            ),
-            footer: (
-              <>
-                <Button onClick={() => window.ui.closeModal()}>取消</Button>
-                <Button variant="primary" icon={IconUpload} onClick={() => { window.ui.closeModal(); window.ui.toast('导入中…', { kind: 'info', desc: '正在解析 142 行数据' }); setTimeout(() => window.ui.toast('导入完成', { kind: 'success', desc: '新增 8 人，更新 134 人' }), 1500); }}>开始导入</Button>
-              </>
-            ),
+            content: <TeacherImportModal onDone={loadTeachers} />,
           })}>批量导入</Button>
-          <Button variant="primary" icon={IconPlus} onClick={() => window.ui.toast('新增教师表单已打开', { kind: 'info' })}>新增教师</Button>
+          <Button variant="primary" icon={IconPlus} onClick={() => openTeacherForm(null)}>新增教师</Button>
         </>
       }
     >
       <div className="grid grid-cols-4 gap-4">
         <MiniKPI label="在职教职工" value={total - onLeave} unit="人" accent="#4F46E5" icon={IconUsers} trend="1.4" trendUp />
         <MiniKPI label="班主任" value={homerooms} unit="人" accent="#9333EA" icon={IconCheck} sub="覆盖 6 个年级" />
-        <MiniKPI label="本学期总监考" value={totalSup} unit="场次" accent="#059669" icon={IconCalendar} sub={`人均 ${(totalSup/total).toFixed(1)} 场`} />
+        <MiniKPI label="本学期总监考" value={totalSup} unit="场次" accent="#059669" icon={IconCalendar} sub={`人均 ${total ? (totalSup/total).toFixed(1) : '0.0'} 场`} />
         <MiniKPI label="请假/休假" value={onLeave} unit="人" accent="#D97706" icon={IconClock} sub="需调整排班" />
       </div>
 
       <FilterBar
         search="搜索姓名、工号、电话..."
+        searchValue={search}
+        onSearch={setSearch}
         filters={[
-          { label: '年级:', value: '全部' },
-          { label: '科目:', value: '全部' },
-          { label: '班主任:', value: '全部' },
-          { label: '状态:', value: '在职' },
+          { label: '年级:', value: filters.grade, options: gradeOpts, onChange: setF('grade') },
+          { label: '科目:', value: filters.subject, options: subjectOpts, onChange: setF('subject') },
+          { label: '班主任:', value: filters.homeroom, options: ['全部', '是', '否'], onChange: setF('homeroom') },
+          { label: '状态:', value: filters.status, options: ['全部', '在职', '请假'], onChange: setF('status') },
         ]}
-        total={total}
-        onReset={() => {}}
+        total={filteredTeachers.length}
+        onReset={activeFilterCount > 0 ? resetAll : undefined}
         right={<Button size="sm" variant="ghost" icon={IconMore}>更多筛选</Button>}
       />
 
-      <DataTable
-        columns={columns}
-        rows={MOCK_TEACHERS}
-        selectable
-        onRowClick={(row) => setSelectedTeacher(row)}
-      />
+      {loadingTeachers ? (
+        <MasterDataState title="正在加载教师数据" sub="正在从后端读取当前租户的教师、任教学科和班主任信息。" />
+      ) : teacherError ? (
+        <EmptyState
+          title="教师数据加载失败"
+          sub={teacherError}
+          action={<Button variant="primary" onClick={loadTeachers}>重新加载</Button>}
+        />
+      ) : filteredTeachers.length > 0 ? (
+        <DataTable
+          columns={columns}
+          rows={filteredTeachers}
+          selectable
+          onRowClick={(row) => setSelectedTeacher(row)}
+        />
+      ) : (
+        <EmptyState
+          title="没有符合条件的教职工"
+          sub={`当前筛选条件下没有匹配结果${q ? `，关键词「${search.trim()}」` : ''}。可调整年级、科目或状态，或清空筛选重新查看。`}
+          action={<Button variant="primary" onClick={resetAll}>清空筛选</Button>}
+        />
+      )}
 
       <TeacherScheduleTimeline teacher={selectedTeacher} />
     </PageShell>
