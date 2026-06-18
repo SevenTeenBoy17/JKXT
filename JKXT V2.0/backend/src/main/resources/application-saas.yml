@@ -3,6 +3,9 @@ jkxt:
     mode: saas
     fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
     external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:true}
+  security:
+    # Production cloud must never ship usable known-credential demo super-admins.
+    disable-demo-accounts: ${JKXT_DISABLE_DEMO_ACCOUNTS:true}
   auth:
     cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:true}
     cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}

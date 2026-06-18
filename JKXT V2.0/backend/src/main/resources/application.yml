@@ -53,6 +53,10 @@ jkxt:
     mode: ${JKXT_DEPLOY_MODE:${DEPLOY_MODE:dev}}
     fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
     external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:false}
+  security:
+    # When true, seeded demo accounts (known default passwords) are disabled on startup.
+    # Off by default so dev / test / on-prem demo keep working; the saas profile turns it on.
+    disable-demo-accounts: ${JKXT_DISABLE_DEMO_ACCOUNTS:false}
   auth:
     cookie-name: ${JKXT_AUTH_COOKIE_NAME:JKXT_SESSION}
     cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:false}
