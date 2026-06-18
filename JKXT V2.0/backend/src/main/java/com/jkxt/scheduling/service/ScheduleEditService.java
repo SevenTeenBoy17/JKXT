@@ -7,8 +7,10 @@ import com.jkxt.masterdata.domain.Classroom;
 import com.jkxt.masterdata.domain.Teacher;
 import com.jkxt.masterdata.repo.ClassroomRepository;
 import com.jkxt.masterdata.repo.TeacherRepository;
+import com.jkxt.notify.channel.NotificationRecipient;
 import com.jkxt.notify.domain.Notification;
 import com.jkxt.notify.repo.NotificationRepository;
+import com.jkxt.notify.service.NotificationDispatcher;
 import com.jkxt.scheduling.api.ScheduleEditDtos.ConflictCheckRequest;
 import com.jkxt.scheduling.api.ScheduleEditDtos.ConflictCheckResponse;
 import com.jkxt.scheduling.api.ScheduleEditDtos.PublishResponse;
@@ -55,6 +57,7 @@ public class ScheduleEditService {
   private final ScheduleAssignmentRepository assignmentRepository;
   private final ScheduleRevisionRepository revisionRepository;
   private final NotificationRepository notificationRepository;
+  private final NotificationDispatcher notificationDispatcher;
   private final AuditLogRepository auditLogRepository;
 
   public ScheduleEditService(
@@ -66,8 +69,10 @@ public class ScheduleEditService {
       ScheduleAssignmentRepository assignmentRepository,
       ScheduleRevisionRepository revisionRepository,
       NotificationRepository notificationRepository,
+      NotificationDispatcher notificationDispatcher,
       AuditLogRepository auditLogRepository
   ) {
+    this.notificationDispatcher = notificationDispatcher;
     this.taskRepository = taskRepository;
     this.examRepository = examRepository;
     this.teacherRepository = teacherRepository;
@@ -255,20 +260,39 @@ public class ScheduleEditService {
     task.setPublishedAt(now);
     taskRepository.save(task);
 
+    // R3: fan the publish out across channels (in-app + email + SMS) to every assigned invigilator.
+    // In-app is the notification row below; email/SMS go through the dispatcher (logging-only senders
+    // unless a real provider bean is wired). The per-channel result is recorded on the payload.
+    List<UUID> teacherIds = assignments.stream()
+        .map(ScheduleAssignment::getTeacherId)
+        .filter(Objects::nonNull)
+        .distinct()
+        .toList();
+    List<NotificationRecipient> recipients = (teacherIds.isEmpty()
+        ? List.<Teacher>of()
+        : teacherRepository.findByOrgIdAndIdIn(context.orgId(), teacherIds)).stream()
+        .map(t -> new NotificationRecipient(t.getId(), t.getName(), t.getEmail(), t.getPhone()))
+        .toList();
+    String taskName = task.getName() == null || task.getName().isBlank() ? "监考排班" : task.getName();
+    String subject = taskName + " · 监考排班已发布";
+    String body = "监考排班已发布，共 " + teacherCount + " 位监考教师，请登录系统查看您的监考安排。";
+    Map<String, Object> channels = notificationDispatcher.dispatch(recipients, subject, body);
+
     Notification notification = new Notification();
     notification.setOrgId(context.orgId());
     notification.setExamTaskId(task.getId());
     notification.setType("schedule_published");
-    notification.setTitle("Schedule published");
-    notification.setBody("Exam proctor schedule has been published.");
+    notification.setTitle(subject);
+    notification.setBody(body);
     notification.setStatus("sent");
     notification.setTargetUrl("/tasks/" + task.getId());
     notification.setPublishedAt(now);
-    notification.setPayload(Map.of(
-        "runId", context.run().getId().toString(),
-        "assignmentCount", assignments.size(),
-        "teacherCount", teacherCount
-    ));
+    Map<String, Object> payload = new LinkedHashMap<>();
+    payload.put("runId", context.run().getId().toString());
+    payload.put("assignmentCount", assignments.size());
+    payload.put("teacherCount", teacherCount);
+    payload.put("channels", channels);
+    notification.setPayload(payload);
     notification = notificationRepository.save(notification);
 
     audit(context.orgId(), "SCHEDULE_PUBLISH", "exam_task", task.getId(), "info", Map.of(

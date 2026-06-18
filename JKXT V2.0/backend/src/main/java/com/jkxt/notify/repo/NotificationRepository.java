@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
 
   List<Notification> findByOrgIdAndExamTaskId(UUID orgId, UUID examTaskId);
+
+  List<Notification> findTop50ByOrgIdOrderByCreatedAtDesc(UUID orgId);
 }
