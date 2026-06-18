@@ -366,11 +366,16 @@ public class ScheduleJobService {
     }
     try {
       JsonNode dsl = objectMapper.readTree(json).path("dsl");
-      return new SchedulePolicy(ruleActive(dsl, "teacher_avoid_class"), ruleActive(dsl, "same_grade_avoid"));
+      return policyFromDsl(dsl);
     } catch (Exception ex) {
       log.warn("Failed to parse AI policy DSL for task {}; keeping all constraints on", taskId, ex);
       return SchedulePolicy.allOn();
     }
+  }
+
+  /** Resolve a parsed policy DSL node into solver flags. Package-private for focused unit testing. */
+  static SchedulePolicy policyFromDsl(JsonNode dsl) {
+    return new SchedulePolicy(ruleActive(dsl, "teacher_avoid_class"), ruleActive(dsl, "same_grade_avoid"));
   }
 
   /** A hard rule stays enforced unless the DSL explicitly carries a rule of this type with enabled=false. */

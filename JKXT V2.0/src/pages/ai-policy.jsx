@@ -56,8 +56,7 @@ function PolicyToggle({ p, checked, onChange }) {
   );
 }
 
-function NaturalLanguageInput() {
-  const [text, setText] = React.useState('');
+function NaturalLanguageInput({ text, onTextChange, onRefine, refining, refined }) {
   const examples = [
     '王伟明老师本周一上午有外出会议,请避开',
     '初三(4)班和高三(7)班的考场需要错开半小时',
@@ -75,7 +74,7 @@ function NaturalLanguageInput() {
       />
       <textarea
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => onTextChange(e.target.value)}
         placeholder="例如:王伟明老师本周一上午有外出,请避开;高三模考要求两位资深老师配合..."
         className="w-full h-32 rounded-xl p-4 text-[13px] outline-none resize-none transition-colors leading-relaxed"
         style={{
@@ -88,10 +87,23 @@ function NaturalLanguageInput() {
         <div className="text-[11px]" style={{ color: 'var(--text-soft)' }}>
           已输入 <span className="font-mono">{text.length}</span> / 500 字
         </div>
-        <button className="text-[11px] inline-flex items-center gap-1 hover:underline" style={{ color: 'var(--brand)' }}>
-          <IconSparkle size={11} /> 优化我的表达
+        <button
+          onClick={onRefine}
+          disabled={refining || !text.trim()}
+          className="text-[11px] inline-flex items-center gap-1 hover:underline disabled:opacity-50"
+          style={{ color: 'var(--brand)' }}
+        >
+          {refining ? <span className="w-3 h-3 rounded-full border-2 border-current border-t-transparent animate-spin" /> : <IconSparkle size={11} />}
+          优化我的表达
         </button>
       </div>
+      {refined?.refinedText && (
+        <div className="mt-3 rounded-xl p-3 text-[12px] leading-relaxed"
+          style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-medium)' }}>
+          <div className="font-semibold mb-1" style={{ color: 'var(--text-strong)' }}>AI refined policy</div>
+          <div>{refined.refinedText}</div>
+        </div>
+      )}
 
       <div className="mt-4">
         <div className="text-[11px] mb-2 font-medium" style={{ color: 'var(--text-soft)' }}>
@@ -101,7 +113,7 @@ function NaturalLanguageInput() {
           {examples.map((e) => (
             <button
               key={e}
-              onClick={() => setText(text ? text + '\n' + e : e)}
+              onClick={() => onTextChange(text ? text + '\n' + e : e)}
               className="px-2.5 py-1.5 rounded-full text-[11.5px] transition-colors hover:bg-white"
               style={{ background: '#F1F5F9', color: 'var(--text-medium)', border: '1px solid var(--border-soft)' }}
             >
@@ -114,11 +126,27 @@ function NaturalLanguageInput() {
   );
 }
 
-function ProviderSelector() {
-  const [providers, setProviders] = React.useState(PROVIDERS);
+function ProviderSelector({ providerData, activeProvider, onChange }) {
+  const palette = {
+    mock: '#64748B',
+    qwen: '#9333EA',
+    deepseek: '#4F46E5',
+    doubao: '#EF4444',
+    openai: '#10B981',
+    'llm-token': '#0EA5E9',
+    'gpt-agent': '#0EA5E9',
+  };
+  const providers = (providerData?.providers?.length ? providerData.providers : PROVIDERS).slice(0, 4).map((p) => ({
+    id: p.id,
+    name: p.name,
+    org: p.status || p.org || 'local',
+    active: p.id === activeProvider,
+    color: palette[p.id] || '#4F46E5',
+  }));
+  const usage = providerData?.usage;
   const setActive = (id) => {
-    setProviders(providers.map((p) => ({ ...p, active: p.id === id })));
-    window.ui.toast(`已切换至 ${providers.find((p) => p.id === id).name}`, { kind: 'success' });
+    onChange(id);
+    window.ui.toast(`已切换至 ${providers.find((p) => p.id === id)?.name || id}`, { kind: 'success' });
   };
   return (
     <div className="bg-white rounded-2xl p-5"
@@ -162,9 +190,9 @@ function ProviderSelector() {
       <div className="mt-4 pt-4 space-y-2 text-[11.5px]"
         style={{ borderTop: '1px solid var(--border-soft)' }}>
         {[
-          { k: '本月调用', v: '142 次', c: 'var(--text-strong)' },
-          { k: '剩余额度', v: '858 次', c: 'var(--brand)' },
-          { k: '平均响应', v: '4.2 秒', c: 'var(--text-strong)' },
+          { k: '本月调用', v: `${usage?.monthCallCount ?? 0} 次`, c: 'var(--text-strong)' },
+          { k: '剩余额度', v: `${usage?.remainingQuota ?? '--'} 次`, c: 'var(--brand)' },
+          { k: '平均响应', v: `${Math.round((usage?.averageLatencyMs || 0) / 100) / 10} 秒`, c: 'var(--text-strong)' },
         ].map((r) => (
           <div key={r.k} className="flex items-center justify-between">
             <span style={{ color: 'var(--text-soft)' }}>{r.k}</span>
@@ -181,18 +209,101 @@ function AIPolicyPage() {
     K12_POLICIES.reduce((acc, p) => ({ ...acc, [p.id]: p.default }), {})
   );
   const [running, setRunning] = React.useState(false);
+  const [nlText, setNlText] = React.useState('');
+  const [refining, setRefining] = React.useState(false);
+  const [refined, setRefined] = React.useState(null);
+  const [providerData, setProviderData] = React.useState(null);
+  const [activeProvider, setActiveProvider] = React.useState('mock');
   const activeCount = Object.values(policies).filter(Boolean).length;
+  const selectedPolicyIds = React.useMemo(
+    () => Object.entries(policies).filter(([, enabled]) => enabled).map(([id]) => id),
+    [policies]
+  );
 
-  const startAI = () => {
+  React.useEffect(() => {
+    if (!window.api) return;
+    let cancelled = false;
+    window.api.get('/ai/providers')
+      .then((data) => {
+        if (cancelled) return;
+        setProviderData(data);
+        const active = data?.providers?.find((p) => p.active)?.id || data?.providers?.find((p) => p.status === 'available')?.id;
+        if (active) setActiveProvider(active);
+      })
+      .catch(() => {
+        if (!cancelled) setProviderData(null);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  const policyText = () => nlText.trim() || '使用当前勾选的 K12 监考策略，班主任回避本班、同年级回避，保持教师工作量均衡。';
+
+  const refinePolicy = async () => {
+    if (!window.api || !nlText.trim()) return;
+    setRefining(true);
+    try {
+      const response = await window.api.post('/nl-policy/refine', {
+        text: nlText,
+        policyIds: selectedPolicyIds,
+        provider: activeProvider,
+      });
+      setRefined(response);
+      setNlText(response.refinedText || nlText);
+      window.ui.toast('AI 已优化表达', { kind: response.fallback ? 'info' : 'success', desc: response.fallback ? '已使用安全降级表达' : '已完成脱敏与策略润色' });
+    } catch (err) {
+      window.ui.toast('AI 表达优化不可用', { kind: 'warning', desc: String(err?.message || err) });
+    } finally {
+      setRefining(false);
+    }
+  };
+
+  const startAI = async () => {
+    if (!window.api) {
+      window.ui.toast('AI 后端暂不可用', { kind: 'warning', desc: '请先连接 /api/v1 服务' });
+      return;
+    }
     setRunning(true);
-    window.ui.toast('AI 正在读取数据…', { kind: 'info' });
-    setTimeout(() => {
-      window.ui.toast('应用策略中 (班主任避监·同年级回避…)', { kind: 'info' });
-      setTimeout(() => {
-        setRunning(false);
-        window.ui.toast('AI 生成完成', { kind: 'success', desc: '评分 96/100 · 0 冲突 · 可下载结果', action: { label: '查看任务', onClick: () => window.navigateTo('tasks') } });
-      }, 2400);
-    }, 1200);
+    try {
+      window.ui.toast('AI 正在解析策略…', { kind: 'info' });
+      // 先建任务，再带 taskId 解析，让 AI 策略 DSL 绑定到该任务——后端
+      // ScheduleJobService.resolvePolicy 据此驱动 OR-Tools 求解器（Epic 4 端到端）。
+      const task = await window.api.post('/exam-tasks', {
+        name: `AI Policy ${new Date().toLocaleString()}`,
+        source: 'ai_policy',
+      });
+      const parse = await window.api.post('/nl-policy/parse', {
+        text: policyText(),
+        policyIds: selectedPolicyIds,
+        provider: activeProvider,
+        taskId: task.id,
+      });
+      for (const kind of ['teacher', 'classroom', 'exam']) {
+        await window.api.upload(`/exam-tasks/${task.id}/uploads`, null, { kind, sample: 'true' });
+      }
+      const validation = await window.api.post(`/exam-tasks/${task.id}/imports/validate`, {});
+      if ((validation.report?.counts?.error || 0) > 0) {
+        throw new Error('示例数据校验存在阻断项，无法启动排考 job');
+      }
+      const job = await window.api.post(`/exam-tasks/${task.id}/schedule-jobs`, {});
+      const handoff = {
+        source: 'ai_policy',
+        taskId: task.id,
+        jobId: job.jobId || job.runId,
+        validationReport: validation.report,
+        parse,
+        provider: activeProvider,
+        at: Date.now(),
+      };
+      try {
+        sessionStorage.setItem('jkxt:quickHandoff', JSON.stringify(handoff));
+        localStorage.setItem('jkxt:taskDetailId', task.id);
+      } catch {}
+      window.ui.toast('AI 策略已提交到排考 job', { kind: 'success', desc: '即将进入一键排监考进度页' });
+      window.navigateTo?.('quick');
+    } catch (err) {
+      window.ui.toast('AI 策略提交失败', { kind: 'warning', desc: String(err?.message || err) });
+      setRunning(false);
+    }
   };
 
   return (
@@ -201,7 +312,7 @@ function AIPolicyPage() {
       title={
         <span className="inline-flex items-center gap-2.5">
           AI 策略监考
-          <Tag color="violet" dot>AI · Qwen3 Max</Tag>
+          <Tag color="violet" dot>AI · {activeProvider}</Tag>
         </span>
       }
       subtitle="勾选策略 + 自然语言补充,AI 将基于本校历史排班数据生成最优监考方案"
@@ -293,12 +404,22 @@ function AIPolicyPage() {
             </div>
           </div>
 
-          <NaturalLanguageInput />
+          <NaturalLanguageInput
+            text={nlText}
+            onTextChange={setNlText}
+            onRefine={refinePolicy}
+            refining={refining}
+            refined={refined}
+          />
         </div>
 
         {/* Right rail */}
         <div className="space-y-4">
-          <ProviderSelector />
+          <ProviderSelector
+            providerData={providerData}
+            activeProvider={activeProvider}
+            onChange={setActiveProvider}
+          />
 
           {/* Generate button (sticky) */}
           <div className="rounded-2xl p-5 text-white relative overflow-hidden"
