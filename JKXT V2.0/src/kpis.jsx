@@ -72,7 +72,7 @@ function MiniDonut({ pct, color, track }) {
   );
 }
 
-function KPICard({ variant, label, sub, value, unit, deltaPct, deltaUp, chart, icon: I }) {
+function KPICard({ variant, label, sub, sub2, value, unit, deltaPct, deltaUp, chart, icon: I }) {
   const cfg = {
     1: { bg: 'var(--kpi-1-bg)', fg: 'var(--kpi-1-fg)', iconBg: '#FFFFFF', iconFg: '#4F46E5' },
     2: { bg: 'var(--kpi-2-bg)', fg: 'var(--kpi-2-fg)', iconBg: '#FFFFFF', iconFg: '#059669' },
@@ -128,74 +128,105 @@ function KPICard({ variant, label, sub, value, unit, deltaPct, deltaUp, chart, i
               </span>
             )}
           </div>
-          <div className="mt-2.5 inline-flex items-center gap-1">
-            <span
-              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-mono font-semibold"
-              style={{
-                background: deltaUp ? '#DCFCE7' : '#FEE2E2',
-                color: deltaUp ? '#059669' : '#DC2626',
-              }}
-            >
-              {deltaUp ? <IconArrowUp size={11} strokeWidth={2.5} /> : <IconArrowDown size={11} strokeWidth={2.5} />}
-              {deltaPct}%
-            </span>
-            <span className="text-[11px]" style={{ color: 'var(--text-soft)' }}>
-              较上周
-            </span>
-          </div>
+          {deltaPct != null && (
+            <div className="mt-2.5 inline-flex items-center gap-1">
+              <span
+                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-mono font-semibold"
+                style={{
+                  background: deltaUp ? '#DCFCE7' : '#FEE2E2',
+                  color: deltaUp ? '#059669' : '#DC2626',
+                }}
+              >
+                {deltaUp ? <IconArrowUp size={11} strokeWidth={2.5} /> : <IconArrowDown size={11} strokeWidth={2.5} />}
+                {deltaPct}%
+              </span>
+              <span className="text-[11px]" style={{ color: 'var(--text-soft)' }}>
+                较上周
+              </span>
+            </div>
+          )}
+          {sub2 && (
+            <div className="mt-2.5 text-[11px]" style={{ color: 'var(--text-soft)' }}>{sub2}</div>
+          )}
         </div>
-        <div className="shrink-0">{chart}</div>
+        {chart && <div className="shrink-0">{chart}</div>}
       </div>
     </div>
   );
 }
 
+// Real KPI counts pulled from the backend on mount. No fabricated values / weekly deltas / sparklines
+// (P1-4: these four cards used to render hardcoded 142/36/186/8 with fake 较上周 deltas).
 function KPIRow() {
+  const [stats, setStats] = React.useState(null);
+
+  React.useEffect(() => {
+    let alive = true;
+    if (!window.api) return undefined;
+    const asArray = (x) => Array.isArray(x) ? x
+      : Array.isArray(x?.rows) ? x.rows
+      : Array.isArray(x?.content) ? x.content
+      : Array.isArray(x?.items) ? x.items
+      : [];
+    Promise.all([
+      window.api.get('/teachers').catch(() => []),
+      window.api.get('/classrooms').catch(() => []),
+      window.api.get('/exam-tasks').catch(() => []),
+      window.api.get('/stats/history').catch(() => ({})),
+    ]).then(([teachers, classrooms, tasks, history]) => {
+      if (!alive) return;
+      const taskList = asArray(tasks);
+      const activeTasks = taskList.filter((it) => {
+        const s = String(it?.status || '').toLowerCase();
+        return s && !['draft', 'archived', 'cancelled', 'canceled', 'completed', 'closed'].includes(s);
+      }).length;
+      setStats({
+        teachers: asArray(teachers).length,
+        classrooms: asArray(classrooms).length,
+        tasks: taskList.length,
+        activeTasks,
+        sessions: Number(history?.totals?.count) || 0,
+      });
+    });
+    return () => { alive = false; };
+  }, []);
+
+  const show = (n) => (stats == null ? '—' : String(n));
+
   return (
     <div className="grid grid-cols-4 gap-5">
       <KPICard
         variant={1}
         icon={IconList}
-        label="考务任务进行中"
-        sub="ACTIVE TASKS"
-        value="8"
+        label="考务任务"
+        sub="EXAM TASKS"
+        value={show(stats?.tasks)}
         unit="个"
-        deltaPct="14.3"
-        deltaUp={true}
-        chart={<SparkChartJS data={[2,3,5,4,6,7,8,8]} color="#4F46E5" />}
+        sub2={stats == null ? null : `进行中 ${stats.activeTasks}`}
       />
       <KPICard
         variant={2}
         icon={IconCalendar}
-        label="本学期累计排班"
-        sub="TOTAL ASSIGNMENTS"
-        value="186"
-        unit="场"
-        deltaPct="9.6"
-        deltaUp={true}
-        chart={<SparkChartJS data={[14,18,22,25,28,30,32,36]} color="#059669" />}
+        label="本学期累计监考"
+        sub="TOTAL SUPERVISIONS"
+        value={show(stats?.sessions)}
+        unit="人次"
       />
       <KPICard
         variant={3}
         icon={IconUsers}
         label="在职教职工"
         sub="FACULTY"
-        value="142"
+        value={show(stats?.teachers)}
         unit="人"
-        deltaPct="1.4"
-        deltaUp={true}
-        chart={<MiniDonut pct={86} color="#D97706" track="#FFEDD5" />}
       />
       <KPICard
         variant={4}
         icon={IconBuilding}
         label="可用教室"
         sub="CLASSROOMS"
-        value="36"
+        value={show(stats?.classrooms)}
         unit="间"
-        deltaPct="0.8"
-        deltaUp={false}
-        chart={<MiniDonut pct={88} color="#9333EA" track="#F3E8FF" />}
       />
     </div>
   );

@@ -33,6 +33,38 @@ const NOTIF_META = {
   audit:    { icon: IconArchive,  bg: '#FFF7ED', fg: '#D97706' },
 };
 
+// Map a backend notification (GET /api/v1/notifications) to the drawer's display shape.
+function relTimeTb(iso) {
+  if (!iso) return '';
+  const t = new Date(iso).getTime();
+  if (!t) return '';
+  const m = Math.floor((Date.now() - t) / 60000);
+  if (m < 1) return '刚刚';
+  if (m < 60) return `${m} 分钟前`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} 小时前`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d} 天前`;
+  try { return new Date(iso).toLocaleDateString('zh-CN'); } catch { return ''; }
+}
+function mapNotification(n) {
+  const type = String(n.type || '');
+  const kind = type === 'schedule_published' ? 'task'
+    : type.includes('conflict') ? 'conflict'
+    : type.includes('security') ? 'security'
+    : 'system';
+  const url = String(n.targetUrl || '');
+  return {
+    id: n.id,
+    kind,
+    title: n.title || '通知',
+    desc: n.body || '',
+    at: relTimeTb(n.createdAt || n.publishedAt),
+    unread: !n.read,
+    page: url.startsWith('/tasks') ? 'tasks' : null,
+  };
+}
+
 // ── Command palette items ────────────────────────────────
 const PALETTE_ITEMS = [
   { kind: 'page', label: '仪表盘',        kw: '总览 dashboard home',  icon: IconDashboard, page: 'dashboard' },
@@ -99,6 +131,22 @@ const TENANTS = [
   { id: 'tg',  name: '天津大学附属中学', type: '完全中学', abbr: 'TG',  active: false, color: '#D97706' },
 ];
 
+function normalizeTopbarTenant(t, index = 0) {
+  const id = t?.slug || t?.id || t?.uuid || `tenant-${index}`;
+  const abbr = t?.abbr || String(id).slice(0, 3).toUpperCase();
+  return {
+    id,
+    uuid: t?.uuid,
+    slug: t?.slug || id,
+    name: t?.name || id,
+    type: t?.type || t?.plan || 'school',
+    abbr,
+    active: t?.active !== false && t?.status !== 'suspended',
+    color: t?.color || ['#9333EA', '#4F46E5', '#059669', '#D97706'][index % 4],
+    status: t?.status || 'active',
+  };
+}
+
 function useClickOutside(ref, handler, deps = []) {
   useEffectTb(() => {
     const fn = (e) => { if (ref.current && !ref.current.contains(e.target)) handler(); };
@@ -108,7 +156,7 @@ function useClickOutside(ref, handler, deps = []) {
 }
 
 // ── Notifications Drawer Content ─────────────────────────
-function NotificationsList({ onNav, source = NOTIFICATIONS, onActions }) {
+function NotificationsList({ onNav, source = NOTIFICATIONS, onActions, onMarkRead, onMarkAllRead }) {
   const [list, setList] = useStateTb(source);
   const unread = list.filter((n) => n.unread).length;
   return (
@@ -120,11 +168,16 @@ function NotificationsList({ onNav, source = NOTIFICATIONS, onActions }) {
         <button
           className="text-[12px] font-medium hover:underline"
           style={{ color: 'var(--brand)' }}
-          onClick={() => { setList(list.map((n) => ({ ...n, unread: false }))); window.ui.toast('已标记全部为已读'); }}
+          onClick={() => { setList(list.map((n) => ({ ...n, unread: false }))); if (onMarkAllRead) onMarkAllRead(); else window.ui.toast('已标记全部为已读'); }}
         >
           全部标为已读
         </button>
       </div>
+      {list.length === 0 && (
+        <div className="rounded-xl px-4 py-8 text-center text-[12.5px]" style={{ border: '1px dashed var(--border-strong)', color: 'var(--text-soft)' }}>
+          暂无通知 · 发布排班后将在此收到提醒
+        </div>
+      )}
       <ul className="space-y-2">
         {list.map((n) => {
           const m = NOTIF_META[n.kind] || NOTIF_META.system;
@@ -137,6 +190,7 @@ function NotificationsList({ onNav, source = NOTIFICATIONS, onActions }) {
                 border: '1px solid var(--border-soft)',
               }}
               onClick={() => {
+                if (onMarkRead && n.unread) onMarkRead(n.id);
                 setList(list.map((x) => (x.id === n.id ? { ...x, unread: false } : x)));
                 if (n.page) onNav(n.page);
                 window.ui.closeDrawer();
@@ -290,7 +344,8 @@ function Topbar({ onNav, active, mode = 'admin' }) {
   const [tenantOpen,  setTenantOpen]  = useStateTb(false);
   const [avatarOpen,  setAvatarOpen]  = useStateTb(false);
   const [paletteOpen, setPaletteOpen] = useStateTb(false);
-  const [tenant,      setTenant]      = useStateTb(TENANTS[0]);
+  const [tenants,     setTenants]     = useStateTb(TENANTS.map(normalizeTopbarTenant));
+  const [tenant,      setTenant]      = useStateTb(normalizeTopbarTenant(TENANTS[0]));
 
   // ⌘K shortcut
   useEffectTb(() => {
@@ -304,16 +359,64 @@ function Topbar({ onNav, active, mode = 'admin' }) {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const notifSource = isSuper ? SUPER_NOTIFICATIONS : NOTIFICATIONS;
+  useEffectTb(() => {
+    let cancelled = false;
+    async function loadTenants() {
+      if (!window.api?.get) return;
+      try {
+        const rows = await window.api.get('/admin/tenants');
+        const normalized = (Array.isArray(rows) ? rows : []).map(normalizeTopbarTenant);
+        if (cancelled || normalized.length === 0) return;
+        setTenants(normalized);
+        const saved = localStorage.getItem('jkxt:tenantId');
+        setTenant(normalized.find((t) => t.id === saved || t.slug === saved || t.uuid === saved) || normalized[0]);
+      } catch (error) {
+        console.warn('[topbar] admin tenants fallback', error);
+      }
+    }
+    loadTenants();
+    return () => { cancelled = true; };
+  }, []);
+
+  const selectTenant = (t) => {
+    setTenant(t);
+    localStorage.setItem('jkxt:tenantId', t.slug || t.id);
+    window.dispatchEvent(new CustomEvent('jkxt:tenant-change', { detail: t }));
+  };
+
+  // Admin notifications come from the real backend inbox (GET /api/v1/notifications). Super-admin
+  // platform notifications remain illustrative (no platform-notification endpoint yet, R6).
+  const [realNotifs, setRealNotifs] = useStateTb(null);
+  const refreshNotifs = () => {
+    if (isSuper || !window.api) return;
+    window.api.get('/notifications')
+      .then((rows) => setRealNotifs(Array.isArray(rows) ? rows.map(mapNotification) : []))
+      .catch(() => setRealNotifs([]));
+  };
+  useEffectTb(() => { refreshNotifs(); }, [isSuper]);
+
+  const notifSource = isSuper ? SUPER_NOTIFICATIONS : (realNotifs || []);
   const paletteItems = isSuper ? SUPER_PALETTE_ITEMS : PALETTE_ITEMS;
   const unreadCount = notifSource.filter((n) => n.unread).length;
 
+  const markRead = (id) => {
+    setRealNotifs((prev) => (prev || []).map((x) => (x.id === id ? { ...x, unread: false } : x)));
+    try { window.api?.post(`/notifications/${id}/read`, {})?.catch?.(() => {}); } catch {}
+  };
+  const markAllRead = () => {
+    setRealNotifs((prev) => (prev || []).map((x) => ({ ...x, unread: false })));
+    try { window.api?.post('/notifications/read-all', {})?.catch?.(() => {}); } catch {}
+    window.ui.toast('已标记全部为已读');
+  };
+
   const openNotifications = () => {
+    refreshNotifs();
     window.ui.drawer({
       title: isSuper ? '平台通知中心' : '通知中心',
       subtitle: `${unreadCount} 条未读 · ${isSuper ? '跨租户 · 平台级' : '本校 · 本学期'}`,
       width: 460,
-      content: <NotificationsList onNav={(p) => onNav?.(p)} source={notifSource} />,
+      content: <NotificationsList onNav={(p) => onNav?.(p)} source={notifSource}
+        onMarkRead={isSuper ? undefined : markRead} onMarkAllRead={isSuper ? undefined : markAllRead} />,
     });
   };
 
@@ -482,12 +585,12 @@ function Topbar({ onNav, active, mode = 'admin' }) {
                   切换学校 / 租户
                 </div>
                 <ul className="py-1.5">
-                  {TENANTS.map((t) => (
+                  {tenants.map((t) => (
                     <li key={t.id}>
                       <button
                         className="w-full px-3 py-2 flex items-center gap-2.5 text-left hover:bg-slate-50 transition-colors"
                         onClick={() => {
-                          setTenant(t);
+                          selectTenant(t);
                           setTenantOpen(false);
                           window.ui.toast(`已切换至 ${t.name}`, { kind: 'success' });
                         }}

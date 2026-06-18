@@ -54,6 +54,136 @@ const SUPER_ANNOUNCEMENTS = [
   { id: 'AN004', title: '寒假期间系统维护通告 (2026-01-20 ~ 2026-02-05)',  severity: 'info',     publishAt: '—',          expireAt: '2026-01-20', status: 'draft',     target: '全部租户', readBy: 0   },
 ];
 
+function useSuperResource(path, fallback) {
+  const [rows, setRows] = React.useState(fallback);
+  const [loading, setLoading] = React.useState(false);
+  const reload = React.useCallback(async () => {
+    if (!window.api?.get) return fallback;
+    setLoading(true);
+    try {
+      const data = await window.api.get(path);
+      const next = Array.isArray(data) ? data : fallback;
+      setRows(next);
+      return next;
+    } catch (error) {
+      console.warn(`[super] ${path} fallback`, error);
+      setRows(fallback);
+      return fallback;
+    } finally {
+      setLoading(false);
+    }
+  }, [path, fallback]);
+  React.useEffect(() => { reload(); }, [reload]);
+  return [rows, reload, loading, setRows];
+}
+
+function useSuperObject(path, fallback) {
+  const [value, setValue] = React.useState(fallback);
+  const reload = React.useCallback(async () => {
+    if (!window.api?.get) return fallback;
+    try {
+      const data = await window.api.get(path);
+      const next = data && typeof data === 'object' ? data : fallback;
+      setValue(next);
+      return next;
+    } catch (error) {
+      console.warn(`[super] ${path} fallback`, error);
+      setValue(fallback);
+      return fallback;
+    }
+  }, [path, fallback]);
+  React.useEffect(() => { reload(); }, [reload]);
+  return [value, reload, setValue];
+}
+
+async function superPost(path, body, reload, successText) {
+  const shouldToast = successText !== false;
+  if (!window.api?.post) {
+    if (shouldToast) window.ui.toast(successText || '操作已记录', { kind: 'info' });
+    return null;
+  }
+  try {
+    const result = await window.api.post(path, body || {});
+    if (reload) await reload();
+    if (shouldToast) window.ui.toast(successText || '操作已记录', { kind: 'success', desc: '后端已写入审计日志' });
+    return result;
+  } catch (error) {
+    console.error(`[super] ${path} failed`, error);
+    window.ui.toast(error.message || '操作失败', { kind: 'error' });
+    return null;
+  }
+}
+
+async function superPut(path, body, reload, successText) {
+  const shouldToast = successText !== false;
+  if (!window.api?.put) {
+    if (shouldToast) window.ui.toast(successText || '操作已记录', { kind: 'info' });
+    return null;
+  }
+  try {
+    const result = await window.api.put(path, body || {});
+    if (reload) await reload();
+    if (shouldToast) window.ui.toast(successText || '操作已记录', { kind: 'success', desc: '后端已写入审计日志' });
+    return result;
+  } catch (error) {
+    console.error(`[super] ${path} failed`, error);
+    window.ui.toast(error.message || '操作失败', { kind: 'error' });
+    return null;
+  }
+}
+
+function superBackendId(row) {
+  const id = row?.uuid || row?.id;
+  return /^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(String(id || '')) ? id : null;
+}
+
+function announcementStatusLabel(status) {
+  if (status === 'published') return '已发布';
+  if (status === 'retracted') return '已撤回';
+  return '草稿';
+}
+
+function announcementStatusColor(status) {
+  if (status === 'published') return 'emerald';
+  if (status === 'retracted') return 'rose';
+  return 'slate';
+}
+
+function announcementTargetLabel(target) {
+  if (target === 'admins') return '管理员';
+  if (target === 'selected') return '选定租户';
+  if (target === 'all') return '全部租户';
+  return target || '全部租户';
+}
+
+function normalizeAnnouncementSeverity(value) {
+  if (value === '紧急' || value === 'critical') return 'critical';
+  if (value === '提醒' || value === 'reminder') return 'reminder';
+  return 'info';
+}
+
+function normalizeAnnouncementTarget(value) {
+  if (value === '仅管理员' || value === '管理员' || value === 'admins') return 'admins';
+  if (value === '选定租户' || value === 'selected') return 'selected';
+  return 'all';
+}
+
+function announcementFormPayload(formId, defaults = {}) {
+  const form = document.querySelector(`[data-announcement-form="${formId}"]`);
+  const field = (name, fallback = '') => {
+    const value = form?.querySelector(`[name="${name}"]`)?.value;
+    return String(value || fallback || '').trim();
+  };
+  return {
+    title: field('title', defaults.title || '平台公告'),
+    body: field('body', defaults.body || ''),
+    severity: normalizeAnnouncementSeverity(field('severity', defaults.severity || 'info')),
+    target: normalizeAnnouncementTarget(field('target', defaults.target || 'all')),
+    expireAt: field('expireAt', defaults.expireAt || ''),
+    status: defaults.status || 'draft',
+  };
+}
+
 // ── Premium gradient palettes for Super KPIs ──────────────────────
 const FEATURE_GRADIENTS = {
   rose:   'linear-gradient(135deg, #FFE4D6 0%, #FFC7E0 45%, #F5B8E2 100%)',
@@ -442,70 +572,71 @@ function SuperDashboardPage() {
 
 // ── 2. Tenants ────────────────────────────────────────────────────────
 
-// Open the New Tenant registration wizard (5-step modal)
-function openNewTenantModal() {
+// 新增租户 — 真实写入后端 (POST /api/v1/admin/tenants，SUPER_ADMIN)。
+// 私有部署固定单租户时后端会返回 403，表单会如实提示。
+function SuperTenantFormModal({ onSaved }) {
+  const [form, setForm] = React.useState({ name: '', city: '天津', plan: 'trial', students: '', contactName: '', contactPhone: '' });
+  const [saving, setSaving] = React.useState(false);
+  const [err, setErr] = React.useState('');
+  const bind = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const submit = async () => {
+    if (saving) return;
+    if (!form.name.trim()) { setErr('学校名称为必填项'); return; }
+    setSaving(true); setErr('');
+    try {
+      await window.api.post('/admin/tenants', {
+        name: form.name.trim(), city: form.city.trim() || null, plan: form.plan,
+        students: parseInt(form.students, 10) || 0,
+        contactName: form.contactName.trim() || null, contactPhone: form.contactPhone.trim() || null,
+      });
+      window.ui.closeModal();
+      window.ui.toast('租户已创建', { kind: 'success', desc: form.name.trim() + ' · 审计已记录' });
+      if (onSaved) onSaved();
+    } catch (e) {
+      setErr(e.message || '创建失败（私有部署固定单租户时不支持新增）');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      {[
+        ['学校名称 *', 'name', '例:天津市第二实验小学'],
+        ['所在城市', 'city', '例:天津 · 河西区'],
+        ['预估学生数', 'students', '例:1200'],
+        ['联系人姓名', 'contactName', '例:张明远'],
+        ['联系电话', 'contactPhone', '13800138000'],
+      ].map(([label, key, ph]) => (
+        <div key={key} className="grid grid-cols-[100px_1fr] gap-3 items-center">
+          <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>{label}</label>
+          <input style={SUPER_FIELD_STYLE} value={form[key]} onChange={bind(key)} placeholder={ph} />
+        </div>
+      ))}
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>套餐</label>
+        <select style={SUPER_FIELD_STYLE} value={form.plan} onChange={bind('plan')}>
+          <option value="trial">试用 (trial)</option>
+          <option value="standard">标准 (standard)</option>
+          <option value="premium">旗舰 (premium)</option>
+        </select>
+      </div>
+      {err && <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>}
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconCheck} disabled={saving} onClick={submit}>{saving ? '创建中…' : '创建租户'}</Button>
+      </div>
+    </div>
+  );
+}
+
+// Open the New Tenant registration modal. onSaved (optional) reloads the tenant list.
+function openNewTenantModal(onSaved) {
   window.ui.modal({
     title: '注册新租户',
-    subtitle: '5 步引导:基础信息 → 套餐 → 管理员 → 域名 → 确认',
-    size: 'lg',
-    content: (
-      <div className="space-y-4">
-        {/* Step indicator */}
-        <div className="flex items-center gap-2 px-1">
-          {['基础信息', '套餐', '主管理员', '域名', '确认'].map((s, i) => (
-            <React.Fragment key={s}>
-              <div className={`flex items-center gap-1.5 text-[11.5px] ${i === 0 ? 'font-semibold' : ''}`}
-                style={{ color: i === 0 ? 'var(--brand)' : 'var(--text-soft)' }}>
-                <span className="w-5 h-5 rounded-full inline-flex items-center justify-center font-mono font-bold text-[10px]"
-                  style={{ background: i === 0 ? 'var(--brand)' : '#F1F5F9', color: i === 0 ? '#fff' : 'var(--text-soft)' }}>
-                  {i + 1}
-                </span>
-                {s}
-              </div>
-              {i < 4 && <span className="flex-1 h-px" style={{ background: 'var(--border-soft)' }} />}
-            </React.Fragment>
-          ))}
-        </div>
-
-        {/* Step 1 fields */}
-        <div className="space-y-3 mt-4">
-          {[
-            { l: '学校名称 *',   ph: '例:天津市第二实验小学' },
-            { l: '所在城市 *',   ph: '例:天津 · 河西区' },
-            { l: '学段类型 *',   ph: '完全中学 / 初中 / 高中 / 小学', kind: 'select', opts: ['完全中学', '初中', '高中', '小学', '九年一贯制'] },
-            { l: '预估学生数 *', ph: '例:1200', mono: true },
-            { l: '联系人姓名 *', ph: '例:张明远' },
-            { l: '联系电话 *',   ph: '13800138000', mono: true },
-          ].map((f) => (
-            <div key={f.l} className="grid grid-cols-[110px_1fr] gap-3 items-center">
-              <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>{f.l}</label>
-              {f.kind === 'select' ? (
-                <select className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                  style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
-                  {f.opts.map(o => <option key={o}>{o}</option>)}
-                </select>
-              ) : (
-                <input placeholder={f.ph}
-                  className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                  style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', fontFamily: f.mono ? 'Geist Mono' : undefined }} />
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="text-[11.5px] mt-2 px-2" style={{ color: 'var(--text-soft)' }}>
-          完成本步后,后续步骤将自动展开。所有信息可在租户管理页面修改。
-        </div>
-      </div>
-    ),
-    footer: (
-      <>
-        <Button onClick={() => window.ui.closeModal()}>取消</Button>
-        <Button variant="primary" icon={IconChevron} onClick={() => { window.ui.closeModal(); window.ui.toast('已保存草稿 · 进入下一步', { kind: 'success', desc: '可在「租户管理 → 草稿」继续' }); }}>
-          下一步:套餐选择
-        </Button>
-      </>
-    ),
+    subtitle: '填写学校基础信息,创建后可在租户管理继续完善',
+    size: 'md',
+    content: <SuperTenantFormModal onSaved={typeof onSaved === 'function' ? onSaved : undefined} />,
   });
 }
 
@@ -671,6 +802,15 @@ function openTenantEditDrawer(t) {
 }
 
 function SuperTenantsPage() {
+  const [tenants, reloadTenants] = useSuperResource('/admin/tenants', SUPER_TENANTS);
+  const changeTenantStatus = async (r, action) => {
+    const tenantId = r.uuid || r.id;
+    if (!tenantId) {
+      window.ui.toast('租户缺少后端 ID', { kind: 'warning' });
+      return;
+    }
+    await superPost(`/admin/tenants/${tenantId}/${action}`, {}, reloadTenants, action === 'suspend' ? `${r.name} 已暂停` : `${r.name} 已恢复`);
+  };
   const cols = [
     { key: 'name', label: '租户名称', width: 220,
       render: (r) => (
@@ -708,14 +848,14 @@ function SuperTenantsPage() {
             <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: '#DC2626' }}
               onClick={async () => {
                 const ok = await window.ui.confirm({ title: `暂停 ${r.name}?`, desc: '该租户的所有管理员将无法登录,数据保留 90 天后可恢复', danger: true, confirmText: '暂停租户' });
-                if (ok) window.ui.toast(`${r.name} 已暂停`, { kind: 'success', desc: '已发送邮件通知主管理员' });
+                if (ok) await changeTenantStatus(r, 'suspend');
               }}>暂停</button>
           )}
           {r.status === 'suspended' && (
             <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: '#059669' }}
               onClick={async () => {
                 const ok = await window.ui.confirm({ title: `恢复 ${r.name}?`, desc: '该租户的管理员将立即可以登录', confirmText: '恢复访问' });
-                if (ok) window.ui.toast(`${r.name} 已恢复`, { kind: 'success' });
+                if (ok) await changeTenantStatus(r, 'restore');
               }}>恢复</button>
           )}
         </div>
@@ -723,12 +863,12 @@ function SuperTenantsPage() {
     },
   ];
 
-  const totalStudents = SUPER_TENANTS.reduce((a,b)=>a+b.students,0);
+  const totalStudents = tenants.reduce((a,b)=>a+Number(b.students || 0),0);
   return (
     <PageShell
       crumbs={['JKXT 平台', '超管控制台', '租户管理']}
       title="租户(单位)管理"
-      badge={`${SUPER_TENANTS.length} 所学校`}
+      badge={`${tenants.length} 所学校`}
       subtitle="跨租户管理学校档案、套餐、管理员配额"
       actions={
         <>
@@ -763,21 +903,21 @@ function SuperTenantsPage() {
       <div className="grid grid-cols-4 gap-4">
         <FeatureKPI
           label="活跃租户" sublabel="ACTIVE"
-          value={SUPER_TENANTS.filter(t => t.status === 'active').length} unit={`/ ${SUPER_TENANTS.length}`}
+          value={tenants.filter(t => t.status === 'active').length} unit={`/ ${tenants.length}`}
           footnote="近 7 天有登录记录"
           icon={IconCheck} accent="#059669"
           gradient={FEATURE_GRADIENTS.mint} orbColor="rgba(52,211,153,.4)"
         />
         <FeatureKPI
           label="试用中" sublabel="ON TRIAL"
-          value={SUPER_TENANTS.filter(t => t.status === 'trial').length} unit="所"
+          value={tenants.filter(t => t.status === 'trial').length} unit="所"
           footnote="平均剩余 18 天"
           icon={IconClock} accent="#D97706"
           gradient={FEATURE_GRADIENTS.amber} orbColor="rgba(251,191,36,.42)"
         />
         <FeatureKPI
           label="已暂停" sublabel="SUSPENDED"
-          value={SUPER_TENANTS.filter(t => t.status === 'suspended').length} unit="所"
+          value={tenants.filter(t => t.status === 'suspended').length} unit="所"
           footnote="需联系恢复"
           icon={IconAlert} accent="#DC2626"
           gradient={FEATURE_GRADIENTS.rose} orbColor="rgba(244,114,182,.42)"
@@ -794,21 +934,116 @@ function SuperTenantsPage() {
       <FilterBar
         search="搜索学校名称、域名..."
         filters={[
-          { label: '类型:', value: '全部' },
-          { label: '套餐:', value: '全部' },
-          { label: '城市:', value: '全部' },
-          { label: '状态:', value: '全部' },
+          { label: '类型:', value: '全部', options: ['全部', '公立', '民办', '国际学校'] },
+          { label: '套餐:', value: '全部', options: ['全部', '基础版', '专业版', '旗舰版'] },
+          { label: '城市:', value: '全部', options: ['全部', '天津', '北京', '上海', '广州', '深圳'] },
+          { label: '状态:', value: '全部', options: ['全部', '正常', '试用', '欠费', '停用'] },
         ]}
-        total={SUPER_TENANTS.length}
+        total={tenants.length}
       />
 
-      <DataTable columns={cols} rows={SUPER_TENANTS} selectable onRowClick={(r) => openTenantDrawer(r)} />
+      <DataTable columns={cols} rows={tenants} selectable onRowClick={(r) => openTenantDrawer(r)} />
     </PageShell>
   );
 }
 
 // ── 3. Accounts ───────────────────────────────────────────────────────
+const SUPER_FIELD_STYLE = {
+  height: 40, padding: '0 12px', borderRadius: 8, fontSize: 13, outline: 'none',
+  background: '#F8FAFC', border: '1px solid var(--border-soft)', width: '100%',
+};
+
+// 新增管理员账号 — 真实写入后端 (POST /api/v1/admin/accounts，SUPER_ADMIN)
+function SuperAccountFormModal({ onSaved }) {
+  const [form, setForm] = React.useState({ name: '', email: '', phone: '', tenantId: '', role: 'admin' });
+  const [tenants, setTenants] = React.useState([]);
+  const [saving, setSaving] = React.useState(false);
+  const [err, setErr] = React.useState('');
+
+  React.useEffect(() => {
+    let alive = true;
+    window.api.get('/admin/tenants')
+      .then((rows) => {
+        if (!alive) return;
+        const list = Array.isArray(rows) ? rows : [];
+        setTenants(list);
+        setForm((prev) => ({ ...prev, tenantId: list[0]?.uuid || '' }));
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
+  const bind = (key) => (e) => setForm((prev) => ({ ...prev, [key]: e.target.value }));
+
+  const submit = async () => {
+    if (saving) return;
+    if (!form.name.trim() || !form.email.trim()) { setErr('姓名和邮箱为必填项'); return; }
+    setSaving(true); setErr('');
+    try {
+      await window.api.post('/admin/accounts', {
+        name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() || null,
+        tenantId: form.tenantId || null, role: form.role,
+      });
+      window.ui.closeModal();
+      window.ui.toast('账号已创建', { kind: 'success', desc: '已生成临时密码,首次登录需修改 · 审计已记录' });
+      if (onSaved) onSaved();
+    } catch (e) {
+      setErr(e.message || '创建失败');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>姓名 *</label>
+        <input style={SUPER_FIELD_STYLE} value={form.name} onChange={bind('name')} placeholder="例:张明远" />
+      </div>
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>邮箱 *</label>
+        <input style={SUPER_FIELD_STYLE} value={form.email} onChange={bind('email')} placeholder="name@school.edu.cn" />
+      </div>
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>手机号</label>
+        <input style={SUPER_FIELD_STYLE} value={form.phone} onChange={bind('phone')} placeholder="13800138000" />
+      </div>
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>所属租户</label>
+        <select style={SUPER_FIELD_STYLE} value={form.tenantId} onChange={bind('tenantId')}>
+          {tenants.length === 0 && <option value="">（默认当前租户）</option>}
+          {tenants.map((t) => <option key={t.uuid} value={t.uuid}>{t.name || t.slug || t.uuid}</option>)}
+        </select>
+      </div>
+      <div className="grid grid-cols-[100px_1fr] gap-3 items-center">
+        <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>角色 *</label>
+        <select style={SUPER_FIELD_STYLE} value={form.role} onChange={bind('role')}>
+          <option value="admin">本校管理员 (admin)</option>
+          <option value="viewer">只读 (viewer)</option>
+          <option value="super">超级管理员 (super)</option>
+        </select>
+      </div>
+      <div className="rounded-lg p-3 text-[11.5px]" style={{ background: '#EEF2FF', border: '1px solid #C7D2FE', color: 'var(--text-medium)' }}>
+        系统将自动生成临时密码,首次登录需修改并配置 2FA。
+      </div>
+      {err && <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>}
+      <div className="flex items-center justify-end gap-2 pt-1">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconCheck} disabled={saving} onClick={submit}>{saving ? '创建中…' : '创建账号'}</Button>
+      </div>
+    </div>
+  );
+}
+
 function SuperAccountsPage() {
+  const [accounts, reloadAccounts] = useSuperResource('/admin/accounts', SUPER_ACCOUNTS);
+  const accountAction = async (acc, action, label) => {
+    const accountId = acc.uuid || acc.id;
+    if (!accountId) {
+      window.ui.toast('账号缺少后端 ID', { kind: 'warning' });
+      return;
+    }
+    await superPost(`/admin/accounts/${accountId}/${action}`, {}, reloadAccounts, label);
+  };
   const cols = [
     { key: 'id', label: '账号 ID', width: 90, mono: true,
       render: (r) => <span className="font-mono text-[12px]" style={{ color: 'var(--text-soft)' }}>{r.id}</span> },
@@ -855,7 +1090,7 @@ function SuperAccountsPage() {
           <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--text-medium)' }}
             onClick={async () => {
               const ok = await window.ui.confirm({ title: `重置 ${r.name} 密码?`, desc: '系统将生成临时密码并发送至验证邮箱,管理员首次登录需修改', confirmText: '重置并发送' });
-              if (ok) window.ui.toast(`已发送临时密码至 ${r.email.replace(/^.*@/,'***@')}`, { kind: 'success' });
+              if (ok) await accountAction(r, 'reset-password', `已发送临时密码至 ${r.email.replace(/^.*@/,'***@')}`);
             }}>重置密码</button>
         </div>
       ),
@@ -951,17 +1186,17 @@ function SuperAccountsPage() {
               <Button size="sm" danger
                 onClick={async () => {
                   const ok = await window.ui.confirm({ title: `强制下线 ${acc.name}?`, desc: '该账号将立即失去会话,需重新登录', danger: true });
-                  if (ok) window.ui.toast(`${acc.name} 已强制下线`, { kind: 'warning' });
+                  if (ok) await accountAction(acc, 'force-logout', `${acc.name} 已强制下线`);
                 }}>强制下线</Button>
               <Button size="sm" danger
                 onClick={async () => {
                   const ok = await window.ui.confirm({ title: `禁用 ${acc.name} 账号?`, desc: '账号将无法登录,可在 30 天内恢复', danger: true });
-                  if (ok) window.ui.toast(`${acc.name} 账号已禁用`, { kind: 'warning' });
+                  if (ok) await accountAction(acc, 'disable', `${acc.name} 账号已禁用`);
                 }}>禁用账号</Button>
               <Button size="sm" danger
                 onClick={async () => {
                   const ok = await window.ui.confirm({ title: `删除 ${acc.name}?`, desc: '该账号将被永久删除,无法恢复。所有关联数据将保留 30 天。', danger: true, confirmText: '确认删除' });
-                  if (ok) window.ui.toast(`${acc.name} 已删除`, { kind: 'error' });
+                  if (ok) await accountAction(acc, 'delete', `${acc.name} 已删除`);
                 }}>永久删除</Button>
             </div>
           </div>
@@ -985,7 +1220,7 @@ function SuperAccountsPage() {
     <PageShell
       crumbs={['JKXT 平台', '超管控制台', '管理员账号']}
       title="管理员账号"
-      badge={`${SUPER_ACCOUNTS.length} 个账号`}
+      badge={`${accounts.length} 个账号`}
       subtitle="跨租户管理所有管理员、查看登录状态、强制密码重置"
       actions={
         <>
@@ -994,42 +1229,7 @@ function SuperAccountsPage() {
             title: '新增管理员账号',
             subtitle: '该账号将获得选定租户的管理员权限',
             size: 'md',
-            content: (
-              <div className="space-y-3">
-                {[
-                  { l: '姓名 *',     ph: '例:张明远' },
-                  { l: '邮箱 *',     ph: 'name@school.edu.cn', mono: true },
-                  { l: '手机号',     ph: '13800138000', mono: true },
-                  { l: '所属租户 *', kind: 'select', opts: ['TSY 天津市实验中学', 'NK 天津南开中学', 'YH 天津耀华小学', 'TG 天津大学附属中学', 'BSD 天津宝坻一中', 'WJX 天津外国语小学', 'WQ 天津武清外国语'] },
-                  { l: '角色 *',     kind: 'select', opts: ['本校管理员 (admin)', '只读 (viewer)', '超级管理员 (super)'] },
-                ].map(f => (
-                  <div key={f.l} className="grid grid-cols-[100px_1fr] gap-3 items-center">
-                    <label className="text-[12.5px] text-right" style={{ color: 'var(--text-medium)' }}>{f.l}</label>
-                    {f.kind === 'select' ? (
-                      <select className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                        style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
-                        {f.opts.map(o => <option key={o}>{o}</option>)}
-                      </select>
-                    ) : (
-                      <input placeholder={f.ph}
-                        className="h-10 px-3 rounded-lg text-[13px] outline-none"
-                        style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', fontFamily: f.mono ? 'Geist Mono' : undefined }} />
-                    )}
-                  </div>
-                ))}
-                <div className="rounded-lg p-3 text-[11.5px] mt-2" style={{ background: '#EEF2FF', border: '1px solid #C7D2FE', color: 'var(--text-medium)' }}>
-                  系统将自动生成临时密码,首次登录需修改并配置 2FA
-                </div>
-              </div>
-            ),
-            footer: (
-              <>
-                <Button onClick={() => window.ui.closeModal()}>取消</Button>
-                <Button variant="primary" icon={IconCheck} onClick={() => { window.ui.closeModal(); window.ui.toast('账号已创建', { kind: 'success', desc: '已通过邮件发送临时密码' }); }}>
-                  创建账号
-                </Button>
-              </>
-            ),
+            content: <SuperAccountFormModal onSaved={reloadAccounts} />,
           })}>新增账号</Button>
         </>
       }
@@ -1037,28 +1237,28 @@ function SuperAccountsPage() {
       <div className="grid grid-cols-4 gap-4">
         <FeatureKPI
           label="在线账号" sublabel="ONLINE NOW"
-          value={SUPER_ACCOUNTS.filter(a => a.status === 'online').length} unit="人"
+          value={accounts.filter(a => a.status === 'online').length} unit="人"
           footnote="实时 · 含超管账号"
           icon={IconCheck} accent="#059669"
           gradient={FEATURE_GRADIENTS.mint} orbColor="rgba(52,211,153,.4)"
         />
         <FeatureKPI
           label="超级管理员" sublabel="SUPER ADMINS"
-          value={SUPER_ACCOUNTS.filter(a => a.role === 'super').length} unit="人"
+          value={accounts.filter(a => a.role === 'super').length} unit="人"
           footnote="平台级最高权限"
           icon={IconSettings} accent="#7C3AED"
           gradient={FEATURE_GRADIENTS.violet} orbColor="rgba(167,139,250,.4)"
         />
         <FeatureKPI
           label="未启用 2FA" sublabel="2FA RISK"
-          value={SUPER_ACCOUNTS.filter(a => !a.twoFactor).length} unit="人"
+          value={accounts.filter(a => !a.twoFactor).length} unit="人"
           footnote="建议立即推送启用提醒"
           icon={IconAlert} accent="#DC2626"
           gradient={FEATURE_GRADIENTS.rose} orbColor="rgba(244,114,182,.42)"
         />
         <FeatureKPI
           label="本月活跃" sublabel="MONTHLY ACTIVE"
-          value={SUPER_ACCOUNTS.length - 1} unit="人"
+          value={Math.max(0, accounts.length - 1)} unit="人"
           footnote="较上月 +5.0%"
           icon={IconUsers} accent="#2563EB"
           gradient={FEATURE_GRADIENTS.azure} orbColor="rgba(96,165,250,.4)"
@@ -1068,15 +1268,15 @@ function SuperAccountsPage() {
       <FilterBar
         search="搜索姓名、邮箱..."
         filters={[
-          { label: '角色:', value: '全部' },
-          { label: '租户:', value: '全部' },
-          { label: '状态:', value: '全部' },
-          { label: '2FA:', value: '全部' },
+          { label: '角色:', value: '全部', options: ['全部', '超级管理员', '运维', '客服', '只读'] },
+          { label: '租户:', value: '全部', options: ['全部', '天津市实验中学', '北京一中', '上海中学'] },
+          { label: '状态:', value: '全部', options: ['全部', '启用', '禁用'] },
+          { label: '2FA:', value: '全部', options: ['全部', '已开启', '未开启'] },
         ]}
-        total={SUPER_ACCOUNTS.length}
+        total={accounts.length}
       />
 
-      <DataTable columns={cols} rows={SUPER_ACCOUNTS} selectable />
+      <DataTable columns={cols} rows={accounts} selectable />
     </PageShell>
   );
 }
@@ -1106,7 +1306,7 @@ function SuperSystemSettingsPage() {
               confirmText: '确认保存并广播',
             });
             if (ok) {
-              window.ui.toast('系统设置已保存', { kind: 'success', desc: '配置已下发至所有租户 · 审计 L0010 已记录' });
+              await superPut('/admin/platform-settings', switches, null, '系统设置已保存 · 配置已下发,审计已记录');
             }
           }}>保存设置</Button>
         </>
@@ -1183,6 +1383,7 @@ function SuperSystemSettingsPage() {
 
 // ── 5. Audit ──────────────────────────────────────────────────────────
 function SuperAuditPage() {
+  const [auditRows] = useSuperResource('/admin/audit-logs', SUPER_AUDIT);
   const cols = [
     { key: 'id', label: '日志 ID', width: 90, mono: true,
       render: (r) => <span className="font-mono text-[11.5px]" style={{ color: 'var(--text-soft)' }}>{r.id}</span> },
@@ -1250,7 +1451,7 @@ function SuperAuditPage() {
     <PageShell
       crumbs={['JKXT 平台', '超管控制台', '审计日志']}
       title="审计日志"
-      badge={`${SUPER_AUDIT.length} 条记录`}
+      badge={`${auditRows.length} 条记录`}
       subtitle="全平台所有关键操作的审计记录,支持时间/级别/操作类型筛选"
       actions={<Button variant="primary" icon={IconUpload} onClick={() => window.ui.modal({
         title: '导出审计日志',
@@ -1290,28 +1491,28 @@ function SuperAuditPage() {
       <div className="grid grid-cols-4 gap-4">
         <FeatureKPI
           label="今日记录" sublabel="TODAY"
-          value={SUPER_AUDIT.filter(l => l.at.startsWith('今天')).length} unit="条"
+          value={auditRows.filter(l => String(l.at || '').startsWith('今天') || String(l.at || '').includes('T')).length} unit="条"
           footnote="较昨日 +12 条"
           icon={IconList} accent="#2563EB"
           gradient={FEATURE_GRADIENTS.azure} orbColor="rgba(96,165,250,.4)"
         />
         <FeatureKPI
           label="高危事件" sublabel="HIGH SEVERITY"
-          value={SUPER_AUDIT.filter(l => l.severity === 'high').length} unit="条"
+          value={auditRows.filter(l => l.severity === 'high').length} unit="条"
           footnote="均已处理"
           icon={IconAlert} accent="#DC2626"
           gradient={FEATURE_GRADIENTS.rose} orbColor="rgba(244,114,182,.42)"
         />
         <FeatureKPI
           label="警告事件" sublabel="WARNINGS"
-          value={SUPER_AUDIT.filter(l => l.severity === 'warn').length} unit="条"
+          value={auditRows.filter(l => l.severity === 'warn').length} unit="条"
           footnote="需关注"
           icon={IconBell} accent="#D97706"
           gradient={FEATURE_GRADIENTS.amber} orbColor="rgba(251,191,36,.42)"
         />
         <FeatureKPI
           label="活跃操作员" sublabel="ACTORS · 24H"
-          value={new Set(SUPER_AUDIT.map(l => l.actor)).size} unit="人"
+          value={new Set(auditRows.map(l => l.actor)).size} unit="人"
           footnote="跨 5 个租户"
           icon={IconUsers} accent="#7C3AED"
           gradient={FEATURE_GRADIENTS.violet} orbColor="rgba(167,139,250,.4)"
@@ -1321,20 +1522,22 @@ function SuperAuditPage() {
       <FilterBar
         search="搜索操作人、IP、目标..."
         filters={[
-          { label: '时间:', value: '近 7 天' },
-          { label: '级别:', value: '全部' },
-          { label: '操作类型:', value: '全部' },
-          { label: '租户:', value: '全部' },
+          { label: '时间:', value: '近 7 天', options: ['近 24 小时', '近 7 天', '近 30 天', '全部'] },
+          { label: '级别:', value: '全部', options: ['全部', '信息', '警告', '严重'] },
+          { label: '操作类型:', value: '全部', options: ['全部', '登录', '新建', '修改', '删除', '导出'] },
+          { label: '租户:', value: '全部', options: ['全部', '天津市实验中学', '北京一中', '上海中学'] },
         ]}
-        total={SUPER_AUDIT.length}
+        total={auditRows.length}
       />
-      <DataTable columns={cols} rows={SUPER_AUDIT} />
+      <DataTable columns={cols} rows={auditRows} />
     </PageShell>
   );
 }
 
 // ── 6. Security ───────────────────────────────────────────────────────
 function SuperSecurityPage() {
+  const [security, reloadSecurity] = useSuperObject('/admin/security/overview', SUPER_SEC);
+  const threats = Array.isArray(security.threats) ? security.threats : SUPER_SEC.threats;
   const cols = [
     { key: 'ip',       label: 'IP 地址',   width: 150, mono: true,
       render: (r) => <span className="font-mono font-semibold" style={{ color: 'var(--text-strong)' }}>{r.ip}</span> },
@@ -1392,7 +1595,7 @@ function SuperSecurityPage() {
                 desc: '该 IP 将立即被加入防火墙黑名单,所有来源此 IP 的请求会被拒绝。操作记录在审计日志中。',
                 danger: true, confirmText: '确认封禁',
               });
-              if (ok) window.ui.toast(`已封禁 IP ${r.ip}`, { kind: 'success', desc: '防火墙规则已下发 · 立即生效' });
+              if (ok) await superPost('/admin/security/ip-ban', { ip: r.ip, reason: 'security-center' }, reloadSecurity, `已封禁 IP ${r.ip}`);
             }}>立即封禁</button>
           <span className="text-slate-300">·</span>
           <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--text-medium)' }}
@@ -1402,7 +1605,7 @@ function SuperSecurityPage() {
                 desc: '该 IP 的访问将不再触发安全告警 · 仅在确认是可信内部 IP 时使用',
                 confirmText: '加入白名单',
               });
-              if (ok) window.ui.toast(`${r.ip} 已加入白名单`, { kind: 'success' });
+              if (ok) await superPost('/admin/security/ip-allowlist', { ip: r.ip, reason: 'security-center' }, reloadSecurity, `${r.ip} 已加入白名单`);
             }}>白名单</button>
         </div>
       ),
@@ -1413,7 +1616,7 @@ function SuperSecurityPage() {
     <PageShell
       crumbs={['JKXT 平台', '超管控制台', '安全中心']}
       title="安全中心"
-      badge={`安全分 ${SUPER_SEC.score}/100`}
+      badge={`安全分 ${security.score}/100`}
       subtitle="实时监控登录尝试、异常 IP、备份状态;响应威胁告警"
       actions={<Button variant="primary" icon={IconUpload} onClick={async () => {
         const ok = await window.ui.confirm({
@@ -1422,8 +1625,7 @@ function SuperSecurityPage() {
           confirmText: '开始备份',
         });
         if (ok) {
-          window.ui.toast('备份已开始 · 任务 BAK-1132', { kind: 'info', desc: '请勿关闭浏览器' });
-          setTimeout(() => window.ui.toast('备份完成 · 4.2 GB', { kind: 'success', desc: '已上传云端 · 校验通过' }), 2400);
+          superPost('/admin/backups/run', {}, reloadSecurity, '备份完成 · 已写入审计日志');
         }
       }}>立即备份</Button>}
     >
@@ -1444,7 +1646,7 @@ function SuperSecurityPage() {
           </svg>
           <div className="relative">
             <div className="text-[10.5px] uppercase font-mono tracking-[.22em] text-center opacity-80 mb-3">PLATFORM SECURITY SCORE</div>
-            <RadialGauge value={SUPER_SEC.score} sublabel="/ 100"
+            <RadialGauge value={security.score} sublabel="/ 100"
               color="#FFFFFF" valueColor="#FFFFFF" size={160} thickness={14} />
             <div className="text-center mt-4">
               <Tag color="emerald" dot>等级:良好</Tag>
@@ -1455,10 +1657,10 @@ function SuperSecurityPage() {
           <h3 className="text-[16px] font-bold mb-4 tracking-tight" style={{ color: 'var(--text-strong)' }}>安全维度评分</h3>
           {[
             { label: '密码策略强度',     value: 92, color: '#10B981', trend: 'up',   sub: '所有租户启用强密码' },
-            { label: '2FA 覆盖率',       value: 71, color: '#F59E0B', trend: 'up',   sub: `${SUPER_ACCOUNTS.filter(a=>a.twoFactor).length} / ${SUPER_ACCOUNTS.length} 已启用` },
+            { label: '2FA 覆盖率',       value: 71, color: '#F59E0B', trend: 'up',   sub: '后端账号策略已接入' },
             { label: '会话保护',         value: 88, color: '#06B6D4', trend: 'up',   sub: '8h 自动登出' },
             { label: '可疑 IP 拦截率',   value: 95, color: '#10B981', trend: 'up',   sub: '近 7 天 32 次拦截' },
-            { label: '数据备份新鲜度',   value: 82, color: '#4F46E5', trend: 'up',   sub: SUPER_SEC.lastBackup },
+            { label: '数据备份新鲜度',   value: 82, color: '#4F46E5', trend: 'up',   sub: security.lastBackup },
           ].map((m, i, arr) => (
             <div key={m.label} style={{ borderBottom: i < arr.length - 1 ? '1px solid var(--border-soft)' : 'none' }}>
               <HealthBar label={m.label} value={m.value} color={m.color} trend={m.trend} sub={m.sub} />
@@ -1470,14 +1672,14 @@ function SuperSecurityPage() {
       <div className="grid grid-cols-4 gap-4">
         <FeatureKPI
           label="失败登录" sublabel="FAILED LOGIN · 24H"
-          value={SUPER_SEC.failedLogins} unit="次"
+          value={security.failedLogins} unit="次"
           footnote="较前日 -28% · 趋势良好"
           icon={IconAlert} accent="#DC2626"
           gradient={FEATURE_GRADIENTS.rose} orbColor="rgba(244,114,182,.42)"
         />
         <FeatureKPI
           label="可疑 IP" sublabel="SUSPICIOUS"
-          value={SUPER_SEC.suspiciousIps} unit="个"
+          value={security.suspiciousIps} unit="个"
           footnote="待审核 · 1 个高危"
           icon={IconAlert} accent="#D97706"
           gradient={FEATURE_GRADIENTS.amber} orbColor="rgba(251,191,36,.42)"
@@ -1491,7 +1693,7 @@ function SuperSecurityPage() {
         />
         <FeatureKPI
           label="最近备份" sublabel="LAST BACKUP"
-          value={SUPER_SEC.lastBackup}
+          value={security.lastBackup}
           footnote="自动 · 每日 03:00 · 4.2 GB"
           icon={IconArchive} accent="#7C3AED"
           gradient={FEATURE_GRADIENTS.violet} orbColor="rgba(167,139,250,.4)"
@@ -1500,7 +1702,7 @@ function SuperSecurityPage() {
 
       <GlassPanel className="p-5">
         <SectionTitle title="可疑访问 IP" sub="近 7 天 · 按威胁等级排序" right={<Tag color="amber" dot>需要审核</Tag>} />
-        <DataTable columns={cols} rows={SUPER_SEC.threats} footer={<></>} />
+        <DataTable columns={cols} rows={threats} footer={<></>} />
       </GlassPanel>
     </PageShell>
   );
@@ -1546,8 +1748,8 @@ const ANNOUNCEMENT_BODIES = {
 - 维护期间不影响数据完整性`,
 };
 
-function openAnnouncementDrawer(a, sev) {
-  const body = ANNOUNCEMENT_BODIES[a.id] || a.title;
+function openAnnouncementDrawer(a, sev, actions = {}) {
+  const body = a.body || ANNOUNCEMENT_BODIES[a.id] || a.title;
   // mock per-tenant reading stats
   const tenantReads = [
     { tenant: 'TSY 天津市实验中学', total: 32, read: 28 },
@@ -1560,7 +1762,7 @@ function openAnnouncementDrawer(a, sev) {
   ];
   window.ui.drawer({
     title: a.title,
-    subtitle: `${a.id} · ${a.status === 'published' ? '已发布' : '草稿'} · 目标 ${a.target}`,
+    subtitle: `${a.id} · ${announcementStatusLabel(a.status)} · 目标 ${announcementTargetLabel(a.target)}`,
     width: 560,
     content: (
       <div className="space-y-5">
@@ -1569,7 +1771,7 @@ function openAnnouncementDrawer(a, sev) {
           style={{ background: sev.gradient, border: `1px solid ${sev.accent}33` }}>
           <div className="flex items-center gap-2 flex-wrap">
             <Tag color={sev.color} dot>{sev.label}</Tag>
-            <Tag color={a.status === 'published' ? 'emerald' : 'slate'} dot>{a.status === 'published' ? '已发布' : '草稿'}</Tag>
+            <Tag color={announcementStatusColor(a.status)} dot>{announcementStatusLabel(a.status)}</Tag>
             <span className="font-mono text-[10.5px]" style={{ color: sev.accent }}>{a.id}</span>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-3 text-[11.5px]">
@@ -1626,35 +1828,44 @@ function openAnnouncementDrawer(a, sev) {
     footer: (
       <>
         <Button onClick={() => window.ui.closeDrawer()}>关闭</Button>
-        <Button icon={IconEdit} onClick={() => { window.ui.closeDrawer(); openAnnouncementEditDrawer(a); }}>编辑</Button>
+        <Button icon={IconEdit} onClick={() => { window.ui.closeDrawer(); openAnnouncementEditDrawer(a, actions); }}>编辑</Button>
         {a.status === 'published' ? (
-          <Button variant="primary" icon={IconUpload} onClick={() => window.ui.toast('已重新推送至未阅读用户', { kind: 'success', desc: '邮件 + 站内信' })}>重新推送</Button>
+          <Button variant="primary" icon={IconUpload} onClick={async () => {
+            window.ui.closeDrawer();
+            if (actions.push) await actions.push(a);
+            else window.ui.toast('已重新推送至未阅读用户', { kind: 'success', desc: '邮件 + 站内信' });
+          }}>重新推送</Button>
         ) : (
-          <Button variant="primary" icon={IconCheck} onClick={() => { window.ui.closeDrawer(); window.ui.toast('公告已发布', { kind: 'success', desc: '将通过站内信、邮件推送' }); }}>立即发布</Button>
+          <Button variant="primary" icon={IconCheck} onClick={async () => {
+            window.ui.closeDrawer();
+            if (actions.publish) await actions.publish(a);
+            else window.ui.toast('公告已发布', { kind: 'success', desc: '将通过站内信、邮件推送' });
+          }}>立即发布</Button>
         )}
       </>
     ),
   });
 }
 
-function openAnnouncementEditDrawer(a) {
-  const body = ANNOUNCEMENT_BODIES[a.id] || '';
+function openAnnouncementEditDrawer(a, actions = {}) {
+  const body = a.body || ANNOUNCEMENT_BODIES[a.id] || '';
+  const formId = `edit-announcement-${a.uuid || a.id}`;
   window.ui.drawer({
     title: `编辑公告 · ${a.id}`,
     subtitle: '修改后需重新发布;已阅读用户记录会保留',
     width: 600,
     content: (
-      <div className="space-y-4">
+      <div className="space-y-4" data-announcement-form={formId}>
         <div>
           <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>公告标题 *</label>
-          <input defaultValue={a.title}
+          <input name="title" defaultValue={a.title}
             className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none"
             style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div>
             <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>级别</label>
-            <select defaultValue={a.severity === 'critical' ? '紧急' : a.severity === 'reminder' ? '提醒' : '常规'}
+            <select name="severity" defaultValue={a.severity === 'critical' ? '紧急' : a.severity === 'reminder' ? '提醒' : '常规'}
               className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none"
               style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
               <option>常规</option><option>提醒</option><option>紧急</option>
@@ -1662,7 +1873,7 @@ function openAnnouncementEditDrawer(a) {
           </div>
           <div>
             <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>目标</label>
-            <select defaultValue={a.target}
+            <select name="target" defaultValue={announcementTargetLabel(a.target)}
               className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none"
               style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
               <option>全部租户</option><option>选定租户</option><option>管理员</option>
@@ -1670,14 +1881,14 @@ function openAnnouncementEditDrawer(a) {
           </div>
           <div>
             <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>失效日期</label>
-            <input type="text" defaultValue={a.expireAt}
+            <input name="expireAt" type="text" defaultValue={a.expireAt}
               className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none font-mono"
               style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
           </div>
         </div>
         <div>
           <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>内容 (Markdown)</label>
-          <textarea defaultValue={body}
+          <textarea name="body" defaultValue={body}
             className="w-full h-60 p-3 rounded-lg text-[12.5px] outline-none resize-none font-mono leading-relaxed"
             style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
         </div>
@@ -1686,8 +1897,18 @@ function openAnnouncementEditDrawer(a) {
     footer: (
       <>
         <Button onClick={() => window.ui.closeDrawer()}>取消</Button>
-        <Button icon={IconArchive} onClick={() => { window.ui.closeDrawer(); window.ui.toast('已保存草稿', { kind: 'success' }); }}>保存草稿</Button>
-        <Button variant="primary" icon={IconCheck} onClick={() => { window.ui.closeDrawer(); window.ui.toast('公告已更新并重新推送', { kind: 'success', desc: '站内信 + 邮件' }); }}>
+        <Button icon={IconArchive} onClick={async () => {
+          const payload = announcementFormPayload(formId, { ...a, status: 'draft' });
+          window.ui.closeDrawer();
+          if (actions.saveDraft) await actions.saveDraft(a, payload);
+          else window.ui.toast('已保存草稿', { kind: 'success' });
+        }}>保存草稿</Button>
+        <Button variant="primary" icon={IconCheck} onClick={async () => {
+          const payload = announcementFormPayload(formId, { ...a, status: 'published' });
+          window.ui.closeDrawer();
+          if (actions.saveAndPush) await actions.saveAndPush(a, payload);
+          else window.ui.toast('公告已更新并重新推送', { kind: 'success', desc: '站内信 + 邮件' });
+        }}>
           保存并推送
         </Button>
       </>
@@ -1696,48 +1917,90 @@ function openAnnouncementEditDrawer(a) {
 }
 
 function SuperAnnouncementsPage() {
+  const [announcements, reloadAnnouncements] = useSuperResource('/admin/announcements', SUPER_ANNOUNCEMENTS);
   const SEV = {
     info:     { label: '常规',   color: 'sky',    accent: '#0EA5E9', gradient: 'linear-gradient(135deg, #DBEAFE 0%, #E0F2FE 100%)' },
     reminder: { label: '提醒',   color: 'amber',  accent: '#D97706', gradient: 'linear-gradient(135deg, #FEF3C7 0%, #FFF7ED 100%)' },
     critical: { label: '紧急',   color: 'rose',   accent: '#DC2626', gradient: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)' },
   };
+  const announcementAction = async (a, action, label) => {
+    const announcementId = superBackendId(a);
+    if (!announcementId) {
+      window.ui.toast('公告缺少后端 ID', { kind: 'warning' });
+      return null;
+    }
+    return superPost(`/admin/announcements/${announcementId}/${action}`, {}, reloadAnnouncements, label);
+  };
+  const createAnnouncement = async (status) => {
+    const payload = announcementFormPayload('new-announcement', { status });
+    payload.status = status;
+    const result = await superPost(
+      '/admin/announcements',
+      payload,
+      reloadAnnouncements,
+      status === 'published' ? '公告已发布' : '公告草稿已保存'
+    );
+    if (result) window.ui.closeModal();
+  };
+  const updateAnnouncement = async (a, payload, reload, label) => {
+    const announcementId = superBackendId(a);
+    if (!announcementId) {
+      window.ui.toast('公告缺少后端 ID', { kind: 'warning' });
+      return null;
+    }
+    return superPut(`/admin/announcements/${announcementId}`, payload, reload ? reloadAnnouncements : null, label);
+  };
+  const announcementActions = {
+    publish: (a) => announcementAction(a, 'publish', '公告已发布'),
+    push: (a) => announcementAction(a, 'push', '公告已重新推送'),
+    retract: (a) => announcementAction(a, 'retract', '公告已撤回'),
+    saveDraft: (a, payload) => updateAnnouncement(a, { ...payload, status: 'draft' }, true, '公告草稿已保存'),
+    saveAndPush: async (a, payload) => {
+      await updateAnnouncement(a, payload, false, false);
+      await announcementAction(a, a.status === 'published' ? 'push' : 'publish', '公告已更新并推送');
+    },
+  };
+  const publishedCount = announcements.filter(a => a.status === 'published').length;
+  const draftCount = announcements.filter(a => a.status === 'draft').length;
+  const totalReads = announcements.reduce((sum, a) => sum + Number(a.readBy || 0), 0);
+  const readRate = Math.min(100, Math.round((totalReads / Math.max(1, publishedCount * 180)) * 100));
   return (
     <PageShell
       crumbs={['JKXT 平台', '超管控制台', '公告发布']}
       title="公告发布"
-      badge={`${SUPER_ANNOUNCEMENTS.length} 条公告`}
+      badge={`${announcements.length} 条公告`}
       subtitle="平台级公告管理,可定向租户、定时发布、统计阅读率"
       actions={<Button variant="primary" icon={IconPlus} onClick={() => window.ui.modal({
         title: '撰写公告',
         subtitle: '支持 Markdown · 可选发布时间与失效时间',
         size: 'lg',
         content: (
-          <div className="space-y-4">
+          <div className="space-y-4" data-announcement-form="new-announcement">
             <div>
               <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>公告标题 *</label>
-              <input className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
+              <input name="title" className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>级别</label>
-                <select className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
+                <select name="severity" className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
                   <option>常规</option><option>提醒</option><option>紧急</option>
                 </select>
               </div>
               <div>
                 <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>目标</label>
-                <select className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
+                <select name="target" className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }}>
                   <option>全部租户</option><option>选定租户</option><option>仅管理员</option>
                 </select>
               </div>
               <div>
                 <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>失效日期</label>
-                <input type="date" className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none font-mono" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
+                <input name="expireAt" type="date" className="w-full h-10 px-3 rounded-lg text-[13.5px] outline-none font-mono" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
               </div>
             </div>
             <div>
               <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>内容 (Markdown)</label>
-              <textarea defaultValue="" placeholder="公告内容..."
+              <textarea name="body" defaultValue="" placeholder="公告内容..."
                 className="w-full h-40 p-3 rounded-lg text-[13.5px] outline-none resize-none font-mono"
                 style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)' }} />
             </div>
@@ -1745,8 +2008,8 @@ function SuperAnnouncementsPage() {
         ),
         footer: (
           <>
-            <Button onClick={() => window.ui.closeModal()}>保存草稿</Button>
-            <Button variant="primary" icon={IconCheck} onClick={() => { window.ui.closeModal(); window.ui.toast('公告已发布', { kind: 'success', desc: '将通过站内信、邮件推送给目标租户' }); }}>立即发布</Button>
+            <Button onClick={() => createAnnouncement('draft')}>保存草稿</Button>
+            <Button variant="primary" icon={IconCheck} onClick={() => createAnnouncement('published')}>立即发布</Button>
           </>
         ),
       })}>撰写公告</Button>}
@@ -1754,44 +2017,44 @@ function SuperAnnouncementsPage() {
       <div className="grid grid-cols-4 gap-4">
         <FeatureKPI
           label="已发布" sublabel="PUBLISHED"
-          value={SUPER_ANNOUNCEMENTS.filter(a => a.status === 'published').length} unit="条"
+          value={publishedCount} unit="条"
           footnote="覆盖全部租户"
           icon={IconCheck} accent="#059669"
           gradient={FEATURE_GRADIENTS.mint} orbColor="rgba(52,211,153,.4)"
         />
         <FeatureKPI
           label="草稿" sublabel="DRAFTS"
-          value={SUPER_ANNOUNCEMENTS.filter(a => a.status === 'draft').length} unit="条"
+          value={draftCount} unit="条"
           footnote="待审核与发布"
           icon={IconEdit} accent="#7C3AED"
           gradient={FEATURE_GRADIENTS.violet} orbColor="rgba(167,139,250,.4)"
         />
         <FeatureKPI
           label="总阅读量" sublabel="TOTAL READS"
-          value={SUPER_ANNOUNCEMENTS.reduce((a,b)=>a+b.readBy,0)} unit="人次"
+          value={totalReads} unit="人次"
           footnote="近 30 天累计"
           icon={IconUsers} accent="#2563EB"
           gradient={FEATURE_GRADIENTS.azure} orbColor="rgba(96,165,250,.4)"
         />
         <FeatureKPI
           label="平均阅读率" sublabel="READ RATE"
-          value="87" unit="%"
-          footnote="平均 142 人 / 条"
+          value={readRate} unit="%"
+          footnote={`平均 ${publishedCount ? Math.round(totalReads / publishedCount) : 0} 人 / 条`}
           icon={IconChart} accent="#D97706"
           gradient={FEATURE_GRADIENTS.amber} orbColor="rgba(251,191,36,.42)"
         />
       </div>
 
       <div className="space-y-4">
-        {SUPER_ANNOUNCEMENTS.map((a) => {
-          const sev = SEV[a.severity];
+        {announcements.map((a) => {
+          const sev = SEV[a.severity] || SEV.info;
           return (
             <div key={a.id} className="relative bg-white rounded-2xl overflow-hidden group transition-all cursor-pointer"
               style={{
                 border: '1px solid var(--border-soft)',
                 boxShadow: '0 1px 3px rgba(15,23,42,.04), 0 8px 24px -8px rgba(15,23,42,.06)',
               }}
-              onClick={() => openAnnouncementDrawer(a, sev)}
+              onClick={() => openAnnouncementDrawer(a, sev, announcementActions)}
               onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 8px rgba(15,23,42,.06), 0 16px 32px -8px rgba(15,23,42,.10)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(15,23,42,.04), 0 8px 24px -8px rgba(15,23,42,.06)'; }}>
               {/* Severity stripe */}
@@ -1806,9 +2069,9 @@ function SuperAnnouncementsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
                     <Tag color={sev.color} dot>{sev.label}</Tag>
-                    <Tag color={a.status === 'published' ? 'emerald' : 'slate'} dot>{a.status === 'published' ? '已发布' : '草稿'}</Tag>
+                    <Tag color={announcementStatusColor(a.status)} dot>{announcementStatusLabel(a.status)}</Tag>
                     <span className="font-mono text-[10.5px] uppercase tracking-[.14em]" style={{ color: 'var(--text-soft)' }}>{a.id}</span>
-                    <span className="text-[11px]" style={{ color: 'var(--text-soft)' }}>· 目标 · {a.target}</span>
+                    <span className="text-[11px]" style={{ color: 'var(--text-soft)' }}>· 目标 · {announcementTargetLabel(a.target)}</span>
                   </div>
                   <h4 className="text-[15.5px] font-bold tracking-tight" style={{ color: 'var(--text-strong)', letterSpacing: '-0.005em' }}>{a.title}</h4>
                   <div className="mt-2.5 flex items-center gap-4 text-[11.5px]" style={{ color: 'var(--text-soft)' }}>
@@ -1830,17 +2093,17 @@ function SuperAnnouncementsPage() {
               <div className="px-5 pl-6 py-2.5 flex items-center gap-2"
                 style={{ borderTop: '1px solid var(--border-soft)', background: '#FAFBFC' }}
                 onClick={(e) => e.stopPropagation()}>
-                <Button size="sm" variant="ghost" onClick={() => openAnnouncementDrawer(a, sev)}>查看详情</Button>
-                <Button size="sm" variant="ghost" onClick={() => openAnnouncementEditDrawer(a)}>编辑</Button>
+                <Button size="sm" variant="ghost" onClick={() => openAnnouncementDrawer(a, sev, announcementActions)}>查看详情</Button>
+                <Button size="sm" variant="ghost" onClick={() => openAnnouncementEditDrawer(a, announcementActions)}>编辑</Button>
                 {a.status === 'published' && (
                   <Button size="sm" variant="ghost" danger onClick={async () => {
                     const ok = await window.ui.confirm({ title: '撤回此公告?', desc: '已阅读用户的记录会保留', danger: true });
-                    if (ok) window.ui.toast('公告已撤回', { kind: 'success' });
+                    if (ok) await announcementActions.retract(a);
                   }}>撤回</Button>
                 )}
                 <div className="flex-1" />
                 <span className="font-mono text-[10.5px]" style={{ color: 'var(--text-soft)' }}>
-                  阅读率 <span className="font-semibold" style={{ color: 'var(--text-medium)' }}>{Math.round(a.readBy / 1.62)}%</span>
+                  阅读率 <span className="font-semibold" style={{ color: 'var(--text-medium)' }}>{Math.min(100, Math.round(Number(a.readBy || 0) / 1.62))}%</span>
                 </span>
               </div>
             </div>

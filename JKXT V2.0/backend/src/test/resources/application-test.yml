@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: ${JKXT_TEST_DATASOURCE_URL:jdbc:postgresql://host.docker.internal:5432/jkxt}
+    username: ${JKXT_TEST_DATASOURCE_USERNAME:jkxt}
+    password: ${JKXT_TEST_DATASOURCE_PASSWORD:jkxt_dev_password}
+  flyway:
+    enabled: true
+    clean-disabled: false
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      host: ${JKXT_TEST_REDIS_HOST:host.docker.internal}
+      port: ${JKXT_TEST_REDIS_PORT:6379}
+
+jkxt:
+  auth:
+    captcha-debug: true

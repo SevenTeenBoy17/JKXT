@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1440" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>排监考系统 · 仪表盘</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,6 +56,7 @@
     --pill-6: #EC4899;
 
     --shadow-card: 0 1px 0 rgba(255,255,255,.85) inset, 0 1px 3px rgba(15, 23, 42, .04), 0 4px 12px -4px rgba(15, 23, 42, .06);
+    --shadow-focus: 0 0 0 3px rgba(79,70,229,.16);
     --shadow-hover: 0 1px 0 rgba(255,255,255,.85) inset, 0 4px 8px rgba(15, 23, 42, .06), 0 16px 32px -8px rgba(15, 23, 42, .12);
     --elevation-1: 0 1px 0 rgba(255,255,255,.85) inset, 0 1px 3px rgba(15,23,42,.04), 0 1px 2px rgba(15,23,42,.02);
     --elevation-2: 0 1px 0 rgba(255,255,255,.85) inset, 0 2px 6px rgba(15,23,42,.06), 0 8px 18px -4px rgba(15,23,42,.08);
@@ -117,43 +118,69 @@
 
   /* loading skeleton (unused but kept as token) */
   @keyframes sweep { 0%{background-position: -200% 0} 100%{background-position: 200% 0} }
+
+  /* ── Responsive shell ──────────────────────────────────────────────
+     Replaces the old hard `min-w-[1280px]` lock + fixed 1280 viewport.
+     The workstation layout stays fluid on standard desktops/laptops and
+     degrades gracefully (horizontal scroll) on narrow/tablet widths,
+     instead of forcing a zoomed-out 1280 canvas on phones. */
+  .app-body {
+    min-width: 1080px;          /* keep dense workstation legible; scrolls below this */
+    overflow-x: auto;
+  }
+  @media (min-width: 1081px) {
+    .app-body { min-width: 0; } /* truly fluid above the floor — reflows with the window */
+  }
+  /* Tighten the main content gutters as the window narrows so tables
+     and KPI rows keep breathing room without overflowing. */
+  @media (max-width: 1280px) {
+    main > .page-transition-stage .px-8 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
 </style>
 </head>
-<body class="min-w-[1440px]">
+<body class="app-body">
   <div id="root"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
   <script type="text/babel" src="src/icons.jsx"></script>
   <script type="text/babel" src="src/overlay.jsx"></script>
+  <script src="src/fluid-cursor.js"></script>
   <script type="text/babel" src="src/common.jsx"></script>
   <script type="text/babel" src="src/super-ui.jsx"></script>
   <script type="text/babel" src="src/charts.jsx"></script>
   <script type="text/babel" src="src/tweaks-panel.jsx"></script>
-  <script type="text/babel" src="src/onboarding.jsx"></script>
-  <script type="text/babel" src="src/topbar.jsx"></script>
-  <script type="text/babel" src="src/sidebar.jsx"></script>
-  <script type="text/babel" src="src/kpis.jsx"></script>
-  <script type="text/babel" src="src/timeline.jsx"></script>
+  <script type="text/babel" src="src/onboarding.jsx?v=m3-onboarded-persist"></script>
+  <script type="text/babel" src="src/topbar.jsx?v=r3-notify"></script>
+  <script type="text/babel" src="src/sidebar.jsx?v=p5-master-data"></script>
+  <script type="text/babel" src="src/kpis.jsx?v=acc-fix-kpis"></script>
+  <script type="text/babel" src="src/timeline.jsx?v=p10-reports-admin"></script>
   <script type="text/babel" src="src/tasks.jsx"></script>
   <script type="text/babel" src="src/quickactions.jsx"></script>
-  <script type="text/babel" src="src/pages/login.jsx"></script>
-  <script type="text/babel" src="src/pages/dashboard.jsx"></script>
-  <script type="text/babel" src="src/pages/quick.jsx"></script>
-  <script type="text/babel" src="src/pages/ai-policy.jsx"></script>
-  <script type="text/babel" src="src/pages/edit.jsx"></script>
-  <script type="text/babel" src="src/pages/tasks-page.jsx"></script>
-  <script type="text/babel" src="src/pages/stats-supervise.jsx"></script>
-  <script type="text/babel" src="src/pages/people.jsx"></script>
-  <script type="text/babel" src="src/pages/classrooms.jsx"></script>
-  <script type="text/babel" src="src/pages/classes-subjects.jsx"></script>
-  <script type="text/babel" src="src/pages/history.jsx"></script>
+  <script src="src/api.js?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/login.jsx?v=clock-spacing-2"></script>
+  <script type="text/babel" src="src/pages/dashboard.jsx?v=m3-dash-newtask"></script>
+  <script type="text/babel" src="src/pages/quick-step1.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/quick-step2.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/quick-step3.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/quick-engine.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/quick-step4.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/quick.jsx?v=m1-quick-real-dataflow"></script>
+  <script type="text/babel" src="src/pages/ai-policy.jsx?v=acc-fix-aipolicy"></script>
+  <script type="text/babel" src="src/pages/edit.jsx?v=acc-fix-edit"></script>
+  <script type="text/babel" src="src/pages/tasks-page.jsx?v=p7-quick-backend-loop"></script>
+  <script type="text/babel" src="src/pages/stats-supervise.jsx?v=p10-reports-admin"></script>
+  <script type="text/babel" src="src/pages/people.jsx?v=m2-people-crud"></script>
+  <script type="text/babel" src="src/pages/classrooms.jsx?v=m2-classrooms-crud"></script>
+  <script type="text/babel" src="src/pages/classes-subjects.jsx?v=m2-cs-crud"></script>
+  <script type="text/babel" src="src/pages/history.jsx?v=acc-fix-history"></script>
   <script type="text/babel" src="src/pages/settings.jsx"></script>
-  <script type="text/babel" src="src/pages/task-detail.jsx"></script>
-  <script type="text/babel" src="src/pages/super.jsx"></script>
+  <script type="text/babel" src="src/pages/task-detail.jsx?v=acc-fix-taskdetail"></script>
+  <script type="text/babel" src="src/pages/super.jsx?v=m3-super-settings"></script>
   <script type="text/babel" src="src/app.jsx"></script>
 </body>
 </html>

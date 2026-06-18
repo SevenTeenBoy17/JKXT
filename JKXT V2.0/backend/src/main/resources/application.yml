@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: jkxt-backend
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  profiles:
+    default: dev
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://localhost:5432/jkxt}}
+    username: ${SPRING_DATASOURCE_USERNAME:${POSTGRES_USER:jkxt}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:jkxt_dev_password}}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${SPRING_DATA_REDIS_HOST:${REDIS_HOST:localhost}}
+      port: ${SPRING_DATA_REDIS_PORT:${REDIS_PORT:6379}}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+
+jkxt:
+  version: ${JKXT_VERSION:0.1.0-p1}
+  api-base: ${API_PUBLIC_BASE:/api/v1}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://127.0.0.1:4174,http://localhost:4174,http://127.0.0.1:8000,http://localhost:8000,http://127.0.0.1:8080,http://localhost:8080}
+  deploy:
+    mode: ${JKXT_DEPLOY_MODE:${DEPLOY_MODE:dev}}
+    fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
+    external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:false}
+  security:
+    # When true, seeded demo accounts (known default passwords) are disabled on startup.
+    # Off by default so dev / test / on-prem demo keep working; the saas profile turns it on.
+    disable-demo-accounts: ${JKXT_DISABLE_DEMO_ACCOUNTS:false}
+  auth:
+    cookie-name: ${JKXT_AUTH_COOKIE_NAME:JKXT_SESSION}
+    cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:false}
+    cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}
+    session-ttl-seconds: ${JKXT_AUTH_SESSION_TTL_SECONDS:604800}
+    captcha-ttl-seconds: ${JKXT_AUTH_CAPTCHA_TTL_SECONDS:180}
+    captcha-debug: ${JKXT_AUTH_CAPTCHA_DEBUG:false}
+  llm:
+    enabled: ${JKXT_LLM_ENABLED:false}
+    provider: ${JKXT_LLM_PROVIDER:mock}
+    base-url: ${JKXT_LLM_BASE_URL:https://api.llm-token.cn/v1}
+    api-key: ${JKXT_LLM_API_KEY:}
+    model: ${JKXT_LLM_MODEL:deepseek-v4-pro}
+    timeout-ms: ${JKXT_LLM_TIMEOUT_MS:12000}
+    max-retries: ${JKXT_LLM_MAX_RETRIES:1}
+    monthly-quota: ${JKXT_LLM_MONTHLY_QUOTA:1000}

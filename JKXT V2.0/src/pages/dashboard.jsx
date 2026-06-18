@@ -1,63 +1,59 @@
 // Dashboard page — composes the dashboard widgets
 
+// 新建排监考任务 — 真实写入后端 (POST /api/v1/exam-tasks)。考试科目/日期/考场在后续导入时确定。
+function DashboardNewTaskModal() {
+  const [name, setName] = React.useState('2025-2026 学年下学期 期中考试');
+  const [saving, setSaving] = React.useState(false);
+  const [err, setErr] = React.useState('');
+
+  const submit = async () => {
+    if (saving) return;
+    if (!name.trim()) { setErr('任务名称为必填项'); return; }
+    setSaving(true); setErr('');
+    try {
+      const task = await window.api.post('/exam-tasks', { name: name.trim(), source: 'manual' });
+      window.ui.closeModal();
+      window.ui.toast('排监考任务已创建', {
+        kind: 'success',
+        desc: `编号 ${task.taskNo || task.id} · 接下来上传三张表生成真实排班`,
+        action: { label: '前往一键排监考', onClick: () => window.navigateTo('quick') },
+      });
+    } catch (e) {
+      setErr(e.message || '创建失败');
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>任务名称 <span className="text-rose-500">*</span></label>
+        <input value={name} onChange={(e) => setName(e.target.value)}
+          className="w-full h-10 px-3 rounded-lg text-[13px] outline-none"
+          style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
+      </div>
+      <div className="rounded-lg p-3 flex items-start gap-2.5" style={{ background: '#EEF2FF' }}>
+        <IconHelp size={14} className="shrink-0 mt-0.5" style={{ color: '#4F46E5' }} />
+        <div className="text-[11.5px]" style={{ color: '#3730A3' }}>
+          创建后进入「一键排监考」——上传教师 / 考场 / 考试三张表，系统据此真实排考；考试科目、日期、考场等在导入时确定。
+        </div>
+      </div>
+      {err && <div className="rounded-lg px-3 py-2 text-[12px]" style={{ background: '#FEF2F2', color: '#B91C1C', border: '1px solid #FECACA' }}>{err}</div>}
+      <div className="flex items-center justify-end gap-2">
+        <Button onClick={() => window.ui.closeModal()}>取消</Button>
+        <Button variant="primary" icon={IconCheck} disabled={saving} onClick={submit}>{saving ? '创建中…' : '创建并继续'}</Button>
+      </div>
+    </div>
+  );
+}
+
 function DashboardPage() {
   const openNewTask = () => {
     window.ui.modal({
       title: '新建排监考任务',
-      subtitle: '一步设置基础信息,后续可在「一键排监考」或「AI 策略」继续完善',
+      subtitle: '填写任务名称即可创建,随后在「一键排监考」上传三张表生成真实排班',
       size: 'md',
-      content: (
-        <div className="space-y-4">
-          <div>
-            <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>任务名称 <span className="text-rose-500">*</span></label>
-            <input defaultValue="2025-2026 学年下学期 期中考试"
-              className="w-full h-10 px-3 rounded-lg text-[13px] outline-none"
-              style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>适用年级</label>
-              <select className="w-full h-10 px-3 rounded-lg text-[13px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }}>
-                <option>初二</option><option>初三</option><option>高一</option><option>高二</option><option>高三</option><option>全校</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>考试类型</label>
-              <select className="w-full h-10 px-3 rounded-lg text-[13px] outline-none" style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }}>
-                <option>月考</option><option>期中考</option><option>期末考</option><option>单元测试</option><option>联考统考</option><option>模拟考</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>开始日期</label>
-              <input type="date" defaultValue="2025-11-22"
-                className="w-full h-10 px-3 rounded-lg text-[13px] outline-none font-mono"
-                style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
-            </div>
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>考期 (天数)</label>
-              <input type="number" defaultValue="3"
-                className="w-full h-10 px-3 rounded-lg text-[13px] outline-none font-mono"
-                style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
-            </div>
-          </div>
-          <div>
-            <label className="block text-[12px] font-medium mb-1.5" style={{ color: 'var(--text-medium)' }}>备注</label>
-            <textarea defaultValue=""
-              placeholder="可选,关于本次考试的注意事项"
-              className="w-full h-20 px-3 py-2 rounded-lg text-[13px] outline-none resize-none"
-              style={{ background: '#F8FAFC', border: '1px solid var(--border-soft)', color: 'var(--text-strong)' }} />
-          </div>
-        </div>
-      ),
-      footer: (
-        <>
-          <Button onClick={() => window.ui.closeModal()}>取消</Button>
-          <Button variant="primary" icon={IconCheck} onClick={() => {
-            window.ui.closeModal();
-            window.ui.toast('任务已创建', { kind: 'success', desc: '可继续在「一键排监考」上传 Excel,或使用「AI 策略监考」', action: { label: '前往一键排监考', onClick: () => window.navigateTo('quick') } });
-          }}>创建并继续</Button>
-        </>
-      ),
+      content: <DashboardNewTaskModal />,
     });
   };
 
@@ -82,7 +78,7 @@ function DashboardPage() {
     >
       <KPIRow />
       <div className="grid grid-cols-[1fr_360px] gap-5">
-        <div><TimelineCard /></div>
+        <div className="min-w-0"><TimelineCard /></div>
         <div><RecentTasksCard /></div>
       </div>
       <QuickActionsRow />

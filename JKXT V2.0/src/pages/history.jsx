@@ -14,8 +14,8 @@ const MOCK_HISTORY = [
 ];
 
 // Donut for distribution by grade
-function GradeDistribution() {
-  const data = [
+function GradeDistribution({ data }) {
+  const fallback = [
     { grade: '高三', count: 34, color: '#EF4444' },
     { grade: '高二', count: 26, color: '#F59E0B' },
     { grade: '高一', count: 18, color: '#06B6D4' },
@@ -23,7 +23,8 @@ function GradeDistribution() {
     { grade: '初二', count: 15, color: '#10B981' },
     { grade: '七年级', count: 9, color: '#9333EA' },
   ];
-  const total = data.reduce((a, b) => a + b.count, 0);
+  const rows = data?.length ? data : fallback;
+  const total = rows.reduce((a, b) => a + b.count, 0);
   return (
     <div className="bg-white rounded-2xl p-5"
       style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
@@ -31,15 +32,15 @@ function GradeDistribution() {
       <div className="flex items-center gap-5">
         <div className="shrink-0" style={{ width: 140 }}>
           <DoughnutChartJS
-            labels={data.map((d) => d.grade)}
-            data={data.map((d) => d.count)}
-            colors={data.map((d) => d.color)}
+            labels={rows.map((d) => d.grade)}
+            data={rows.map((d) => d.count)}
+            colors={rows.map((d) => d.color)}
             height={140} cutout="68%"
             centerLabel="累计" centerValue={total}
           />
         </div>
         <ul className="space-y-1.5 flex-1">
-          {data.map((d) => (
+          {rows.map((d) => (
             <li key={d.grade} className="flex items-center gap-2 text-[12px]">
               <span className="w-2 h-2 rounded-full" style={{ background: d.color }} />
               <span style={{ color: 'var(--text-medium)' }}>{d.grade}</span>
@@ -56,9 +57,10 @@ function GradeDistribution() {
 }
 
 // Trend line
-function MonthlyTrend() {
-  const labels = ['8 月', '9 月', '10 月', '11 月'];
-  const data = [12, 28, 45, 36];
+function MonthlyTrend({ trend }) {
+  const labels = trend?.labels?.length ? trend.labels : ['8 月', '9 月', '10 月', '11 月'];
+  const data = trend?.data?.length ? trend.data : [12, 28, 45, 36];
+  const trendPct = Number(trend?.trendPct ?? 147);
   return (
     <div className="bg-white rounded-2xl p-5"
       style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
@@ -67,7 +69,7 @@ function MonthlyTrend() {
         sub="本学期 8 - 11 月监考量"
         right={
           <div className="inline-flex items-center gap-1.5">
-            <span className="num font-semibold text-[15px]" style={{ color: 'var(--text-strong)' }}>+147%</span>
+            <span className="num font-semibold text-[15px]" style={{ color: 'var(--text-strong)' }}>{trendPct >= 0 ? '+' : ''}{trendPct}%</span>
             <Tag color="emerald" dot>较 8 月</Tag>
           </div>
         }
@@ -82,11 +84,28 @@ function MonthlyTrend() {
 }
 
 function HistoryPage() {
-  const total = MOCK_HISTORY.reduce((a, b) => a + b.count, 0);
-  const totalDur = MOCK_HISTORY.reduce((a, b) => a + b.duration, 0);
-  const totalAllowance = MOCK_HISTORY.reduce((a, b) => a + b.total, 0);
+  const [historyPayload, setHistoryPayload] = React.useState(null);
+  React.useEffect(() => {
+    let cancelled = false;
+    async function loadHistory() {
+      if (!window.api?.get) return;
+      try {
+        const payload = await window.api.get('/stats/history');
+        if (!cancelled) setHistoryPayload(payload);
+      } catch (error) {
+        console.warn('[history] backend fallback', error);
+      }
+    }
+    loadHistory();
+    return () => { cancelled = true; };
+  }, []);
 
-  const maxCount = Math.max(...MOCK_HISTORY.map((h) => h.count));
+  const historyRows = historyPayload?.rows?.length ? historyPayload.rows : MOCK_HISTORY;
+  const total = historyRows.reduce((a, b) => a + Number(b.count || 0), 0);
+  const totalDur = historyRows.reduce((a, b) => a + Number(b.duration || b.hours || 0), 0);
+  const totalAllowance = historyRows.reduce((a, b) => a + Number(b.total || b.allowance || 0), 0);
+
+  const maxCount = Math.max(1, ...historyRows.map((h) => Number(h.count || 0)));
 
   const columns = [
     { key: 'ranking', label: '排名', width: 70, align: 'center',
@@ -164,7 +183,7 @@ function HistoryPage() {
               { l: '场均',     v: r.avgDur.toFixed(1), u: 'h' },
               { l: '总津贴',   v: '¥' + r.total.toLocaleString() },
               { l: '本年级排名', v: '#' + r.ranking },
-              { l: '本学期贡献', v: ((r.count / 200) * 100).toFixed(1) + '%' },
+              { l: '本学期贡献', v: Number(r.contributionPct ?? 0).toFixed(1) + '%' },
             ].map((it) => (
               <div key={it.l} className="rounded-lg p-3" style={{ background: '#F8FAFC' }}>
                 <div className="text-[10.5px] font-mono uppercase tracking-wider" style={{ color: 'var(--text-soft)' }}>{it.l}</div>
@@ -175,12 +194,12 @@ function HistoryPage() {
           <div>
             <div className="text-[12.5px] font-medium mb-2" style={{ color: 'var(--text-medium)' }}>近期监考</div>
             <ul className="space-y-2">
-              {[
+              {(r.recent?.length ? r.recent : [
                 { d: '11-21 14:30', l: '高三·一模联考 (A-302)', amt: 120 },
                 { d: '11-15 08:00', l: '高三·期中考 (A-301)', amt: 120 },
                 { d: '11-08 10:00', l: '高三·月考 (A-303)', amt: 120 },
                 { d: '10-28 14:30', l: '高二·跨年级监考 (A-401)', amt: 120 },
-              ].map((it, i) => (
+              ]).map((it, i) => (
                 <li key={i} className="rounded-lg p-3 flex items-center justify-between" style={{ background: '#fff', border: '1px solid var(--border-soft)' }}>
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-[11px] px-1.5 py-0.5 rounded" style={{ background: '#F1F5F9', color: 'var(--text-medium)' }}>{it.d}</span>
@@ -220,27 +239,27 @@ function HistoryPage() {
         <MiniKPI label="累计监考次数" value={total} unit="场" accent="#4F46E5" icon={IconCalendar} trend="9.6" trendUp />
         <MiniKPI label="累计监考时长" value={totalDur} unit="小时" accent="#059669" icon={IconClock} trend="8.4" trendUp />
         <MiniKPI label="累计津贴" value={`¥${totalAllowance.toLocaleString()}`} accent="#D97706" icon={IconChart} sub="本学期累计" />
-        <MiniKPI label="参与教师" value={MOCK_HISTORY.length} unit="人" accent="#9333EA" icon={IconUsers} sub={`人均 ${(total/MOCK_HISTORY.length).toFixed(1)} 场`} />
+        <MiniKPI label="参与教师" value={historyRows.filter((r) => (Number(r.count) || 0) > 0).length} unit="人" accent="#9333EA" icon={IconUsers} sub={`人均 ${(total/Math.max(1, historyRows.filter((r) => (Number(r.count) || 0) > 0).length)).toFixed(1)} 场`} />
       </div>
 
       <div className="grid grid-cols-2 gap-5">
-        <GradeDistribution />
-        <MonthlyTrend />
+        <GradeDistribution data={historyPayload?.byGrade} />
+        <MonthlyTrend trend={historyPayload?.monthlyTrend} />
       </div>
 
       <FilterBar
         search="搜索工号、姓名..."
         filters={[
-          { label: '学期:', value: '当前' },
-          { label: '年级:', value: '全部' },
-          { label: '科目:', value: '全部' },
-          { label: '排序:', value: '次数倒序' },
+          { label: '学期:', value: '当前', options: ['当前', '2025 秋', '2025 春', '2024 秋', '全部'] },
+          { label: '年级:', value: '全部', options: ['全部', '初一', '初二', '初三', '高一', '高二', '高三'] },
+          { label: '科目:', value: '全部', options: ['全部', '语文', '数学', '英语', '物理', '化学', '生物', '政治', '历史', '地理'] },
+          { label: '排序:', value: '次数倒序', options: ['次数倒序', '次数正序', '姓名 A→Z', '工号升序'] },
         ]}
-        total={MOCK_HISTORY.length}
+        total={historyRows.length}
         onReset={() => {}}
       />
 
-      <DataTable columns={columns} rows={MOCK_HISTORY} onRowClick={openDetail} />
+      <DataTable columns={columns} rows={historyRows} onRowClick={openDetail} />
     </PageShell>
   );
 }
