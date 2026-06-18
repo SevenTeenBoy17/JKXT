@@ -466,30 +466,22 @@ function AIPolicyPage() {
           {/* Recent invocations */}
           <div className="bg-white rounded-2xl p-5"
             style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
-            <SectionTitle title="近期 AI 调用" sub="最近 5 次" />
-            <ul className="space-y-3">
-              {[
-                { task: '高三 11 月 第二次月考', t: '20 分钟前', score: 96, c: '#10B981' },
-                { task: '初三年级月考',           t: '昨天 14:32', score: 92, c: '#10B981' },
-                { task: '七年级 单元测试',       t: '11-18',     score: 88, c: '#F59E0B' },
-                { task: '初二期中考',             t: '11-12',     score: 94, c: '#10B981' },
-              ].map((it, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg inline-flex items-center justify-center"
-                    style={{ background: it.c + '15', color: it.c }}>
-                    <IconSparkle size={13} strokeWidth={2} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[12px] font-medium truncate" style={{ color: 'var(--text-strong)' }}>
-                      {it.task}
-                    </div>
-                    <div className="text-[10.5px] font-mono mt-0.5" style={{ color: 'var(--text-soft)' }}>
-                      {it.t} · 评分 {it.score}/100
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {/* R6：后端暂无「近期 AI 调用」记录接口，故不展示伪造的历史与评分，
+                改为如实的空状态。待 AI 调用日志接口落地后再以真实数据渲染。 */}
+            <SectionTitle title="近期 AI 调用" sub="本次会话内的真实调用记录" />
+            <div className="rounded-xl py-10 px-4 flex flex-col items-center text-center"
+              style={{ border: '1px dashed var(--border-strong)', background: 'var(--surface-muted, #F8FAFC)' }}>
+              <div className="w-12 h-12 rounded-full inline-flex items-center justify-center mb-3"
+                style={{ background: '#F1F5F9', color: 'var(--text-soft)' }}>
+                <IconSparkle size={20} strokeWidth={2} />
+              </div>
+              <div className="text-[13px] font-semibold" style={{ color: 'var(--text-strong)' }}>
+                暂无 AI 调用记录
+              </div>
+              <div className="text-[11.5px] mt-1 max-w-xs" style={{ color: 'var(--text-soft)' }}>
+                发起一次「AI 解析策略」后，可在此查看真实的调用结果与评分。
+              </div>
+            </div>
           </div>
         </div>
       </div>

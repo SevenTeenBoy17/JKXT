@@ -179,7 +179,7 @@ function TaskDetailPage() {
             if (!taskId) { window.ui.toast('该任务暂无后端排班,无法通知', { kind: 'warning', desc: '请先从「一键排监考」或「AI 策略监考」生成排班' }); return; }
             try {
               const r = await window.api.post(`/tasks/${taskId}/publish`, {});
-              window.ui.toast('排班已发布并通知', { kind: 'success', desc: `已通知 ${r.notificationCount || 0} 位监考教师 · ${r.notificationStatus || 'sent'}` });
+              window.ui.toast('排班已发布并通知', { kind: 'success', desc: `已通知 ${r.recipientCount ?? r.notificationCount ?? 0} 位监考教师 · ${r.notificationStatus || 'sent'}` });
             } catch (e) {
               window.ui.toast('通知失败', { kind: 'error', desc: e.message || '请稍后重试' });
             }
@@ -393,7 +393,7 @@ function TaskDetailPage() {
                       if (!taskId) { window.ui.toast('示例数据 · 暂无后端任务', { kind: 'warning', desc: '请先从「一键排监考」生成真实排班' }); return; }
                       try {
                         const res = await window.api.post(`/tasks/${taskId}/publish`, {});
-                        window.ui.toast('已向监考教师发送通知', { kind: 'success', desc: `共 ${res.notificationCount || 0} 人 · ${res.notificationStatus || 'sent'}（按当前后端为全员发布通知）` });
+                        window.ui.toast('已向监考教师发送通知', { kind: 'success', desc: `共 ${res.recipientCount ?? res.notificationCount ?? 0} 人 · ${res.notificationStatus || 'sent'}（按当前后端为全员发布通知）` });
                       } catch (e) { window.ui.toast('发送失败', { kind: 'error', desc: e.message || '请稍后重试' }); }
                     }}>提醒响应</button>
                   <span className="text-slate-300">·</span>
