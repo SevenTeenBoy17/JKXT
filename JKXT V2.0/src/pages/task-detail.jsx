@@ -40,30 +40,150 @@ const __TD_LOG = [
   { at: '11-12 10:00','actor': '王明远',action: '创建任务',                  detail: '初始化 · 目标:高三 11 月月考', icon: IconPlus,    color: '#94A3B8' },
 ];
 
+function mapBackendDetail(task, assignments) {
+  const rows = assignments?.rows || [];
+  const teacherMap = new Map();
+  rows.forEach((row) => {
+    const key = row.teacherId || row.teacherName;
+    const prev = teacherMap.get(key) || { name: row.teacherName || 'Unknown teacher', grade: row.grade || '', count: 0 };
+    prev.count += 1;
+    teacherMap.set(key, prev);
+  });
+  return {
+    id: task.id,
+    name: task.name || task.taskNo || 'Backend task',
+    status: task.status || assignments?.status || 'scheduled',
+    source: 'backend',
+    createdAt: task.createdAt,
+    exports: assignments?.downloads || {},
+    stats: {
+      exams: new Set(rows.map((row) => row.examId)).size,
+      teachersUsed: teacherMap.size,
+      rooms: new Set(rows.map((row) => row.roomId || row.roomCode)).size,
+      supervisions: rows.length,
+      avg: teacherMap.size ? (rows.length / teacherMap.size).toFixed(1) : '0',
+      std: 'backend',
+      spread: '',
+    },
+    schedule: rows.map((row) => ({
+      date: row.examDate,
+      period: `${row.startTime || ''}-${row.endTime || ''}`,
+      subject: row.subjectName,
+      room: row.roomCode || row.roomName,
+      building: row.roomName,
+      supervisors: [row.teacherName || 'Unknown teacher'],
+      students: 0,
+    })),
+    teacherLoad: Array.from(teacherMap.values()),
+  };
+}
+
 function TaskDetailPage() {
   const [tab, setTab] = React.useState('overview');
-  const t = __TD_MOCK;
+
+  // 按 id 读取真实生成的任务（一键排监考写入本地任务库）；否则回退示例
+  const detailId = (() => { try { return localStorage.getItem('jkxt:taskDetailId'); } catch { return null; } })();
+  const [backendDetail, setBackendDetail] = React.useState(null);
+  const [backendAssignments, setBackendAssignments] = React.useState(null);
+  React.useEffect(() => {
+    let alive = true;
+    if (!detailId || !window.api) return undefined;
+    Promise.all([
+      window.api.get(`/exam-tasks/${detailId}`),
+      window.api.get(`/exam-tasks/${detailId}/assignments`),
+    ]).then(([task, assignments]) => {
+      if (!alive) return;
+      setBackendDetail(task);
+      setBackendAssignments(assignments);
+    }).catch(() => {
+      if (!alive) return;
+      setBackendDetail(null);
+      setBackendAssignments(null);
+    });
+    return () => { alive = false; };
+  }, [detailId]);
+  const backendTask = backendDetail ? mapBackendDetail(backendDetail, backendAssignments) : null;
+  const realTask = backendTask || (detailId && window.JKXT?.getTask ? window.JKXT.getTask(detailId) : null);
+  const isBackend = !!backendTask;
+  const isReal = !!realTask;
+
+  const t = isReal ? (() => {
+    const s = realTask.stats || {};
+    const dates = Array.from(new Set((realTask.schedule || []).map((r) => r.date)));
+    const students = (realTask.schedule || []).reduce((a, r) => a + (Number(r.students) || 0), 0);
+    return {
+      id: realTask.id, name: realTask.name,
+      type: isBackend ? '后端任务' : realTask.status === 'draft' ? '草稿' : '预览',
+      typeColor: isBackend ? 'emerald' : realTask.status === 'draft' ? 'slate' : 'indigo',
+      grade: '—', days: dates.length || 1, exams: s.exams || 0, supervisors: s.teachersUsed || 0,
+      status: realTask.status || 'preview', progress: realTask.status === 'draft' ? 20 : 60,
+      owner: '教务处', createdAt: realTask.createdAt, updatedAt: '刚刚',
+      startDate: dates[0] || '—', endDate: dates[dates.length - 1] || '—',
+      classrooms: s.rooms || 0, students, allowance: (s.supervisions || 0) * 100,
+      std: s.std, avg: s.avg, spread: s.spread, supervisions: s.supervisions, source: realTask.source,
+    };
+  })() : __TD_MOCK;
+
+  const supervisors = isReal
+    ? (realTask.teacherLoad || []).map((tl, i) => ({ id: 'T' + String(2025000 + i), name: tl.name, grade: tl.grade || '—', subject: '—', sessions: tl.count, status: 'pending' }))
+    : __TD_SUPERVISORS;
+
+  const scheduleRows = isReal
+    ? (realTask.schedule || []).map((r) => ({ date: r.date, period: r.period, subject: r.subject, rooms: r.room + (r.building ? ` · ${r.building}` : ''), supervisors: (r.supervisors || []).join('、'), students: r.students }))
+    : __TD_SCHEDULE;
+
+  const log = isReal ? [
+    { at: '刚刚', actor: '教务处', action: '生成排监考预览', detail: `${t.exams} 场 · ${t.supervisions} 人次 · 工作量标准差 ${t.std}`, icon: IconSparkle, color: '#9333EA' },
+    { at: '刚刚', actor: '教务处', action: `数据来源：${isBackend ? '后端任务' : realTask.source === 'upload' ? '上传 Excel' : '示例数据'}`, detail: isBackend ? '后端 task/job/assignments 已写入数据库' : '浏览器内解析·校验·排班 · 未连接服务端', icon: IconUpload, color: '#4F46E5' },
+    { at: realTask.createdAt, actor: '教务处', action: '创建任务', detail: realTask.name, icon: IconPlus, color: '#94A3B8' },
+  ] : __TD_LOG;
+
+  const downloadReal = (cardId, title) => {
+    if (isBackend) {
+      const path = cardId === 'exam' ? realTask.exports?.pdf : realTask.exports?.xlsx;
+      const clean = String(path || '').replace(/^\/api\/v1/, '');
+      const href = window.api?.url ? window.api.url(clean || `/exam-tasks/${realTask.id}/export?format=xlsx`) : path;
+      if (href) window.open(href, '_blank');
+      window.ui?.toast?.(`Downloading ${title}`, { kind: 'success', desc: 'Backend export' });
+      return;
+    }
+    if (isReal && window.JKXT) {
+      window.JKXT.downloadOne({ rows: realTask.schedule, teachers: (realTask.teacherLoad || []).map((x) => ({ ...x })), stats: realTask.stats }, realTask, cardId, title);
+      window.ui?.toast?.(`正在下载 ${title}.xlsx`, { kind: 'success', desc: '浏览器内真实生成 · 可用 Excel 打开' });
+    } else {
+      window.ui?.toast?.('开始下载…', { kind: 'info', desc: title });
+    }
+  };
 
   const TABS = [
     { id: 'overview',    label: '概览',     icon: IconDashboard, count: null },
     { id: 'supervisors', label: '监考人员', icon: IconUsers,     count: t.supervisors },
     { id: 'schedule',    label: '排班表',   icon: IconCalendar,  count: t.exams },
-    { id: 'log',         label: '操作记录', icon: IconArchive,   count: __TD_LOG.length },
+    { id: 'log',         label: '操作记录', icon: IconArchive,   count: log.length },
   ];
 
   return (
     <PageShell
       crumbs={['天津市实验中学', '排班作业', '任务总览', t.name]}
       title={t.name}
-      badge={<span className="inline-flex items-center gap-1.5"><Tag color={t.typeColor}>{t.type}</Tag><Tag color="sky" dot>进行中</Tag></span>}
+      badge={<span className="inline-flex items-center gap-1.5"><Tag color={t.typeColor}>{t.type}</Tag>{isReal ? <Tag color={t.status === 'draft' ? 'slate' : 'violet'} dot>{t.status === 'draft' ? '草稿' : '预览方案'}</Tag> : <Tag color="sky" dot>进行中</Tag>}</span>}
       subtitle={
-        <span>编号 <span className="font-mono">{t.id}</span> · 负责人 <span className="font-semibold" style={{ color: 'var(--text-strong)' }}>{t.owner}</span> · 最近更新 {t.updatedAt}</span>
+        <span>编号 <span className="font-mono">{t.id}</span> · 负责人 <span className="font-semibold" style={{ color: 'var(--text-strong)' }}>{t.owner}</span> · {isBackend ? '数据来源 后端任务' : isReal ? `数据来源 ${t.source === 'upload' ? '上传 Excel' : '示例'}` : `最近更新 ${t.updatedAt}`}</span>
       }
       actions={
         <>
-          <Button icon={IconUpload} onClick={() => window.ui.toast('正在导出任务文件…', { kind: 'info', desc: '4 份 Excel + AI 摘要 PDF' })}>导出</Button>
+          <Button icon={IconUpload} onClick={() => isBackend ? downloadReal('overall', '后端导出文件') : isReal ? (window.JKXT?.downloadAll({ rows: realTask.schedule, teachers: (realTask.teacherLoad||[]).map((x)=>({...x})), stats: realTask.stats }, realTask), window.ui.toast('正在导出任务文件', { kind: 'success', desc: '多 sheet xlsx · 浏览器内生成' })) : window.ui.toast('正在导出任务文件…', { kind: 'info', desc: '4 份 Excel + AI 摘要 PDF' })}>导出</Button>
           <Button icon={IconEdit} onClick={() => window.navigateTo('edit')}>修改排班</Button>
-          <Button variant="primary" icon={IconCheck} onClick={() => window.ui.toast('已发送邮件通知', { kind: 'success' })}>通知监考人员</Button>
+          <Button variant="primary" icon={IconCheck} onClick={async () => {
+            const taskId = realTask?.id;
+            if (!taskId) { window.ui.toast('该任务暂无后端排班,无法通知', { kind: 'warning', desc: '请先从「一键排监考」或「AI 策略监考」生成排班' }); return; }
+            try {
+              const r = await window.api.post(`/tasks/${taskId}/publish`, {});
+              window.ui.toast('排班已发布并通知', { kind: 'success', desc: `已通知 ${r.notificationCount || 0} 位监考教师 · ${r.notificationStatus || 'sent'}` });
+            } catch (e) {
+              window.ui.toast('通知失败', { kind: 'error', desc: e.message || '请稍后重试' });
+            }
+          }}>通知监考人员</Button>
         </>
       }
     >
@@ -89,13 +209,19 @@ function TaskDetailPage() {
               <div className="h-full rounded-full transition-all" style={{ width: `${t.progress}%`, background: 'linear-gradient(90deg, #4F46E5, #9333EA)' }} />
             </div>
             <div className="mt-3 flex items-center gap-4 text-[11.5px]">
-              {[
+              {(isReal ? [
+                { l: '上传/示例数据', done: true },
+                { l: isBackend ? '后端排班' : '本地排班',  done: true },
+                { l: '人工复核', done: false, current: true },
+                { l: '发布通知', done: false },
+                { l: '归档统计', done: false },
+              ] : [
                 { l: '上传数据', done: true },
                 { l: 'AI 排班',  done: true },
                 { l: '通知监考', done: true },
                 { l: '考试进行', done: false, current: true },
                 { l: '归档统计', done: false },
-              ].map((s, i) => (
+              ]).map((s, i) => (
                 <span key={i} className="inline-flex items-center gap-1.5"
                   style={{ color: s.done ? '#059669' : s.current ? 'var(--brand)' : 'var(--text-soft)' }}>
                   {s.done ? <IconCheck size={11} strokeWidth={2.5} /> : <span className="w-2 h-2 rounded-full" style={{ background: s.current ? 'var(--brand)' : '#CBD5E1', boxShadow: s.current ? '0 0 0 3px rgba(79,70,229,.16)' : 'none' }} />}
@@ -106,8 +232,8 @@ function TaskDetailPage() {
           </div>
           <div className="w-px h-16" style={{ background: 'var(--border-soft)' }} />
           <div className="text-right">
-            <div className="font-mono text-[10.5px] uppercase tracking-wider" style={{ color: 'var(--text-soft)' }}>距离开考</div>
-            <div className="num text-[28px] font-bold" style={{ color: 'var(--brand)' }}>1 天 18 时</div>
+            <div className="font-mono text-[10.5px] uppercase tracking-wider" style={{ color: 'var(--text-soft)' }}>{isReal ? '方案状态' : '距离开考'}</div>
+            <div className="num text-[28px] font-bold" style={{ color: 'var(--brand)' }}>{isReal ? (t.status === 'draft' ? '草稿' : '预览') : '1 天 18 时'}</div>
           </div>
         </div>
       </div>
@@ -144,19 +270,43 @@ function TaskDetailPage() {
           <div className="bg-white rounded-2xl p-5" style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
             <SectionTitle title="任务摘要" sub="AI 自动生成 · 可编辑" right={<Tag color="violet" dot>AI</Tag>} />
             <div className="rounded-lg p-4 text-[13px] leading-relaxed" style={{ background: '#F8FAFC', color: 'var(--text-medium)' }}>
+              {isReal ? (
+                <>
+                  本任务为<strong style={{ color: 'var(--text-strong)' }}>{realTask.name}</strong>，共安排 <strong>{t.exams} 场考试</strong>、跨 <strong>{t.days} 个考期</strong>、使用 <strong>{t.classrooms} 间考场</strong>、合计 <strong>{t.supervisions} 人次监考</strong>。
+                  <br /><br />
+                  {isBackend ? (
+                    <>
+                      后端 schedule_run 已完成，<strong>assignments 已写入数据库</strong>，共涉及 <strong>{t.supervisors} 名教师</strong>，平均每人 <strong>{t.avg}</strong> 场。后端 task/job/assignments 已写入数据库，可通过任务 API 导出 xlsx/pdf 基础版。
+                    </>
+                  ) : (
+                    <>
+                      系统按工作量均衡贪心策略在浏览器内完成分配，共涉及 <strong>{t.supervisors} 名教师</strong>，平均每人 <strong>{t.avg}</strong> 场、最大差 <strong>{t.spread}</strong> 场、工作量标准差 <strong style={{ color: '#10B981' }}>{t.std}</strong>。数据来源：{t.source === 'upload' ? '上传 Excel 解析' : '示例数据'} · 未连接服务端。
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
               本次任务为<strong style={{ color: 'var(--text-strong)' }}>高三年级 11 月第二次月考</strong>,共安排 <strong>10 场考试</strong>(语文/数学/英语/物理/化学/生物)、为期 2 天、覆盖 480 名高三学生与 10 间标准考场(A 栋 301-310)。
               <br /><br />
               系统已基于 K-12 标准策略自动分配 <strong>20 名监考教师</strong>,严格遵守班主任避监本班、同年级回避、每场至少 2 人监考等约束。AI 评分 <strong style={{ color: '#10B981' }}>96 / 100</strong>,无冲突。
+                </>
+              )}
             </div>
             <SectionTitle title="时间轴" sub="关键里程碑" />
             <ul className="space-y-3">
-              {[
+              {(isReal ? [
+                { at: realTask.createdAt, l: '任务创建', s: 'done' },
+                { at: '刚刚', l: `${isBackend ? '后端排班完成' : '本地排班完成'} · ${t.supervisions} 人次`, s: 'done' },
+                { at: '待办', l: '人工复核标注项', s: 'future' },
+                { at: '待办', l: '发布并通知监考教师', s: 'future' },
+                { at: '待办', l: '考试结束后归档统计', s: 'future' },
+              ] : [
                 { at: '11-12 10:00', l: '任务创建', s: 'done' },
                 { at: '昨天 14:20',  l: 'AI 智能排班完成', s: 'done' },
                 { at: '今天 09:30',  l: '排班已发布 · 邮件通知 20 名监考人员', s: 'done' },
                 { at: '11-22 08:00', l: '首场考试开始', s: 'future' },
                 { at: '11-23 16:00', l: '考试结束,自动归档', s: 'future' },
-              ].map((it, i) => (
+              ]).map((it, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <StatusDot color={it.s === 'done' ? '#10B981' : '#CBD5E1'} pulse={it.s === 'current'} />
                   <div className="flex-1 flex items-baseline justify-between">
@@ -172,20 +322,20 @@ function TaskDetailPage() {
             <div className="bg-white rounded-2xl p-5" style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
               <SectionTitle title="文件下载" />
               {[
-                { l: '完整监考排班表', s: 'XLSX · 24 KB', c: '#4F46E5' },
-                { l: '按教师视图',     s: 'XLSX · 18 KB', c: '#059669' },
-                { l: '按考场视图',     s: 'XLSX · 16 KB', c: '#D97706' },
-                { l: 'AI 摘要报告',    s: 'PDF · 142 KB', c: '#9333EA' },
+                { l: '完整监考排班表', s: 'XLSX', c: '#4F46E5', cid: 'overall' },
+                { l: '按教师视图',     s: 'XLSX', c: '#059669', cid: 'teacher' },
+                { l: '按考场视图',     s: 'XLSX', c: '#D97706', cid: 'room' },
+                { l: '按考试视图',     s: 'XLSX', c: '#9333EA', cid: 'exam' },
               ].map((f) => (
-                <button key={f.l} onClick={() => window.ui.toast('开始下载…', { kind: 'info', desc: f.l })}
+                <button key={f.l} onClick={() => isReal ? downloadReal(f.cid, f.l) : window.ui.toast('开始下载…', { kind: 'info', desc: f.l })}
                   className="w-full mt-2 rounded-lg p-3 flex items-center gap-3 transition-colors hover:bg-slate-50"
                   style={{ border: '1px solid var(--border-soft)' }}>
                   <div className="w-9 h-11 rounded flex items-end justify-center pb-1" style={{ background: '#fff', border: `1px solid ${f.c}55` }}>
-                    <span className="font-mono text-[8px] font-bold" style={{ color: f.c }}>{f.s.split(' ')[0]}</span>
+                    <span className="font-mono text-[8px] font-bold" style={{ color: f.c }}>{f.s}</span>
                   </div>
                   <div className="flex-1 text-left">
                     <div className="text-[12.5px] font-medium" style={{ color: 'var(--text-strong)' }}>{f.l}</div>
-                    <div className="text-[10.5px] mt-0.5 font-mono" style={{ color: 'var(--text-soft)' }}>{f.s}</div>
+                    <div className="text-[10.5px] mt-0.5 font-mono" style={{ color: isReal ? '#047857' : 'var(--text-soft)' }}>{isBackend ? '后端导出文件 · xlsx/pdf' : isReal ? '本地生成 · 可用 Excel 打开' : f.s}</div>
                   </div>
                   <IconArrowDown size={14} className="text-slate-400" />
                 </button>
@@ -246,7 +396,7 @@ function TaskDetailPage() {
               ),
             },
           ]}
-          rows={__TD_SUPERVISORS}
+          rows={supervisors}
           selectable
         />
       )}
@@ -262,16 +412,16 @@ function TaskDetailPage() {
               render: (r) => <span className="text-[12.5px]" style={{ color: 'var(--text-medium)' }}>{r.supervisors}</span> },
             { key: 'students', label: '考生数', width: 90, align: 'center', mono: true, render: (r) => <span>{r.students}</span> },
           ]}
-          rows={__TD_SCHEDULE}
+          rows={scheduleRows}
         />
       )}
 
       {tab === 'log' && (
         <div className="bg-white rounded-2xl p-5" style={{ border: '1px solid var(--border-soft)', boxShadow: 'var(--elevation-1)' }}>
-          <SectionTitle title="操作记录" sub={`共 ${__TD_LOG.length} 条 · 全部记录在审计日志`} right={<Button size="sm" variant="ghost" icon={IconUpload} onClick={() => window.ui.toast('导出日志', { kind: 'info' })}>导出</Button>} />
+          <SectionTitle title="操作记录" sub={`共 ${log.length} 条 · 全部记录在审计日志`} right={<Button size="sm" variant="ghost" icon={IconUpload} onClick={() => window.ui.toast('导出日志', { kind: 'info' })}>导出</Button>} />
           <ul className="relative space-y-5 pl-7">
             <span className="absolute left-[14px] top-1 bottom-1 w-px" style={{ background: 'var(--border-soft)' }} />
-            {__TD_LOG.map((l, i) => (
+            {log.map((l, i) => (
               <li key={i} className="relative">
                 <span className="absolute -left-7 w-7 h-7 rounded-full flex items-center justify-center"
                   style={{ background: l.color + '20', color: l.color, top: 0 }}>
