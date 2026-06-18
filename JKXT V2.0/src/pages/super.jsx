@@ -1306,7 +1306,7 @@ function SuperSystemSettingsPage() {
               confirmText: '确认保存并广播',
             });
             if (ok) {
-              window.ui.toast('系统设置已保存', { kind: 'success', desc: '配置已下发至所有租户 · 审计 L0010 已记录' });
+              await superPut('/admin/platform-settings', switches, null, '系统设置已保存 · 配置已下发,审计已记录');
             }
           }}>保存设置</Button>
         </>
