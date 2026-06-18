@@ -31,11 +31,15 @@ public class CpSatScheduleSolver {
   private static final String INFEASIBLE_CODE = "SCHEDULE_INFEASIBLE";
 
   public ScheduleSolverResult solve(ScheduleFixture fixture) {
+    return solve(fixture, SchedulePolicy.allOn());
+  }
+
+  public ScheduleSolverResult solve(ScheduleFixture fixture, SchedulePolicy policy) {
     Instant started = Instant.now();
     long startedNanos = System.nanoTime();
     Map<UUID, RoomInput> rooms = indexRooms(fixture.rooms());
 
-    List<ConflictItem> precheck = precheck(fixture, rooms);
+    List<ConflictItem> precheck = precheck(fixture, rooms, policy);
     if (!precheck.isEmpty()) {
       return infeasible("PRECHECK", precheck, startedNanos, fixture);
     }
@@ -52,7 +56,7 @@ public class CpSatScheduleSolver {
       List<BoolVar> assignVars = new ArrayList<>();
       List<BoolVar> mainVars = new ArrayList<>();
       for (TeacherInput teacher : fixture.teachers()) {
-        if (!eligible(teacher, examRoom)) continue;
+        if (!eligible(teacher, examRoom, policy)) continue;
         Key key = new Key(slot, teacher.id());
         BoolVar assignVar = model.newBoolVar("assign_s%d_t%s".formatted(slot, shortId(teacher.id())));
         BoolVar mainVar = model.newBoolVar("main_s%d_t%s".formatted(slot, shortId(teacher.id())));
@@ -105,7 +109,7 @@ public class CpSatScheduleSolver {
       }
     }
 
-    addDeterministicHint(model, fixture, assign, main);
+    addDeterministicHint(model, fixture, assign, main, policy);
 
     CpSolver solver = new CpSolver();
     solver.getParameters().setMaxTimeInSeconds(60.0);
@@ -166,7 +170,7 @@ public class CpSatScheduleSolver {
     );
   }
 
-  private List<ConflictItem> precheck(ScheduleFixture fixture, Map<UUID, RoomInput> rooms) {
+  private List<ConflictItem> precheck(ScheduleFixture fixture, Map<UUID, RoomInput> rooms, SchedulePolicy policy) {
     List<ConflictItem> conflicts = new ArrayList<>();
     for (ExamRoomInput examRoom : fixture.examRooms()) {
       RoomInput room = rooms.get(examRoom.roomId());
@@ -190,7 +194,7 @@ public class CpSatScheduleSolver {
         ));
       }
       List<TeacherInput> eligible = fixture.teachers().stream()
-          .filter(teacher -> eligible(teacher, examRoom))
+          .filter(teacher -> eligible(teacher, examRoom, policy))
           .toList();
       if (eligible.size() < examRoom.supervisorsPerRoom()) {
         conflicts.add(conflict(
@@ -215,7 +219,8 @@ public class CpSatScheduleSolver {
       CpModel model,
       ScheduleFixture fixture,
       Map<Key, BoolVar> assign,
-      Map<Key, BoolVar> main
+      Map<Key, BoolVar> main,
+      SchedulePolicy policy
   ) {
     Map<Key, Boolean> assignHints = new HashMap<>();
     Map<Key, Boolean> mainHints = new HashMap<>();
@@ -232,7 +237,7 @@ public class CpSatScheduleSolver {
       List<TeacherInput> selected = new ArrayList<>();
       for (TeacherInput teacher : fixture.teachers()) {
         if (selected.size() >= examRoom.supervisorsPerRoom()) break;
-        if (!eligible(teacher, examRoom)) continue;
+        if (!eligible(teacher, examRoom, policy)) continue;
         if (teacher.homeroom() && homeroomLoads.getOrDefault(teacher.id(), 0) >= 2) continue;
         List<ExamRoomInput> existing = teacherSchedule.getOrDefault(teacher.id(), List.of());
         if (existing.stream().anyMatch(previous -> overlaps(previous, examRoom))) continue;
@@ -322,13 +327,19 @@ public class CpSatScheduleSolver {
     return new ConflictItem(code, constraint, "error", scope, message, refs);
   }
 
-  private boolean eligible(TeacherInput teacher, ExamRoomInput examRoom) {
-    // Homeroom-class avoidance only applies when the exam-room is bound to a class. A null classId
-    // means "no class binding" — skip it. (Set.of(...).contains(null) would also NPE, so the null
-    // guard must come first regardless of the set implementation behind homeroomClassIds().)
+  private boolean eligible(TeacherInput teacher, ExamRoomInput examRoom, SchedulePolicy policy) {
+    // Homeroom-class avoidance (teacher_avoid_class) — only when the exam-room is class-bound and the
+    // policy keeps the rule on. A null classId means "no class binding"; the null guard must also
+    // come first because Set.of(...).contains(null) throws.
     UUID classId = examRoom.classId();
-    if (classId != null && teacher.homeroomClassIds().contains(classId)) return false;
-    return !Objects.equals(normalize(teacher.grade()), normalize(examRoom.grade()));
+    if (policy.avoidHomeroomClass() && classId != null && teacher.homeroomClassIds().contains(classId)) {
+      return false;
+    }
+    // Same-grade avoidance (same_grade_avoid) — only when the policy keeps the rule on.
+    if (policy.avoidSameGrade() && Objects.equals(normalize(teacher.grade()), normalize(examRoom.grade()))) {
+      return false;
+    }
+    return true;
   }
 
   private boolean overlaps(ExamRoomInput left, ExamRoomInput right) {

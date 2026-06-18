@@ -1,6 +1,7 @@
 package com.jkxt.scheduling.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jkxt.common.tenant.TenantContext;
 import com.jkxt.common.web.ApiException;
@@ -21,6 +22,7 @@ import com.jkxt.scheduling.solver.ScheduleFixture.ExamRoomInput;
 import com.jkxt.scheduling.solver.ScheduleFixture.RoomInput;
 import com.jkxt.scheduling.solver.ScheduleFixture.TeacherInput;
 import com.jkxt.scheduling.solver.ScheduleFixtureFactory;
+import com.jkxt.scheduling.solver.SchedulePolicy;
 import com.jkxt.scheduling.solver.ScheduleSolverResult;
 import com.jkxt.scheduling.solver.ScheduleSolverResult.Assignment;
 import com.jkxt.scheduling.solver.ScheduleSolverResult.ConflictItem;
@@ -116,7 +118,7 @@ public class ScheduleJobService {
     PreparedRun prepared = tx.execute(status -> prepareRun(orgId, fixtureFactory.fixture(fixtureId)));
     if (prepared == null) throw new IllegalStateException("Failed to prepare schedule run");
     publish(prepared.runId(), "pending", "queued", 0, "排考任务已创建，等待求解器执行。");
-    CompletableFuture.runAsync(() -> executePreparedRun(orgId, prepared.runId(), prepared.fixture()), executor);
+    CompletableFuture.runAsync(() -> executePreparedRun(orgId, prepared.runId(), prepared.fixture(), prepared.policy()), executor);
     return new RunStartResponse(
         prepared.runId(),
         prepared.taskId(),
@@ -135,11 +137,13 @@ public class ScheduleJobService {
       // Killer-bug fix (Epic 1): solve the task's REAL imported data instead of a hardcoded fixture.
       // buildFixtureFromTask validates the inputs and throws 400 if exams/rooms/teachers are missing.
       ScheduleFixture fixture = buildFixtureFromTask(orgId, task);
-      return prepareRealRun(orgId, task, fixture);
+      // Epic 4: resolve the AI policy DSL for this task so it actually drives the solver.
+      SchedulePolicy policy = resolvePolicy(orgId, task.getId());
+      return prepareRealRun(orgId, task, fixture, policy);
     });
     if (prepared == null) throw new IllegalStateException("Failed to prepare schedule run");
     publish(prepared.runId(), "pending", "queued", 0, "Quick schedule job queued.");
-    CompletableFuture.runAsync(() -> executePreparedRun(orgId, prepared.runId(), prepared.fixture()), executor);
+    CompletableFuture.runAsync(() -> executePreparedRun(orgId, prepared.runId(), prepared.fixture(), prepared.policy()), executor);
     return new RunStartResponse(
         prepared.runId(),
         prepared.taskId(),
@@ -225,7 +229,7 @@ public class ScheduleJobService {
         remapRooms(fixture, persisted.roomIds()),
         remapped
     );
-    return new PreparedRun(run.getId(), task.getId(), runFixture);
+    return new PreparedRun(run.getId(), task.getId(), runFixture, SchedulePolicy.allOn());
   }
 
   /**
@@ -317,7 +321,7 @@ public class ScheduleJobService {
    * data or create new exam rows — the fixture already carries the persisted exam/room/teacher
    * IDs, so the solver's assignments reference real rows directly.
    */
-  private PreparedRun prepareRealRun(UUID orgId, ExamTask task, ScheduleFixture fixture) {
+  private PreparedRun prepareRealRun(UUID orgId, ExamTask task, ScheduleFixture fixture, SchedulePolicy policy) {
     task.setStatus("scheduling");
     task.setStartsOn(fixture.examRooms().stream().map(ExamRoomInput::date).min(LocalDate::compareTo).orElse(LocalDate.now()));
     task.setEndsOn(fixture.examRooms().stream().map(ExamRoomInput::date).max(LocalDate::compareTo).orElse(LocalDate.now()));
@@ -338,7 +342,50 @@ public class ScheduleJobService {
         "exams", fixture.examRooms().size()
     )));
     run = runRepository.saveAndFlush(run);
-    return new PreparedRun(run.getId(), task.getId(), fixture);
+    return new PreparedRun(run.getId(), task.getId(), fixture, policy);
+  }
+
+  /**
+   * Epic 4: resolve the task's AI policy DSL into solver flags. Reads the latest {@code nl2dsl}
+   * AI call for the task (the DSL is persisted in {@code ai_call_log.masked_output}) and turns an
+   * implemented hard rule off only when the DSL explicitly disables it. Defaults to all-on
+   * (pre-Epic-4 behaviour) when there is no policy or it cannot be parsed.
+   */
+  private SchedulePolicy resolvePolicy(UUID orgId, UUID taskId) {
+    String json = jdbcTemplate.query(
+        "SELECT masked_output::text FROM ai_call_log "
+            + "WHERE org_id = ? AND exam_task_id = ? AND purpose = 'nl2dsl' "
+            + "ORDER BY created_at DESC LIMIT 1",
+        ps -> {
+          ps.setObject(1, orgId);
+          ps.setObject(2, taskId);
+        },
+        rs -> rs.next() ? rs.getString(1) : null);
+    if (json == null || json.isBlank()) {
+      return SchedulePolicy.allOn();
+    }
+    try {
+      JsonNode dsl = objectMapper.readTree(json).path("dsl");
+      return new SchedulePolicy(ruleActive(dsl, "teacher_avoid_class"), ruleActive(dsl, "same_grade_avoid"));
+    } catch (Exception ex) {
+      log.warn("Failed to parse AI policy DSL for task {}; keeping all constraints on", taskId, ex);
+      return SchedulePolicy.allOn();
+    }
+  }
+
+  /** A hard rule stays enforced unless the DSL explicitly carries a rule of this type with enabled=false. */
+  private static boolean ruleActive(JsonNode dsl, String type) {
+    for (String group : new String[] { "hard", "soft" }) {
+      JsonNode rules = dsl.path(group);
+      if (rules.isArray()) {
+        for (JsonNode rule : rules) {
+          if (type.equals(rule.path("type").asText()) && rule.has("enabled") && !rule.path("enabled").asBoolean(true)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   private static ApiException incompleteInput(String message) {
@@ -418,12 +465,12 @@ public class ScheduleJobService {
         .toList();
   }
 
-  private void executePreparedRun(UUID orgId, UUID runId, ScheduleFixture fixture) {
+  private void executePreparedRun(UUID orgId, UUID runId, ScheduleFixture fixture, SchedulePolicy policy) {
     try {
       markRunning(orgId, runId);
       publish(runId, "running", "读取小样本 fixture", 15, "已读取教师、考场、考试小样本。");
       publish(runId, "running", "构建 H1-H7 约束模型", 35, "正在构建 CP-SAT 决策变量与硬约束。");
-      ScheduleSolverResult result = solver.solve(fixture);
+      ScheduleSolverResult result = solver.solve(fixture, policy);
       publish(runId, "running", "求解完成，写入结果", 80, "CP-SAT 返回 %s。".formatted(result.solverStatus()));
       persistResult(orgId, runId, result);
       publish(
@@ -584,7 +631,7 @@ public class ScheduleJobService {
     );
   }
 
-  private record PreparedRun(UUID runId, UUID taskId, ScheduleFixture fixture) {
+  private record PreparedRun(UUID runId, UUID taskId, ScheduleFixture fixture, SchedulePolicy policy) {
   }
 
   private record PersistedFixtureData(Map<UUID, UUID> teacherIds, Map<UUID, UUID> roomIds) {
