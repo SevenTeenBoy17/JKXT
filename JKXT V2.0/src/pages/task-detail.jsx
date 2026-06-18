@@ -388,10 +388,17 @@ function TaskDetailPage() {
               render: (r) => (
                 <div className="inline-flex items-center gap-1">
                   <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--brand)' }}
-                    onClick={() => window.ui.toast(`已发送提醒给 ${r.name}`, { kind: 'success' })}>提醒响应</button>
+                    onClick={async () => {
+                      const taskId = realTask?.id;
+                      if (!taskId) { window.ui.toast('示例数据 · 暂无后端任务', { kind: 'warning', desc: '请先从「一键排监考」生成真实排班' }); return; }
+                      try {
+                        const res = await window.api.post(`/tasks/${taskId}/publish`, {});
+                        window.ui.toast('已向监考教师发送通知', { kind: 'success', desc: `共 ${res.notificationCount || 0} 人 · ${res.notificationStatus || 'sent'}（按当前后端为全员发布通知）` });
+                      } catch (e) { window.ui.toast('发送失败', { kind: 'error', desc: e.message || '请稍后重试' }); }
+                    }}>提醒响应</button>
                   <span className="text-slate-300">·</span>
                   <button className="text-[12px] font-medium px-1.5 hover:underline" style={{ color: 'var(--text-medium)' }}
-                    onClick={() => window.ui.toast(`替换 ${r.name}`, { kind: 'info' })}>替换</button>
+                    onClick={() => { window.navigateTo('edit'); window.ui.toast('前往「修改排班」改派监考', { kind: 'info', desc: `可拖拽将 ${r.name} 的监考任务改派给其他教师` }); }}>替换</button>
                 </div>
               ),
             },
