@@ -132,6 +132,9 @@ public class OpenAiCompatibleLlmClient implements LlmClient {
           """;
     }
     int latency = (int) Duration.between(start, Instant.now()).toMillis();
+    // A mock/short-circuit response is never a genuine call to the named provider (LLM disabled or
+    // no credential). fallback MUST be true regardless of the requested provider name, otherwise the
+    // caller/UI would mistake canned output for a real "<provider> succeeded" result (P1-7).
     return new ChatResponse(
         provider,
         model,
@@ -140,7 +143,7 @@ public class OpenAiCompatibleLlmClient implements LlmClient {
         Map.of("promptTokens", 120, "completionTokens", 180, "totalTokens", 300),
         BigDecimal.ZERO,
         "succeeded",
-        "mock".equalsIgnoreCase(provider),
+        true,
         null
     );
   }

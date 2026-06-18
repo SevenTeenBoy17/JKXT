@@ -16,6 +16,7 @@ import com.jkxt.security.api.AuthDtos.CaptchaResponse;
 import com.jkxt.tasks.repo.ExamTaskRepository;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -49,6 +51,65 @@ class ScheduleEditApiIntegrationTest {
 
   @Autowired
   private AuditLogRepository auditLogRepository;
+
+  @Autowired
+  private JdbcTemplate jdbcTemplate;
+
+  @Test
+  void republishIsIdempotentDoesNotDuplicateNotificationOrChangePublishedAt() throws Exception {
+    Cookie session = login();
+    JsonNode done = startFeasibleRun(session);
+    UUID taskId = UUID.fromString(done.get("taskId").asText());
+
+    // First publish: writes exactly one notification and stamps published_at.
+    JsonNode firstPublish = json(mockMvc.perform(post("/api/v1/tasks/{taskId}/publish", taskId).cookie(session))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.status").value("published"))
+        .andExpect(jsonPath("$.notificationStatus").value("sent"))
+        .andExpect(jsonPath("$.notificationCount").value(1))
+        .andExpect(jsonPath("$.alreadyPublished").value(false))
+        .andReturn());
+    UUID firstNotificationId = UUID.fromString(firstPublish.get("notificationId").asText());
+    int recipientCount = firstPublish.get("recipientCount").asInt();
+    assertThat(recipientCount).isGreaterThan(0);
+
+    long notificationRowsAfterFirst = countNotifications(taskId);
+    Timestamp publishedAtAfterFirst = publishedAt(taskId);
+    assertThat(notificationRowsAfterFirst).isEqualTo(1L);
+    assertThat(publishedAtAfterFirst).isNotNull();
+
+    // Second publish (double-click): idempotent no-op.
+    JsonNode secondPublish = json(mockMvc.perform(post("/api/v1/tasks/{taskId}/publish", taskId).cookie(session))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.status").value("published"))
+        .andExpect(jsonPath("$.notificationCount").value(0))
+        .andExpect(jsonPath("$.alreadyPublished").value(true))
+        .andReturn());
+
+    // No second notification row inserted, and the existing notification is echoed back.
+    assertThat(countNotifications(taskId)).isEqualTo(notificationRowsAfterFirst).isEqualTo(1L);
+    assertThat(UUID.fromString(secondPublish.get("notificationId").asText())).isEqualTo(firstNotificationId);
+    // recipientCount (distinct teacher count) is still reported on the no-op re-publish.
+    assertThat(secondPublish.get("recipientCount").asInt()).isEqualTo(recipientCount);
+
+    // published_at unchanged by the re-publish.
+    assertThat(publishedAt(taskId)).isEqualTo(publishedAtAfterFirst);
+  }
+
+  private long countNotifications(UUID taskId) {
+    Long count = jdbcTemplate.queryForObject(
+        "SELECT count(*) FROM notification WHERE exam_task_id = ? AND type = 'schedule_published'",
+        Long.class,
+        taskId);
+    return count == null ? 0L : count;
+  }
+
+  private Timestamp publishedAt(UUID taskId) {
+    return jdbcTemplate.queryForObject(
+        "SELECT published_at FROM exam_task WHERE id = ?",
+        Timestamp.class,
+        taskId);
+  }
 
   @Test
   void dragReassignmentChecksConflictsSupportsUndoRedoAndPublishesNotification() throws Exception {

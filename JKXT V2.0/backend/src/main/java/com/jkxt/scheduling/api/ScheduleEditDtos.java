@@ -80,7 +80,9 @@ public final class ScheduleEditDtos {
       Instant publishedAt,
       UUID notificationId,
       String notificationStatus,
-      int notificationCount
+      int recipientCount,
+      int notificationCount,
+      boolean alreadyPublished
   ) {
   }
 }

@@ -488,7 +488,11 @@ public class ImportValidationService {
       Counts counts = total.toCounts();
       String severity = counts.error() > 0 ? "error" : counts.warn() > 0 ? "warn" : counts.suggest() > 0 ? "suggest" : "pass";
       String category = items.isEmpty() ? "fields" : items.get(0).category();
-      int completeness = Math.max(0, Math.min(100, 100 - counts.error() * 5 - counts.warn() * 2));
+      // A hard fail (any blocking error, or no importable data rows) must not score near-perfect:
+      // an empty/header-only file would otherwise report ~95 and show as green "良好". Force 0.
+      int completeness = (counts.error() > 0 || rowCount == 0)
+          ? 0
+          : Math.max(0, Math.min(100, 100 - counts.error() * 5 - counts.warn() * 2));
       Overview overview = overview(spec.kind(), rowCount, completeness);
       return new ValidationReport(severity, category, overview, counts, catCounts, List.copyOf(items));
     }

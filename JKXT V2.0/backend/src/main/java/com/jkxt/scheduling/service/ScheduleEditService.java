@@ -30,6 +30,7 @@ import com.jkxt.tasks.repo.ExamRepository;
 import com.jkxt.tasks.repo.ExamTaskRepository;
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -230,13 +231,30 @@ public class ScheduleEditService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "SCHEDULE_PUBLISH_REQUIRES_ASSIGNMENTS");
     }
 
-    Instant now = Instant.now();
+    int teacherCount = (int) assignments.stream().map(ScheduleAssignment::getTeacherId).distinct().count();
     ExamTask task = context.task();
+
+    // P2-7: publish is idempotent. A re-publish of an already-published task must NOT overwrite
+    // publishedAt and must NOT insert another notification. Return the existing publish result.
+    if ("published".equals(task.getStatus()) && task.getPublishedAt() != null) {
+      Notification existing = latestPublishNotification(context.orgId(), task.getId());
+      return new PublishResponse(
+          task.getId(),
+          task.getStatus(),
+          task.getPublishedAt(),
+          existing == null ? null : existing.getId(),
+          existing == null ? "sent" : existing.getStatus(),
+          teacherCount,
+          0,
+          true
+      );
+    }
+
+    Instant now = Instant.now();
     task.setStatus("published");
     task.setPublishedAt(now);
     taskRepository.save(task);
 
-    int teacherCount = (int) assignments.stream().map(ScheduleAssignment::getTeacherId).distinct().count();
     Notification notification = new Notification();
     notification.setOrgId(context.orgId());
     notification.setExamTaskId(task.getId());
@@ -265,8 +283,19 @@ public class ScheduleEditService {
         now,
         notification.getId(),
         notification.getStatus(),
-        teacherCount
+        teacherCount,
+        1,
+        false
     );
+  }
+
+  private Notification latestPublishNotification(UUID orgId, UUID taskId) {
+    return notificationRepository.findByOrgIdAndExamTaskId(orgId, taskId).stream()
+        .filter(n -> "schedule_published".equals(n.getType()))
+        .max(Comparator.comparing(
+            Notification::getPublishedAt,
+            Comparator.nullsFirst(Comparator.naturalOrder())))
+        .orElse(null);
   }
 
   private Context context(UUID taskId) {

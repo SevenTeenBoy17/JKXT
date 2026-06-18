@@ -121,12 +121,22 @@ public class AuthService {
     }
 
     List<String> permissions = permissions(user.getOrgId(), user.getRole());
-    user.setFailedAttempts(0);
-    user.setLockedUntil(null);
-    user.setLastLoginAt(now);
-    user.setLastLoginIp(ip);
-    user.setLoginCount(user.getLoginCount() + 1);
-    userRepository.save(user);
+    // Persist login-success bookkeeping via a direct UPDATE (not userRepository.save) so that
+    // concurrent successful logins for the same account do not contend on the JPA @Version and
+    // throw ObjectOptimisticLockingFailureException (P1-6). login_count is incremented in-place.
+    jdbcTemplate.update(
+        "update app_user set failed_attempts = 0, locked_until = null, last_login_at = ?, "
+            + "last_login_ip = ?, login_count = login_count + 1, updated_at = now() where id = ?",
+        ps -> {
+          ps.setObject(1, java.sql.Timestamp.from(now));
+          ps.setString(2, ip);
+          ps.setObject(3, user.getId());
+        });
+    // Deliberately DO NOT mutate the managed `user` entity here: the login response and session
+    // principal read only id/username/displayName/role/onboarded (all unchanged), and mutating the
+    // managed entity would make Hibernate flush a second, @Version-checked UPDATE at commit — which
+    // is exactly the optimistic-lock race two concurrent logins would lose (P1-6). The JDBC UPDATE
+    // above is the sole persistence of the bookkeeping columns.
     audit(user.getOrgId(), user.getId(), "AUTH_LOGIN_SUCCESS", "auth", "info");
 
     SessionPrincipal principal = new SessionPrincipal(

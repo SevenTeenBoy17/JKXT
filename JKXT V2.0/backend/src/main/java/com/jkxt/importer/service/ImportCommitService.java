@@ -20,11 +20,13 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -101,10 +103,18 @@ public class ImportCommitService {
     int updated = 0;
     int skipped = 0;
     List<String> warnings = new ArrayList<>();
+    Set<String> seenNos = new HashSet<>();
     for (ParsedRow row : rows) {
       String no = row.get("teacherNo");
       if (no.isBlank()) {
         skipped++;
+        continue;
+      }
+      // P3-5: a natural key repeated inside ONE upload is a data-entry mistake, not an
+      // update. Skip the later row and tell the operator instead of silently counting it.
+      if (!seenNos.add(no)) {
+        skipped++;
+        warnings.add("第 " + row.rowNo() + " 行 teacherNo " + no + " 与文件内前序行重复，已跳过");
         continue;
       }
       Optional<Teacher> existing = teacherRepository.findByOrgIdAndTeacherNo(orgId, no);
@@ -117,7 +127,12 @@ public class ImportCommitService {
       teacher.setPhone(blankToNull(row.get("phone")));
       teacher.setEmail(blankToNull(row.get("email")));
       teacher.setStatus("active");
-      teacherRepository.save(teacher);
+      // saveAndFlush: the raw JDBC teacher_subject insert below references this row's id, so
+      // the parent must be flushed first (same ordering the exam_room path relies on).
+      Teacher saved = teacherRepository.saveAndFlush(teacher);
+      // P2-1: persist the 任教学科 column into teacher_subject (the CRUD path writes the
+      // same join table); unknown subject names warn-and-skip rather than failing the row.
+      linkSubjects("teacher_subject", "teacher_id", orgId, saved.getId(), row, warnings);
       if (existing.isPresent()) {
         updated++;
       } else {
@@ -164,10 +179,18 @@ public class ImportCommitService {
     int inserted = 0;
     int updated = 0;
     int skipped = 0;
+    List<String> warnings = new ArrayList<>();
+    Set<String> seenCodes = new HashSet<>();
     for (ParsedRow row : rows) {
       String code = row.get("code");
       if (code.isBlank()) {
         skipped++;
+        continue;
+      }
+      // P3-5: in-file duplicate班级编号 — skip the later row and warn the operator.
+      if (!seenCodes.add(code)) {
+        skipped++;
+        warnings.add("第 " + row.rowNo() + " 行班级编号 " + code + " 与文件内前序行重复，已跳过");
         continue;
       }
       Optional<SchoolClass> existing = schoolClassRepository.findByOrgIdAndCode(orgId, code);
@@ -179,14 +202,18 @@ public class ImportCommitService {
       klass.setStage(blankToNull(row.get("stage")));
       klass.setStudentCount(intOf(row.get("studentCount"), 0));
       klass.setStatus("active");
-      schoolClassRepository.save(klass);
+      // saveAndFlush: the raw JDBC school_class_subject insert below references this row's id.
+      SchoolClass saved = schoolClassRepository.saveAndFlush(klass);
+      // P2-1: persist the 开设科目 column into school_class_subject (same join the CRUD
+      // path writes); unknown subject names warn-and-skip rather than failing the row.
+      linkSubjects("school_class_subject", "class_id", orgId, saved.getId(), row, warnings);
       if (existing.isPresent()) {
         updated++;
       } else {
         inserted++;
       }
     }
-    return new CommitResult("classes", rows.size(), inserted, updated, skipped, List.of());
+    return new CommitResult("classes", rows.size(), inserted, updated, skipped, warnings);
   }
 
   private CommitResult commitSubjects(UUID orgId, List<ParsedRow> rows) {
@@ -288,6 +315,43 @@ public class ImportCommitService {
     }
     return examTaskRepository.findByOrgIdAndId(orgId, taskId)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exam task not found: " + taskId));
+  }
+
+  /**
+   * Persist the comma-separated 任教学科 / 开设科目 column into the owner's subject join table
+   * ({@code teacher_subject} / {@code school_class_subject}) — the same tables the CRUD path
+   * writes via {@code MasterDataService.replaceSubjects}. Each name is matched by subject name
+   * first, then code, within the org. A named subject that does not exist in the org does not
+   * fail the row: it adds a {@link CommitResult} warning and is skipped. When the column is
+   * absent for a row, existing links are left untouched (no accidental wipe on partial uploads).
+   */
+  private void linkSubjects(
+      String table,
+      String ownerColumn,
+      UUID orgId,
+      UUID ownerId,
+      ParsedRow row,
+      List<String> warnings
+  ) {
+    String raw = row.get("subjects");
+    if (raw == null || raw.isBlank()) {
+      return;
+    }
+    // Re-import is idempotent for this owner: replace its association set with the file's.
+    jdbcTemplate.update(
+        "DELETE FROM " + table + " WHERE org_id = ? AND " + ownerColumn + " = ?", orgId, ownerId);
+    for (String name : splitList(raw)) {
+      Optional<Subject> subject = subjectRepository.findByOrgIdAndName(orgId, name)
+          .or(() -> subjectRepository.findByOrgIdAndCode(orgId, name));
+      if (subject.isEmpty()) {
+        warnings.add("第 " + row.rowNo() + " 行任教学科 " + name + " 未找到，已跳过该关联");
+        continue;
+      }
+      jdbcTemplate.update(
+          "INSERT INTO " + table + " (" + ownerColumn + ", subject_id, org_id) VALUES (?, ?, ?) "
+              + "ON CONFLICT DO NOTHING",
+          ownerId, subject.get().getId(), orgId);
+    }
   }
 
   // ---- parsing helpers ----

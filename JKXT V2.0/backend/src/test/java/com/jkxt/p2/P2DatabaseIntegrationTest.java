@@ -98,7 +98,10 @@ class P2DatabaseIntegrationTest {
     assertThat(roleRepository.findByOrgIdAndCode(orgId, "ADMIN")).isPresent();
     assertThat(userAccountRepository.findByOrgIdAndUsername(orgId, "admin"))
         .hasValueSatisfying(admin -> {
-          assertThat(admin.getRole()).isEqualTo("ADMIN");
+          // The V10 P13 demo-login migration intentionally promoted the seeded `admin` account to the
+          // platform SUPER_ADMIN operator (ON CONFLICT DO UPDATE SET role = 'SUPER_ADMIN'); this
+          // assertion was written against the original P2 seed and is updated to match that reality.
+          assertThat(admin.getRole()).isEqualTo("SUPER_ADMIN");
           assertThat(admin.getStatus()).isEqualTo("active");
           assertThat(admin.isOnboarded()).isTrue();
         });

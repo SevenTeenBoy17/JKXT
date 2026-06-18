@@ -4,14 +4,19 @@ import com.jkxt.security.auth.AuthException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -82,6 +87,53 @@ public class RestExceptionHandler {
             code,
             exception.getReason() == null ? exception.getMessage() : exception.getReason(),
             status
+        ));
+  }
+
+  @ExceptionHandler(OptimisticLockingFailureException.class)
+  ResponseEntity<ApiErrorResponse> handleOptimisticLock(OptimisticLockingFailureException exception) {
+    return ResponseEntity
+        .status(HttpStatus.CONFLICT)
+        .body(ApiErrorResponse.of(
+            "RESOURCE_CONFLICT",
+            "资源已被并发修改，请重新加载后重试",
+            HttpStatus.CONFLICT.value()
+        ));
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  ResponseEntity<ApiErrorResponse> handleNotReadable(HttpMessageNotReadableException exception) {
+    return ResponseEntity
+        .badRequest()
+        .body(ApiErrorResponse.of(
+            "MALFORMED_REQUEST",
+            "请求体格式不正确",
+            HttpStatus.BAD_REQUEST.value()
+        ));
+  }
+
+  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  ResponseEntity<ApiErrorResponse> handleMethodNotSupported(HttpRequestMethodNotSupportedException exception) {
+    ResponseEntity.BodyBuilder builder = ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED);
+    String[] supported = exception.getSupportedMethods();
+    if (supported != null && supported.length > 0) {
+      builder.header(HttpHeaders.ALLOW, String.join(", ", supported));
+    }
+    return builder.body(ApiErrorResponse.of(
+        "METHOD_NOT_ALLOWED",
+        "请求方法不被允许",
+        HttpStatus.METHOD_NOT_ALLOWED.value()
+    ));
+  }
+
+  @ExceptionHandler(NoResourceFoundException.class)
+  ResponseEntity<ApiErrorResponse> handleNoResourceFound(NoResourceFoundException exception) {
+    return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(ApiErrorResponse.of(
+            "NOT_FOUND",
+            "资源不存在",
+            HttpStatus.NOT_FOUND.value()
         ));
   }
 

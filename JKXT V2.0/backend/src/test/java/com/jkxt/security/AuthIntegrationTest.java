@@ -135,6 +135,59 @@ class AuthIntegrationTest {
         .andExpect(jsonPath("$.code").value("AUTH_UNAUTHENTICATED"));
   }
 
+  @Test
+  void concurrentSameAccountLoginAllSucceed() throws Exception {
+    // P1-6 regression: two+ concurrent successful logins for the SAME account used to collide on the
+    // UserAccount @Version (userRepository.save on the success path) -> ObjectOptimisticLockingFailureException
+    // -> 500/409 for one of them. The success path now persists bookkeeping via a direct JDBC UPDATE,
+    // so every concurrent login must return 200.
+    int n = 6;
+
+    // Captcha is single-use, so mint one per request up front (outside the parallel section).
+    java.util.List<CaptchaResponse> captchas = new java.util.ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      captchas.add(captcha());
+    }
+
+    java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(n);
+    try {
+      java.util.concurrent.CountDownLatch ready = new java.util.concurrent.CountDownLatch(n);
+      java.util.concurrent.CountDownLatch go = new java.util.concurrent.CountDownLatch(1);
+      java.util.List<java.util.concurrent.Future<Integer>> futures = new java.util.ArrayList<>();
+
+      for (int i = 0; i < n; i++) {
+        CaptchaResponse captcha = captchas.get(i);
+        futures.add(pool.submit(() -> {
+          ready.countDown();
+          go.await(); // release all threads at once to maximise the race
+          return mockMvc.perform(post("/api/v1/auth/login")
+                  .contentType(MediaType.APPLICATION_JSON)
+                  .content("""
+                      {
+                        "username": "jwc.demo",
+                        "password": "Demo@2025",
+                        "captchaId": "%s",
+                        "captcha": "%s"
+                      }
+                      """.formatted(captcha.captchaId(), captcha.debugAnswer())))
+              .andReturn()
+              .getResponse()
+              .getStatus();
+        }));
+      }
+
+      ready.await();
+      go.countDown();
+
+      for (java.util.concurrent.Future<Integer> future : futures) {
+        org.junit.jupiter.api.Assertions.assertEquals(
+            200, future.get(), "every concurrent same-account login must return 200 (no 500/409 optimistic-lock failure)");
+      }
+    } finally {
+      pool.shutdownNow();
+    }
+  }
+
   private CaptchaResponse captcha() throws Exception {
     MvcResult result = mockMvc.perform(post("/api/v1/auth/captcha"))
         .andExpect(status().isOk())

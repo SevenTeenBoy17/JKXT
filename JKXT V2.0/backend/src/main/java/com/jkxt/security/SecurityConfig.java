@@ -8,6 +8,7 @@ import java.util.Arrays;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -70,6 +71,16 @@ public class SecurityConfig {
             // management) must require the SUPER_ADMIN role — a tenant ADMIN must NOT reach it.
             // This coarse matcher backstops the method-level @PreAuthorize on AdminPlatformController.
             .requestMatchers("/api/v1/admin/**").hasRole("SUPER_ADMIN")
+            // Self-service POSTs every authenticated user may call (sign out, mark onboarding done).
+            .requestMatchers(HttpMethod.POST, "/api/v1/auth/logout", "/api/v1/auth/me/onboarded").authenticated()
+            // All other business mutations (master-data create/update/delete, import commit, schedule
+            // edit/publish, exam-task/scheduling, AI policy authoring) require ADMIN or SUPER_ADMIN.
+            // Read-only roles (VIEWER / TEACHER_QUERY) keep GET access but are denied writes (P1-1):
+            // previously every authenticated user could write because only /admin/** was role-gated.
+            .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .requestMatchers(HttpMethod.PATCH, "/api/v1/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
             .requestMatchers("/api/v1/**").authenticated()
             .anyRequest().permitAll()
         );

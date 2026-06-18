@@ -48,20 +48,28 @@ public class ReportingService {
 
   public List<Map<String, Object>> teacherHistory() {
     UUID orgId = TenantContext.getRequired();
+    UUID runId = activeRunId(orgId);
     double unitPrice = allowanceUnit(orgId);
+    // Subjects are read via a correlated subquery (NOT a top-level join) so a multi-subject teacher
+    // no longer fans out count/hours/allowance by their subject count (P1-2). Assignments are scoped
+    // to the active run via the join condition (P1-3); teachers with no load still list with count 0.
     List<Map<String, Object>> raw = jdbcTemplate.query("""
         select
           t.id as teacher_id,
           t.teacher_no as code,
           t.name,
           coalesce(t.grade, '-') as grade,
-          coalesce(string_agg(distinct s.name, '/'), '-') as subjects,
+          coalesce((
+            select string_agg(distinct s.name, '/')
+            from teacher_subject ts
+            join subject s on s.id = ts.subject_id
+            where ts.org_id = t.org_id and ts.teacher_id = t.id
+          ), '-') as subjects,
           count(sa.id)::int as assignment_count,
           coalesce(sum(extract(epoch from (sa.end_time - sa.start_time)) / 3600.0), 0) as duration_hours
         from teacher t
-        left join teacher_subject ts on ts.org_id = t.org_id and ts.teacher_id = t.id
-        left join subject s on s.id = ts.subject_id
-        left join schedule_assignment sa on sa.org_id = t.org_id and sa.teacher_id = t.id
+        left join schedule_assignment sa
+          on sa.org_id = t.org_id and sa.teacher_id = t.id and sa.schedule_run_id = ?
         where t.org_id = ?
         group by t.id, t.teacher_no, t.name, t.grade
         order by assignment_count desc, t.teacher_no asc
@@ -81,7 +89,7 @@ public class ReportingService {
       row.put("total", allowance);
       row.put("allowance", allowance);
       return row;
-    }, orgId);
+    }, runId, orgId);
 
     int denominator = raw.stream().mapToInt(row -> intValue(row.get("count"))).sum();
     int ranking = 1;
@@ -95,12 +103,13 @@ public class ReportingService {
 
   public List<Map<String, Object>> historyByGrade() {
     UUID orgId = TenantContext.getRequired();
+    UUID runId = activeRunId(orgId);
     List<Map<String, Object>> rows = jdbcTemplate.query("""
         select coalesce(e.grade, t.grade, 'Unknown') as grade, count(sa.id)::int as count
         from schedule_assignment sa
         left join exam e on e.id = sa.exam_id
         left join teacher t on t.id = sa.teacher_id
-        where sa.org_id = ?
+        where sa.org_id = ? and sa.schedule_run_id = ?
         group by coalesce(e.grade, t.grade, 'Unknown')
         order by count desc, grade asc
         """, (rs, rowNum) -> {
@@ -109,7 +118,7 @@ public class ReportingService {
       row.put("count", rs.getInt("count"));
       row.put("color", COLORS.get(rowNum % COLORS.size()));
       return row;
-    }, orgId);
+    }, orgId, runId);
     if (!rows.isEmpty()) {
       return rows;
     }
@@ -130,10 +139,11 @@ public class ReportingService {
 
   public Map<String, Object> monthlyTrend() {
     UUID orgId = TenantContext.getRequired();
+    UUID runId = activeRunId(orgId);
     List<Map<String, Object>> rows = jdbcTemplate.query("""
         select date_trunc('month', sa.exam_date)::date as month_start, count(sa.id)::int as count
         from schedule_assignment sa
-        where sa.org_id = ?
+        where sa.org_id = ? and sa.schedule_run_id = ?
         group by date_trunc('month', sa.exam_date)::date
         order by month_start asc
         """, (rs, rowNum) -> {
@@ -142,17 +152,19 @@ public class ReportingService {
       row.put("label", MONTH.format(month));
       row.put("count", rs.getInt("count"));
       return row;
-    }, orgId);
+    }, orgId, runId);
     List<String> labels = rows.stream().map(row -> String.valueOf(row.get("label"))).toList();
     List<Integer> data = rows.stream().map(row -> intValue(row.get("count"))).toList();
-    double trendPct = 0.0;
-    if (data.size() >= 2 && data.get(0) > 0) {
-      trendPct = round((data.get(data.size() - 1) - data.get(0)) * 100.0 / data.get(0), 1);
-    }
     Map<String, Object> response = new LinkedHashMap<>();
     response.put("labels", labels);
     response.put("data", data);
-    response.put("trendPct", trendPct);
+    // With fewer than two months there is no real period-over-period trend; return null (not a
+    // misleading flat 0%) so the UI can show "趋势数据不足" instead of implying zero change (P2-2).
+    if (data.size() >= 2 && data.get(0) > 0) {
+      response.put("trendPct", round((data.get(data.size() - 1) - data.get(0)) * 100.0 / data.get(0), 1));
+    } else {
+      response.put("trendPct", null);
+    }
     return response;
   }
 
@@ -203,6 +215,7 @@ public class ReportingService {
 
   private List<Map<String, Object>> subjectStats() {
     UUID orgId = TenantContext.getRequired();
+    UUID runId = activeRunId(orgId);
     double unitPrice = allowanceUnit(orgId);
     return jdbcTemplate.query("""
         select
@@ -213,14 +226,15 @@ public class ReportingService {
         from schedule_assignment sa
         left join exam e on e.id = sa.exam_id
         left join subject s on s.id = e.subject_id
-        where sa.org_id = ?
+        where sa.org_id = ? and sa.schedule_run_id = ?
         group by coalesce(e.subject_name, 'Unknown')
         order by assignment_count desc, name asc
-        """, (rs, rowNum) -> statsRow(rs.getString("name"), rs.getString("sub"), rs.getInt("assignment_count"), rs.getDouble("duration_hours"), unitPrice), orgId);
+        """, (rs, rowNum) -> statsRow(rs.getString("name"), rs.getString("sub"), rs.getInt("assignment_count"), rs.getDouble("duration_hours"), unitPrice), orgId, runId);
   }
 
   private List<Map<String, Object>> gradeStats() {
     UUID orgId = TenantContext.getRequired();
+    UUID runId = activeRunId(orgId);
     double unitPrice = allowanceUnit(orgId);
     return jdbcTemplate.query("""
         select
@@ -230,7 +244,7 @@ public class ReportingService {
           coalesce(sum(extract(epoch from (sa.end_time - sa.start_time)) / 3600.0), 0) as duration_hours
         from schedule_assignment sa
         left join exam e on e.id = sa.exam_id
-        where sa.org_id = ?
+        where sa.org_id = ? and sa.schedule_run_id = ?
         group by coalesce(e.grade, 'Unknown')
         order by assignment_count desc, name asc
         """, (rs, rowNum) -> statsRow(
@@ -239,7 +253,7 @@ public class ReportingService {
         rs.getInt("assignment_count"),
         rs.getDouble("duration_hours"),
         unitPrice
-    ), orgId);
+    ), orgId, runId);
   }
 
   private Map<String, Object> superviseRow(Object name, Object sub, Map<String, Object> source) {
@@ -297,9 +311,19 @@ public class ReportingService {
     totals.put("duration", round(duration, 1));
     totals.put("hours", round(duration, 1));
     totals.put("allowance", round(allowance, 2));
-    totals.put("teachers", rows.size());
+    // "参与教师/参与项" counts only rows that actually have >=1 supervision in the active run, so a
+    // zero-load teacher on the roster is not counted as a participant (P2-4).
+    totals.put("teachers", (int) rows.stream().filter(row -> intValue(row.get("count")) > 0).count());
     totals.put("denominator", rows.stream().mapToInt(row -> intValue(row.get("count"))).sum());
     return totals;
+  }
+
+  // The active schedule for an org is its latest succeeded run. All reporting aggregates scope to it
+  // (P1-3) so history/supervise match what /timeline/schedule shows, instead of pooling every
+  // historical/superseded solver run. A zero UUID (no run yet) matches no assignment -> empty/zero.
+  private UUID activeRunId(UUID orgId) {
+    UUID runId = latestSucceededRun(orgId);
+    return runId == null ? new UUID(0L, 0L) : runId;
   }
 
   private UUID latestSucceededRun(UUID orgId) {
