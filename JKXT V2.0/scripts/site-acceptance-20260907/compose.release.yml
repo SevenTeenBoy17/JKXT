@@ -1,0 +1,3 @@
+services:
+  app:
+    image: jkxt-site-accepted:v30-20260907

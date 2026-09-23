@@ -1,0 +1,70 @@
+name: jkxt-v2
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: jkxt-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-jkxt}
+      POSTGRES_USER: ${POSTGRES_USER:-jkxt}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jkxt_dev_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - jkxt-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: jkxt-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - jkxt-redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: jkxt-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-jkxt}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-jkxt}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-jkxt_dev_password}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      API_PUBLIC_BASE: /api/v1
+      JKXT_VERSION: 0.1.0-p1
+      JKXT_AUTH_CAPTCHA_DEBUG: "true"
+      JKXT_LLM_ENABLED: ${JKXT_LLM_ENABLED:-false}
+      JKXT_LLM_ACCEPTANCE_MODE: ${JKXT_LLM_ACCEPTANCE_MODE:-false}
+      JKXT_LLM_PROVIDER: ${JKXT_LLM_PROVIDER:-aliyun}
+      JKXT_LLM_BASE_URL: ${JKXT_LLM_BASE_URL:-}
+      JKXT_LLM_FALLBACK_BASE_URL: ${JKXT_LLM_FALLBACK_BASE_URL:-}
+      JKXT_LLM_API_KEY: ${JKXT_LLM_API_KEY:-}
+      JKXT_LLM_MODEL: ${JKXT_LLM_MODEL:-qwen-plus}
+      JKXT_LLM_FALLBACK_MODELS: ${JKXT_LLM_FALLBACK_MODELS:-qwen-flash}
+      JKXT_LLM_TIMEOUT_MS: ${JKXT_LLM_TIMEOUT_MS:-60000}
+      JKXT_LLM_MAX_RETRIES: ${JKXT_LLM_MAX_RETRIES:-2}
+      JKXT_LLM_MAX_OUTPUT_TOKENS: ${JKXT_LLM_MAX_OUTPUT_TOKENS:-4096}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
+volumes:
+  jkxt-postgres-data:
+  jkxt-redis-data:

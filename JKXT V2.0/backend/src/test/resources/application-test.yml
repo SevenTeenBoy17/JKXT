@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: ${JKXT_TEST_DATASOURCE_URL:}
+    username: ${JKXT_TEST_DATASOURCE_USERNAME:}
+    password: ${JKXT_TEST_DATASOURCE_PASSWORD:}
+  flyway:
+    enabled: true
+    clean-disabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      host: ${JKXT_TEST_REDIS_HOST:}
+      port: ${JKXT_TEST_REDIS_PORT:0}
+
+# Runs before context refresh: no DataSource, Flyway, Redis client or fixture can
+# start against a business endpoint just because a test selected this profile.
+context:
+  initializer:
+    classes: com.jkxt.security.TestDatabaseIsolationGuard
+
+jkxt:
+  auth:
+    captcha-debug: true

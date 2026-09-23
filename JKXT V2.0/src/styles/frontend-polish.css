@@ -1,0 +1,73 @@
+/* Enterprise motion / Chinese type. This layer does not change navigation layout. */
+:root, .app-shell {
+  --font-ui: "Geist Variable", "Noto Sans SC Variable", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
+  --font-mono: Consolas, "Noto Sans SC Variable", monospace;
+  --type-caption-size: .75rem;
+  --type-caption-line: 1.25rem;
+  --type-body-size: .875rem;
+  --type-body-line: 1.5rem;
+  --type-section-size: 1rem;
+  --type-section-line: 1.5rem;
+  --type-page-size: 1.5rem;
+  --type-page-line: 1.4;
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+}
+body, .app-shell, .ops6, .blueprint-v5, .ui-overlay, .ui-toast, .onboarding-overlay {
+  font-family: var(--font-ui);
+  font-size: .875rem;
+  line-height: 1.6;
+  font-synthesis: none;
+}
+.app-shell :is(button,input,textarea,select), .ui-overlay :is(button,input,textarea,select) { font-family: inherit; }
+.app-shell .num, .app-shell .page-meta-badge { font-family: var(--font-ui); font-variant-numeric: tabular-nums; letter-spacing: normal; }
+.app-shell .font-mono, .ui-overlay .font-mono { font-family: var(--font-mono); }
+.app-shell .app-main :is([class*="text-[9px]"],[class*="text-[9.5px]"],[class*="text-[10px]"],[class*="text-[10.5px]"],[class*="text-[11px]"],[class*="text-[11.5px]"]):not(svg):not(.num) { font-size: .75rem; line-height: 1.6; }
+.app-shell .ui-button__label { overflow-wrap: normal; }
+.app-shell :is(.page-meta-badge,.recent-task-status,.ops6-tag,.bp-tag) { white-space: nowrap; flex-shrink: 0; }
+.app-shell .page-subtitle { max-width: 78ch; line-height: 1.7; }
+
+/* A surface has one owner. Old CSS overlays no longer compete with GSAP. */
+.ui-overlay, .ui-overlay .ui-modal, .ui-overlay .ui-drawer, .ui-toast { animation: none !important; }
+.ui-overlay { padding: 16px; }
+.ui-overlay:has(.ui-drawer) { padding: 0; }
+.ui-overlay .ui-modal { min-width: 0 !important; max-width: min(100%, 920px); max-height: calc(100dvh - 32px); }
+.ui-overlay .ui-modal[role="alertdialog"] { max-width: min(100%, 460px); overflow-y: auto; }
+.ui-overlay .ui-drawer { max-width: 100%; height: 100dvh; }
+.ui-toast-stack { max-width: calc(100vw - 24px); right: 12px; z-index: 130; }
+.ui-toast { min-width: 0 !important; width: min(420px, calc(100vw - 24px)); }
+.ui-toast-close { flex: 0 0 32px; height: 32px; border-radius: 8px; color: var(--text-medium); font-size: 20px; line-height: 1; }
+.ui-toast-close:hover { background: var(--surface-muted); }
+.ui-overlay :is(button,a,input,select,textarea,[tabindex]):focus-visible, .ui-toast button:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+
+/* Color feedback is deliberately stable: no pointer-position tracking, chart
+   count-ups, table stagger or animation on drag targets and critical actions. */
+.app-shell .app-main :is(button,a,summary):not([disabled]):not([aria-disabled="true"]) {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 140ms;
+  transition-timing-function: ease-out;
+}
+.app-shell .app-main button:disabled, .ui-overlay button:disabled { cursor: not-allowed; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .app-main .ui-button:not(:disabled):not([data-variant="danger"]):active { transform: translateY(1px); }
+  .app-main .ui-button:not(:disabled):not([data-variant="danger"]) > svg { transition: opacity 140ms ease-out; }
+  .app-main .ui-button:hover > svg { opacity: .85; }
+  .app-main details[open] > :not(summary) { animation: qk-disclosure-in 160ms ease-out; }
+}
+@keyframes qk-disclosure-in { from { opacity: .55; } to { opacity: 1; } }
+@media (pointer: coarse) {
+  .app-main .ui-button, .ui-overlay button, .ui-toast-close { min-height: 44px; }
+}
+@media (max-width: 600px) {
+  .ui-overlay { padding: 12px; }
+  .ui-overlay .ui-modal { max-height: calc(100dvh - 24px); }
+  .ui-overlay .ui-modal > :is(header,footer), .ui-overlay .ui-modal > div { padding-inline: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: 0s !important; }
+  .hover-lift:hover, .ui-button:hover, .ui-button:active { transform: none !important; }
+}
+/* Also pause CSS loops when the page is hidden; the JS owner stops its timelines. */
+html[data-motion-paused="true"] *, html[data-motion-paused="true"] *::before, html[data-motion-paused="true"] *::after { animation-play-state: paused !important; }
+/* One shared z-order for legacy and Blueprint portals; no type-based stacking. */
+.ui-overlay, .bp-portal { z-index: var(--jkxt-layer-index, 120) !important; }

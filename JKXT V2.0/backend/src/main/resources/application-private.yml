@@ -1,0 +1,55 @@
+jkxt:
+  deploy:
+    mode: private
+    fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
+    external-sms-enabled: false
+  # AI 策略：普通模式与验收模式均失败关闭，不以本地草案冒充真实模型调用。
+  # 北京百炼工作空间地址和密钥由部署环境/密钥管理器注入：
+  #   JKXT_LLM_ENABLED=true
+  #   JKXT_LLM_ACCEPTANCE_MODE=true
+  #   JKXT_LLM_PROVIDER=aliyun
+  #   JKXT_LLM_BASE_URL=<北京工作空间 OpenAI 兼容 HTTPS 地址>
+  #   JKXT_LLM_FALLBACK_BASE_URL=           # 默认禁用，设置时必须与主地址同源
+  #   JKXT_LLM_API_KEY=<由服务端密钥管理器注入，切勿提交>
+  #   JKXT_LLM_MODEL=qwen-plus
+  # 80 个目录条目不代表已开通；特殊 OCR/翻译/GUI 模型不可用于监考策略解析。
+  llm:
+    enabled: ${JKXT_LLM_ENABLED:false}
+    acceptance-mode: ${JKXT_LLM_ACCEPTANCE_MODE:false}
+    allow-test-mocks: false
+    provider: ${JKXT_LLM_PROVIDER:aliyun}
+    base-url: ${JKXT_LLM_BASE_URL:}
+    fallback-base-url: ${JKXT_LLM_FALLBACK_BASE_URL:}
+    api-key: ${JKXT_LLM_API_KEY:}
+    model: ${JKXT_LLM_MODEL:qwen-plus}
+    timeout-ms: ${JKXT_LLM_TIMEOUT_MS:60000}
+    max-retries: ${JKXT_LLM_MAX_RETRIES:2}
+  # 通知：默认仅站内 inbox 真实送达；邮件/短信无外发网关，默认关闭并如实标注"未启用"。
+  # 配置真实 SMTP/短信网关后，把对应 enabled 设为 true（env: JKXT_NOTIFY_EMAIL_ENABLED / _SMS_ENABLED）。
+  notify:
+    email:
+      enabled: ${JKXT_NOTIFY_EMAIL_ENABLED:false}
+    sms:
+      enabled: ${JKXT_NOTIFY_SMS_ENABLED:false}
+  auth:
+    cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:false}
+    cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}
+    # 可信反向代理网段。private/public 栈的拓扑是 (caddy →) nginx → app，全部跑在 compose 自建的 docker
+    # bridge 网上；该网络的子网由 docker 默认地址池自动分配(172.17.0.0/16 … 172.31.0.0/16)、并不固定，
+    # 故按整段 172.16.0.0/12 放行 —— 只有落在该段的直连对端(即 nginx 容器)写的 X-Forwarded-For 才被采信，
+    # 使真实客户端 IP 在审计里保持准确，而不是退化成 nginx 的容器 IP。
+    # 刻意不含 10/8 与 192.168/16：校园网客户端本身就在这些网段。把客户端所在网段列为"可信代理"不是
+    # "顶多失真"，而是【直接可伪造】——客户端自带 X-Forwarded-For 时，回溯会把它自己那段当可信代理跳过、
+    # 继续向左返回它预塞的值，审计 IP 遂变成攻击者可控。(只有客户端不带 XFF 时才退化成 nginx 容器 IP。)
+    # 因此本项只应填【反向代理自身】的地址，绝不能填客户端网段。
+    # 若本机 docker 网络不在该段(默认池占满时会退到 192.168/16)，或校园网恰好用 172.16/12，
+    # 用 JKXT_AUTH_TRUSTED_PROXIES 改成 nginx 容器的实际子网即可。
+    #
+    # 【为何这条网段够用 —— 依赖 18081 已绑回环】docker-compose.private.yml 把 app:8080 的旁路端口 18081
+    # 绑在 127.0.0.1。这很关键：若把它改回发布到 0.0.0.0，绕开 nginx 直连该端口时，经 docker NAT 后 app
+    # 看到的对端是 docker 网关(实测 172.19.0.1)——它同样落在本项的 172.16.0.0/12 内，会被判为可信代理、
+    # 其自带 XFF 被采信，本项的防伪造在那条旁路上即告失效(实测：带 XFF: 1.2.3.4 → last_login_ip = 1.2.3.4)。
+    # 走 nginx:18180 的正常路径不受影响：nginx 用 $proxy_add_x_forwarded_for 追加真实对端，回溯取最右非可信段。
+    # 故：18081 必须保持仅绑回环。若确需把它对外发布，本项须同时收窄为 nginx 容器的固定 IP/32(并在 compose
+    # 里 pin 子网)，否则等于把审计 IP 交给调用方。
+    trusted-proxies: ${JKXT_AUTH_TRUSTED_PROXIES:172.16.0.0/12}

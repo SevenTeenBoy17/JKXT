@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <title>Quick 排监考席位方阵 Q</title>
+  <g stroke="#1E2D46" stroke-width="3.25" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4.75" y="4.75" width="27.5" height="27.5" rx="6.25" />
+    <rect x="10" y="10" width="17" height="17" rx="2.25" />
+    <path d="M18.5 10v17M10 18.5h17M28.25 28.25 35.5 35.5" />
+  </g>
+  <circle cx="22.75" cy="14.25" r="2.35" fill="#16815A" />
+</svg>

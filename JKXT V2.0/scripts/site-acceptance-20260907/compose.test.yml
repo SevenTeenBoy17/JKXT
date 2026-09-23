@@ -1,0 +1,59 @@
+name: jkxt-site-acceptance-20260907
+services:
+  postgres:
+    image: postgres:16
+    container_name: jkxt-test-site-20260907-pg
+    environment:
+      POSTGRES_DB: jkxt_test_site_20260907
+      POSTGRES_USER: jkxt_test
+      POSTGRES_PASSWORD: isolated_test_only
+    networks:
+      default:
+        aliases: [jkxt-test-site-20260907-pg]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U jkxt_test -d jkxt_test_site_20260907']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+    # Deliberately no host port or business volume.
+    tmpfs: [/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+    container_name: jkxt-test-site-20260907-redis
+    networks:
+      default:
+        aliases: [jkxt-test-site-20260907-redis]
+    command: [redis-server, --save, '', --appendonly, 'no']
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+  verify:
+    image: maven:3.9.9-eclipse-temurin-21
+    container_name: jkxt-test-site-20260907-maven
+    working_dir: /workspace
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    volumes:
+      - ../../backend:/workspace:ro
+      - build-output:/workspace/target
+      - maven-cache:/root/.m2
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      JKXT_TEST_DATASOURCE_URL: jdbc:postgresql://jkxt-test-site-20260907-pg:5432/jkxt_test_site_20260907
+      JKXT_TEST_DATASOURCE_USERNAME: jkxt_test
+      JKXT_TEST_DATASOURCE_PASSWORD: isolated_test_only
+      JKXT_TEST_REDIS_HOST: jkxt-test-site-20260907-redis
+      JKXT_TEST_REDIS_PORT: '6379'
+      JKXT_LLM_ENABLED: 'false'
+      JKXT_EXTERNAL_SMS_ENABLED: 'false'
+      DOCKER_HOST: unix:///var/run/docker.sock
+      DOCKER_API_VERSION: '1.47'
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE: /var/run/docker.sock
+      TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
+    command: [mvn, -B, '-Djkxt.testcontainers.enabled=true', test]
+volumes:
+  build-output:
+  maven-cache:

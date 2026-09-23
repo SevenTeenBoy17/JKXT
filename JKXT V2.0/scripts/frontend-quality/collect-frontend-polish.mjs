@@ -1,0 +1,20 @@
+// Local provenance collector. This does not create signed Supervisor evidence.
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
+const out=path.join(root,'artifacts/frontend-polish-20260907');
+const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const walk=p=>fs.existsSync(p)?fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(p,e.name)):[path.join(p,e.name)]):[];
+const require=createRequire(import.meta.url),Babel=require(path.join(root,'assets/vendor/babel-standalone.7.29.0.min.js'));
+const jsx=walk(path.join(root,'src')).filter(p=>p.endsWith('.jsx'));
+const parsed=jsx.map(p=>{Babel.transform(fs.readFileSync(p,'utf8'),{presets:['react'],filename:p});return {path:path.relative(root,p).replaceAll('\\','/'),sha256:hash(p)};});
+const owned=['Dashboard.html','src/app.jsx','src/glass-motion.js','src/charts.jsx','src/overlay.jsx','src/ui/blueprint-v5.jsx','src/onboarding.jsx','src/pages/dashboard.jsx','src/pages/quick-step3.jsx','src/pages/login.jsx','src/styles/frontend-polish.css','src/styles/onboarding-learning.css','assets/vendor/anime.4.5.0.umd.min.js','assets/vendor/anime.4.5.0.LICENSE.md'];
+const files=[...owned.map(p=>path.join(root,p)),...walk(path.join(root,'assets/fonts'))].filter(fs.existsSync);
+const entries=files.map(p=>{const relative=path.relative(root,p).replaceAll('\\','/'),checkpoint=path.join(out,'checkpoint',relative);return {path:relative,bytes:fs.statSync(p).size,sha256:hash(p),checkpointSha256:fs.existsSync(checkpoint)?hash(checkpoint):null};});
+const reports=fs.readdirSync(out).filter(p=>p.endsWith('.json')&&p!=='final-provenance.json').map(p=>({path:p,sha256:hash(path.join(out,p))}));
+const report={schema:'FrontendPolishLocalProvenance/v1',collectedAt:new Date().toISOString(),cwd:root,node:process.version,scope:'frontend-only; local observations, not signed gates',jsxParse:{passed:parsed.length,total:jsx.length,files:parsed},taskFiles:entries,reports,rollback:'Existing edited sources have targeted pre-round snapshots in checkpoint. Do not restore over subsequent user edits; compare current hashes first. New assets are listed here. No rollback or deletion executed.'};
+fs.writeFileSync(path.join(out,'final-provenance.json'),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({jsxParsed:parsed.length,taskFiles:entries.length,report:'artifacts/frontend-polish-20260907/final-provenance.json'}));

@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: jkxt-backend
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  profiles:
+    default: dev
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://localhost:5432/jkxt}}
+    username: ${SPRING_DATASOURCE_USERNAME:${POSTGRES_USER:jkxt}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${POSTGRES_PASSWORD:jkxt_dev_password}}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${SPRING_DATA_REDIS_HOST:${REDIS_HOST:localhost}}
+      port: ${SPRING_DATA_REDIS_PORT:${REDIS_PORT:6379}}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+
+jkxt:
+  version: ${JKXT_VERSION:0.1.0-p1}
+  api-base: ${API_PUBLIC_BASE:/api/v1}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://127.0.0.1:4174,http://localhost:4174,http://127.0.0.1:8000,http://localhost:8000,http://127.0.0.1:8080,http://localhost:8080}
+  deploy:
+    mode: ${JKXT_DEPLOY_MODE:${DEPLOY_MODE:dev}}
+    fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
+    external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:false}
+  security:
+    # When true, seeded demo accounts (known default passwords) are disabled on startup.
+    # Off by default so dev / test / on-prem demo keep working; the saas profile turns it on.
+    disable-demo-accounts: ${JKXT_DISABLE_DEMO_ACCOUNTS:false}
+  auth:
+    cookie-name: ${JKXT_AUTH_COOKIE_NAME:JKXT_SESSION}
+    cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:false}
+    cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}
+    session-ttl-seconds: ${JKXT_AUTH_SESSION_TTL_SECONDS:604800}
+    captcha-ttl-seconds: ${JKXT_AUTH_CAPTCHA_TTL_SECONDS:180}
+    captcha-debug: ${JKXT_AUTH_CAPTCHA_DEBUG:false}
+    # 可信反向代理的 IP/CIDR 列表(逗号分隔)。仅当直连对端落在其中时，才采信它写的 X-Forwarded-For 作为
+    # 客户端 IP(登录审计/后续按 IP 限流)。默认留空 = 不信任该头(它由客户端完全可控)，一律取直连对端地址。
+    # dev 与 docker-compose.yml 栈是浏览器直连 app，无代理，留空即为正确值；nginx → app 的 private/public
+    # 栈在 application-private.yml 里配了实际网段。
+    trusted-proxies: ${JKXT_AUTH_TRUSTED_PROXIES:}
+    # A3② 登录按 IP 滑窗节流（叠加在按账号锁定之上，抵御撞库/横向喷洒）。以真实客户端 IP(见 trusted-proxies)
+    # 为 key，某 IP 首次失败起 window-seconds 秒内累计失败达 max-attempts 即 429，窗口到期自动清零；只计失败，
+    # 登录成功不消耗额度。默认关闭：校园网大量学生共用一个 NAT 出口 IP 时开启可能误封整校，故是否开启与阈值
+    # 属部署决策(saas 公网多租户默认开)。Redis 故障时 fail-open(放行)。
+    ip-throttle:
+      enabled: ${JKXT_AUTH_IP_THROTTLE_ENABLED:false}
+      max-attempts: ${JKXT_AUTH_IP_THROTTLE_MAX:30}
+      window-seconds: ${JKXT_AUTH_IP_THROTTLE_WINDOW:300}
+  llm:
+    enabled: ${JKXT_LLM_ENABLED:false}
+    acceptance-mode: ${JKXT_LLM_ACCEPTANCE_MODE:false}
+    allow-test-mocks: false
+    provider: ${JKXT_LLM_PROVIDER:aliyun}
+    base-url: ${JKXT_LLM_BASE_URL:}
+    fallback-base-url: ${JKXT_LLM_FALLBACK_BASE_URL:}
+    api-key: ${JKXT_LLM_API_KEY:}
+    model: ${JKXT_LLM_MODEL:qwen-plus}
+    fallback-models: ${JKXT_LLM_FALLBACK_MODELS:qwen-flash}
+    timeout-ms: ${JKXT_LLM_TIMEOUT_MS:60000}
+    max-retries: ${JKXT_LLM_MAX_RETRIES:2}
+    monthly-quota: ${JKXT_LLM_MONTHLY_QUOTA:1000}
+    max-prompt-chars: 40000
+    max-output-tokens: ${JKXT_LLM_MAX_OUTPUT_TOKENS:4096}
+    max-response-bytes: 1048576

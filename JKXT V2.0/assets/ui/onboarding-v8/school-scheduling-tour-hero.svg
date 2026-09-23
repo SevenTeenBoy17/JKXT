@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-labelledby="title desc">
+  <title id="title">学校排监考导览插图</title>
+  <desc id="desc">日历、两位教师与考场座位表组成的扁平排监考流程图</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="46" y="42" width="258" height="190" rx="28" fill="#F7FAFF" stroke="#B7D4F5" stroke-width="5"/>
+    <path d="M46 70c0-15 13-28 28-28h202c15 0 28 13 28 28v38H46V70Z" fill="#246FD8"/>
+    <path d="M106 28v42M244 28v42" stroke="#F2A51A" stroke-width="18"/>
+    <circle cx="106" cy="70" r="14" fill="#F7FAFF"/>
+    <circle cx="244" cy="70" r="14" fill="#F7FAFF"/>
+    <g fill="#C9DFF6">
+      <rect x="78" y="132" width="38" height="30" rx="7"/>
+      <rect x="128" y="132" width="38" height="30" rx="7"/>
+      <rect x="178" y="132" width="38" height="30" rx="7"/>
+      <rect x="228" y="132" width="38" height="30" rx="7"/>
+      <rect x="78" y="176" width="38" height="30" rx="7"/>
+      <rect x="128" y="176" width="38" height="30" rx="7"/>
+      <rect x="178" y="176" width="38" height="30" rx="7"/>
+    </g>
+    <rect x="178" y="132" width="38" height="30" rx="7" fill="#E65E4F"/>
+    <rect x="228" y="176" width="38" height="30" rx="7" fill="#4A91E8"/>
+
+    <path d="M315 152h72c25 0 36 16 57 16h76" stroke="#246FD8" stroke-width="7" stroke-dasharray="14 16"/>
+    <circle cx="315" cy="152" r="12" fill="#246FD8"/>
+    <circle cx="548" cy="153" r="55" fill="#42A85A"/>
+    <path d="m522 153 18 18 35-39" stroke="#FFFFFF" stroke-width="14"/>
+
+    <circle cx="142" cy="328" r="62" fill="#4A91E8"/>
+    <circle cx="142" cy="306" r="27" fill="#F7FAFF"/>
+    <path d="M89 371c10-35 30-51 53-51s43 16 53 51" fill="#F7FAFF"/>
+    <path d="m132 331 10 12 10-12 10 41h-40l10-41Z" fill="#246FD8"/>
+
+    <circle cx="142" cy="444" r="62" fill="#E96B5A"/>
+    <circle cx="142" cy="421" r="27" fill="#F7FAFF"/>
+    <path d="M89 487c10-35 30-51 53-51s43 16 53 51" fill="#F7FAFF"/>
+    <path d="m132 446 10 12 10-12 10 41h-40l10-41Z" fill="#F2A51A"/>
+
+    <path d="M211 328h54c30 0 33 30 63 30h44M211 444h66c24 0 28-32 54-32h41" stroke="#246FD8" stroke-width="7" stroke-dasharray="14 16"/>
+    <circle cx="211" cy="328" r="10" fill="#246FD8"/>
+    <circle cx="211" cy="444" r="10" fill="#E96B5A"/>
+    <path d="M211 444h66c24 0 28-32 54-32h41" stroke="#E96B5A" stroke-width="7" stroke-dasharray="14 16"/>
+
+    <rect x="360" y="236" width="314" height="252" rx="34" fill="#EAF3FC" stroke="#B7D4F5" stroke-width="5"/>
+    <rect x="398" y="266" width="188" height="18" rx="9" fill="#246FD8"/>
+    <path d="M604 236h42v62l-21-15-21 15v-62Z" fill="#F2A51A"/>
+    <g>
+      <g fill="#F2A51A"><rect x="402" y="316" width="58" height="42" rx="10"/><path d="M412 350v28M450 350v28" stroke="#F2A51A" stroke-width="9"/></g>
+      <g fill="#4A91E8"><rect x="488" y="316" width="58" height="42" rx="10"/><path d="M498 350v28M536 350v28" stroke="#4A91E8" stroke-width="9"/></g>
+      <g fill="#4A91E8"><rect x="574" y="316" width="58" height="42" rx="10"/><path d="M584 350v28M622 350v28" stroke="#4A91E8" stroke-width="9"/></g>
+      <g fill="#4A91E8"><rect x="402" y="390" width="58" height="42" rx="10"/><path d="M412 424v28M450 424v28" stroke="#4A91E8" stroke-width="9"/></g>
+      <g fill="#42A85A"><rect x="488" y="390" width="58" height="42" rx="10"/><path d="M498 424v28M536 424v28" stroke="#42A85A" stroke-width="9"/></g>
+      <g fill="#4A91E8"><rect x="574" y="390" width="58" height="42" rx="10"/><path d="M584 424v28M622 424v28" stroke="#4A91E8" stroke-width="9"/></g>
+    </g>
+  </g>
+</svg>

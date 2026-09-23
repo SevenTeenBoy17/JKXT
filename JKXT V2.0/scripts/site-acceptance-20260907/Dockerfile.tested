@@ -1,0 +1,2 @@
+FROM jkxt-site-rollback:v18-20260907
+COPY jkxt-backend-tested.jar /app/jkxt-backend.jar

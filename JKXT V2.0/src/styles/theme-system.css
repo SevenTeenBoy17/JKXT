@@ -1,0 +1,187 @@
+/* Persistent application appearance. Semantic tokens are the only theme contract pages need. */
+:root {
+  --surface-canvas: #f4f6f9;
+  --surface-raised: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-sunken: #eef2f6;
+  --surface-overlay: rgba(255, 255, 255, 0.94);
+  --fg-strong: #162033;
+  --fg-default: #445169;
+  --fg-muted: #66748b;
+  --line-default: #dfe5ed;
+  --line-strong: #c9d3df;
+  --accent: #4f5fd1;
+  --accent-hover: #3f4fb8;
+  --accent-soft: #eef0ff;
+  --accent-contrast: #ffffff;
+  --surface-on-inverse: #ffffff;
+  --fg-on-inverse: #ffffff;
+  --tile-highlight: rgba(255, 255, 255, 0.88);
+  --tile-shadow: 0 1px 0 var(--tile-highlight) inset, 0 1px 3px rgba(18, 32, 51, 0.05), 0 12px 28px -20px rgba(31, 50, 78, 0.38);
+
+  --bg-base: var(--surface-canvas);
+  --bg-elevated: var(--surface-raised);
+  --border-soft: var(--line-default);
+  --border-strong: var(--line-strong);
+  --text-strong: var(--fg-strong);
+  --text-medium: var(--fg-default);
+  --text-soft: var(--fg-muted);
+  --text-muted: var(--fg-muted);
+  --text-weak: var(--fg-muted);
+  --brand: var(--accent);
+  --brand-hover: var(--accent-hover);
+  --brand-soft: var(--accent-soft);
+  --canvas: var(--surface-canvas);
+  --canvas-tint: var(--surface-sunken);
+  --surface-solid: var(--surface-raised);
+  --surface-subtle: var(--surface-muted);
+  --surface-glass: var(--surface-overlay);
+  --surface-glass-strong: var(--surface-overlay);
+  --surface-brand-soft: var(--accent-soft);
+  --ink-strong: var(--fg-strong);
+  --ink-medium: var(--fg-default);
+  --ink-soft: var(--fg-muted);
+  --stroke-subtle: color-mix(in srgb, var(--line-default) 72%, transparent);
+  --stroke-default: var(--line-default);
+  --stroke-strong: var(--line-strong);
+  --focus-ring: color-mix(in srgb, var(--accent) 26%, transparent);
+}
+
+:root[data-palette="indigo"] { --accent:#4f5fd1; --accent-hover:#3e4db4; --accent-soft:#eef0ff; }
+:root[data-palette="blue"]   { --accent:#2872c7; --accent-hover:#205fa9; --accent-soft:#e9f3ff; }
+:root[data-palette="green"]  { --accent:#268568; --accent-hover:#1f6d56; --accent-soft:#e8f6f0; }
+:root[data-palette="rose"]   { --accent:#b65370; --accent-hover:#98445e; --accent-soft:#fbeef2; }
+:root[data-palette="cyan"]   { --accent:#14788e; --accent-hover:#105f72; --accent-soft:#e7f6f8; }
+:root[data-palette="purple"] { --accent:#7659ba; --accent-hover:#62489f; --accent-soft:#f2edfb; }
+
+/* Dark surfaces need a separate, lighter foreground accent. Reusing the
+   light-theme brand shades made every palette fail 4.5:1 for small text. */
+:root[data-scheme="dark"][data-palette="indigo"] { --accent:#aeb8ff; --accent-hover:#c3caff; }
+:root[data-scheme="dark"][data-palette="blue"]   { --accent:#86bcff; --accent-hover:#a9d0ff; }
+:root[data-scheme="dark"][data-palette="green"]  { --accent:#69d8b0; --accent-hover:#8be4c4; }
+:root[data-scheme="dark"][data-palette="rose"]   { --accent:#f2a0b8; --accent-hover:#f7b9ca; }
+:root[data-scheme="dark"][data-palette="cyan"]   { --accent:#75d8eb; --accent-hover:#9be4f1; }
+:root[data-scheme="dark"][data-palette="purple"] { --accent:#c8adff; --accent-hover:#d8c5ff; }
+
+:root[data-scheme="dark"] {
+  --surface-canvas: #151a22;
+  --surface-raised: #1d2430;
+  --surface-muted: #222a37;
+  --surface-sunken: #11161e;
+  --surface-overlay: rgba(29, 36, 48, 0.95);
+  --fg-strong: #f3f6fb;
+  --fg-default: #c5cfdd;
+  --fg-muted: #9eabbd;
+  --line-default: #323c4b;
+  --line-strong: #455165;
+  --accent-contrast: #101827;
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, var(--surface-raised));
+  --tile-highlight: rgba(255, 255, 255, 0.06);
+  --tile-shadow: 0 1px 0 var(--tile-highlight) inset, 0 12px 28px -20px rgba(0, 0, 0, 0.85);
+  --shadow-card: var(--tile-shadow);
+  --elevation-1: var(--tile-shadow);
+  --elevation-2: 0 1px 0 rgba(255,255,255,.06) inset, 0 10px 28px -20px rgba(0,0,0,.9);
+}
+
+:root[data-scheme="dark"] body,
+:root[data-scheme="dark"] .app-shell,
+:root[data-scheme="dark"] .app-main { background: var(--surface-canvas) !important; color: var(--fg-strong); }
+:root[data-scheme="dark"] .app-sidebar,
+:root[data-scheme="dark"] .app-topbar,
+:root[data-scheme="dark"] .theme-surface,
+:root[data-scheme="dark"] .bg-white { background-color: var(--surface-raised) !important; }
+:root[data-scheme="dark"] .bg-slate-50,
+:root[data-scheme="dark"] .bg-slate-100 { background-color: var(--surface-muted) !important; }
+:root[data-scheme="dark"] input,
+:root[data-scheme="dark"] select,
+:root[data-scheme="dark"] textarea { color: var(--fg-strong); color-scheme: dark; }
+:root[data-scheme="dark"] .ui-button[data-variant="secondary"],
+:root[data-scheme="dark"] .ui-button--secondary { background: var(--surface-raised) !important; color: var(--fg-default) !important; }
+:root[data-scheme="dark"] .filter-search__input,
+:root[data-scheme="dark"] .data-table thead tr,
+:root[data-scheme="dark"] .data-table__row:hover { background: var(--surface-muted) !important; }
+:root[data-scheme="dark"] .ui-toast,
+:root[data-scheme="dark"] .toast-enter,
+:root[data-scheme="dark"] .ui-modal,
+:root[data-scheme="dark"] .drawer-enter { background: var(--surface-overlay) !important; border-color: var(--line-strong) !important; }
+
+:root[data-scheme="light"][data-contrast="more"] {
+  --fg-default: #253247;
+  --fg-muted: #3f4f66;
+  --line-default: #78879a;
+  --line-strong: #526176;
+}
+:root[data-scheme="dark"][data-contrast="more"] {
+  --fg-default: #eef3fa;
+  --fg-muted: #d5deea;
+  --line-default: #9aa8ba;
+  --line-strong: #c2ccda;
+}
+:root[data-contrast="more"] .ceramic-tile,
+:root[data-contrast="more"] .ui-button { box-shadow: none !important; }
+
+.ceramic-tile {
+  position: relative;
+  background: var(--surface-raised);
+  border: 1px solid var(--line-default);
+  box-shadow: var(--tile-shadow);
+  border-radius: 18px;
+}
+.ceramic-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 var(--tile-highlight);
+}
+.ceramic-tile--soft { background: color-mix(in srgb, var(--accent-soft) 54%, var(--surface-raised)); }
+
+.semantic-hover:hover,
+.plan-action:hover {
+  background-color: var(--surface-muted) !important;
+}
+.semantic-danger-hover:hover {
+  background-color: color-mix(in srgb, var(--danger, #c2414f) 12%, var(--surface-raised)) !important;
+}
+
+.theme-choice,
+.palette-choice {
+  min-height: 44px;
+  transition: transform 150ms cubic-bezier(.2,.8,.2,1), border-color 150ms ease, background-color 150ms ease;
+}
+.theme-choice:active,
+.palette-choice:active,
+.plan-action:active { transform: translateY(1px) scale(.985); }
+.theme-choice:focus-visible,
+.palette-choice:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 28%, transparent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* WCAG target-size baseline for touch and narrow layouts. Desktop density is
+   retained while every actionable control remains at least 44 CSS pixels on
+   coarse pointers and phone-width viewports. */
+@media (pointer: coarse), (max-width: 640px) {
+  button,
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  [role="button"],
+  [role="menuitem"],
+  [role="option"] {
+    min-height: 44px;
+  }
+  .topbar-icon-button,
+  .mobile-menu-trigger,
+  [aria-label="关闭导航"] {
+    min-width: 44px;
+  }
+}
+
+@media (forced-colors: active) {
+  :root { --accent: Highlight; --accent-hover: Highlight; --accent-soft: Canvas; --line-default: CanvasText; --line-strong: CanvasText; }
+  .ceramic-tile { box-shadow: none; }
+  button, [role="button"], input, select { forced-color-adjust: auto; }
+}

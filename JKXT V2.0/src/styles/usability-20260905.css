@@ -1,0 +1,170 @@
+/* Authenticated product UI only. Existing brand assets and public screens are not targeted.
+   Fixed 12/14/16/24 scale follows the workspace's dense Chinese data-entry use case.
+   Load after theme-system.css so existing semantic colors remain authoritative. */
+.app-shell {
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+  --type-caption-size: .75rem;
+  --type-caption-line: 1.125rem;
+  --type-body-sm-size: .875rem;
+  --type-body-sm-line: 1.375rem;
+  --type-body-size: .875rem;
+  --type-body-line: 1.375rem;
+  --type-section-size: 1rem;
+  --type-section-line: 1.5rem;
+  --type-page-size: 1.5rem;
+  --type-page-line: 1.4;
+  font-kerning: normal;
+  font-family: var(--font-ui);
+}
+
+/* A status is an indivisible word, not a flex column of Chinese glyphs. */
+.app-shell .recent-task-status {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: .1875rem .5rem;
+  border-radius: .375rem;
+  font: 500 .75rem/1.125rem var(--font-ui);
+}
+.app-shell .recent-task-status__dot { width: .375rem; height: .375rem; border-radius: 50%; flex: 0 0 auto; }
+.app-shell .recent-tasks-card { min-width: 0; container-type: inline-size; }
+.app-shell .recent-tasks-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: 1.25rem 1.25rem .75rem; }
+.app-shell .recent-tasks-all { flex: 0 0 auto; white-space: nowrap; min-height: 2.75rem; color: var(--brand); font: 500 .875rem/1.375rem var(--font-ui); }
+.app-shell .recent-task-row { display: block; width: 100%; padding: .875rem .75rem; border: 0; border-radius: .5rem; text-align: left; background: transparent; color: var(--text-strong); font-family: var(--font-ui); cursor: pointer; }
+.app-shell .recent-task-row:hover, .app-shell .recent-task-row:focus-visible { background: var(--surface-muted); }
+.app-shell .recent-task-heading { display: flex; align-items: start; gap: .5rem; min-width: 0; }
+.app-shell .recent-task-title { flex: 1 1 0%; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .875rem; font-weight: 600; line-height: 1.375rem; }
+.app-shell .recent-task-meta { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .25rem; color: var(--text-soft); font-size: .75rem; line-height: 1.125rem; font-variant-numeric: tabular-nums; }
+.app-shell .recent-task-progress { display: flex; align-items: center; gap: .625rem; margin-top: .75rem; }
+.app-shell .recent-task-progress__value { flex: 0 0 auto; width: 2.5rem; text-align: right; color: var(--text-medium); font-size: .75rem; line-height: 1.125rem; font-variant-numeric: tabular-nums; }
+.app-shell .recent-task-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .375rem; margin-top: .625rem; color: var(--text-soft); font-size: .75rem; line-height: 1.125rem; }
+.app-shell .recent-task-view { white-space: nowrap; color: var(--brand); }
+.app-shell .recent-task-row:hover .recent-task-view { text-decoration: underline; }
+.app-shell .recent-tasks-summary { padding: .875rem 1.25rem; border-top: 1px solid var(--border-soft); background: var(--surface-muted); border-radius: 0 0 1rem 1rem; }
+.app-shell .recent-tasks-summary span { white-space: nowrap; }
+.app-shell .recent-tasks-feedback { padding: 1rem .75rem; color: var(--text-medium); font-size: .875rem; line-height: 1.6; }
+@container (max-width: 17rem) {
+  .app-shell .recent-task-heading { flex-wrap: wrap; }
+  .app-shell .recent-task-title { flex-basis: 100%; }
+}
+@media (forced-colors: active) {
+  .app-shell .recent-task-status { border: 1px solid CanvasText; }
+}
+
+.app-shell .sidebar-nav-item[data-active="true"] {
+  color: var(--brand) !important;
+  background: var(--brand-soft) !important;
+  border-color: var(--border-soft) !important;
+}
+.app-shell .sidebar-nav-item[data-active="true"] .sidebar-nav-icon { color: var(--brand); }
+.app-shell .page-title { font-size: var(--type-page-size) !important; line-height: var(--type-page-line) !important; }
+.app-shell :is(.page-subtitle, .section-title__subtitle) { overflow-wrap: anywhere; }
+.app-shell .page-meta-badge { font-family: var(--font-ui); font-variant-numeric: tabular-nums; }
+.app-shell .page-breadcrumbs { flex-wrap: wrap; row-gap: .375rem; }
+.app-shell .page-header__intro { min-width: 0; }
+.app-shell .page-actions { max-width: 100%; }
+.app-shell .ui-button { font-size: var(--type-body-size); line-height: 1.4; }
+.app-shell .ui-button__label { overflow-wrap: anywhere; }
+.app-shell .app-main :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]) {
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--font-ui);
+  font-size: var(--type-body-size);
+  line-height: 1.5;
+}
+.app-shell .data-table { font-variant-numeric: tabular-nums; }
+.app-shell .data-table :is(th, td) { line-height: 1.5; }
+.app-shell :is(.section-title__subtitle, .page-breadcrumbs, .page-meta-badge) { font-size: var(--type-caption-size); }
+.app-shell :is(button, a, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+
+/* Setting rows use content height so browser zoom and long Chinese labels do not clip. */
+.app-shell .settings-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(18rem, .9fr); gap: 1.25rem; }
+.app-shell .settings-panel { min-width: 0; padding: 1.5rem; border: 1px solid var(--border-soft); border-radius: .75rem; background: var(--surface-raised); }
+.app-shell .settings-readonly-fields { margin: 0; }
+.app-shell .settings-field { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-block: .875rem; border-bottom: 1px solid var(--border-soft); }
+.app-shell .settings-field:last-child { border-bottom: 0; }
+.app-shell .settings-field dt { color: var(--text-medium); }
+.app-shell .settings-field dd { margin: 0; color: var(--text-strong); overflow-wrap: anywhere; }
+.app-shell .settings-identifier { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.app-shell .settings-caption { margin-block: .25rem 0; color: var(--text-soft); font-size: .75rem; line-height: 1.6; overflow-wrap: anywhere; }
+.app-shell .settings-notice { margin-block: .75rem; padding: .875rem; border: 1px solid var(--border-soft); border-radius: .5rem; background: var(--surface-muted); color: var(--text-medium); font-size: .8125rem; line-height: 1.65; }
+.app-shell .settings-switch-list { list-style: none; margin: 0; padding: 0; }
+.app-shell .settings-switch-row { display: flex; align-items: center; gap: 1rem; padding-block: .875rem; border-bottom: 1px solid var(--border-soft); }
+.app-shell .settings-switch-row:last-child { border-bottom: 0; }
+.app-shell .settings-switch-copy { flex: 1; min-width: 0; }
+.app-shell .settings-switch-label { font-size: .875rem; font-weight: 600; line-height: 1.5; color: var(--text-strong); }
+.app-shell .settings-switch { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; flex: 0 0 auto; min-width: 4.5rem; min-height: 2.75rem; padding-inline: .375rem; border-radius: .375rem; background: transparent; }
+.app-shell .settings-switch:disabled { cursor: not-allowed; opacity: .6; }
+.app-shell .settings-switch-track { display: inline-flex; align-items: center; width: 2.375rem; height: 1.375rem; padding: .1875rem; border-radius: 1rem; background: var(--line-strong); }
+.app-shell .settings-switch-track > span { display: block; width: 1rem; height: 1rem; border-radius: 50%; background: var(--surface-raised); transition: transform 150ms ease-out; }
+.app-shell .settings-switch[aria-checked="true"] .settings-switch-track { background: var(--brand); }
+.app-shell .settings-switch[aria-checked="true"] .settings-switch-track > span { transform: translateX(1rem); }
+.app-shell .settings-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .875rem 1rem; border: 1px solid var(--border-strong); border-radius: .5rem; background: var(--surface-muted); color: var(--text-strong); }
+.app-shell .settings-status > span { flex: 1 1 15rem; overflow-wrap: anywhere; }
+.app-shell .settings-status--error { border-color: var(--danger, #b42336); }
+
+/* AI policy editing uses the same Chinese form rhythm; keep numeric/code content monospace. */
+.app-shell .ai-policy-form label { font-size: .875rem; line-height: 1.5; font-family: var(--font-ui); }
+.app-shell .ai-policy-form :is(small, .field-help, .field-hint, .help-text) { font-size: .75rem; line-height: 1.6; font-family: var(--font-ui); overflow-wrap: anywhere; }
+.app-shell .ai-policy-form :is(input, select, textarea) { font-size: .875rem; line-height: 1.5; min-width: 0; }
+.app-shell .ai-policy-form textarea { min-height: 8rem; resize: vertical; }
+.app-shell .ai-policy-form button:not([role="switch"]) {
+  min-height: 2.75rem;
+  max-width: 100%;
+  font-size: .875rem;
+  line-height: 1.5;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.app-shell .ai-policy-form div:is([class~="text-[11px]"], [class~="text-[11.5px]"]) {
+  font-size: .75rem;
+  line-height: 1.6;
+}
+.app-shell [data-testid="plan-flow-strip"] p { font-size: .75rem; line-height: 1.6; }
+
+/* Four fixed-width steps can exceed the content column even on a 1024px desktop.
+   Keep overflow inside the widget, not hidden by the main page shell. */
+.app-shell .qk-step-card {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  overscroll-behavior-inline: contain;
+}
+.app-shell .qk-step-row { min-width: max-content; }
+@media (min-width: 901px) and (max-width: 1200px) {
+  .app-shell .qk-step-scroll-hint { display: flex; }
+}
+
+/* A nested manual-dispatch toolbar must shrink before its action group wraps. */
+.app-shell .filter-bar { min-width: 0; max-width: 100%; width: 100%; }
+.app-shell .filter-bar > * { min-width: 0; max-width: 100%; }
+.app-shell .filter-bar > .inline-flex { flex-wrap: wrap; }
+.app-shell .filter-bar .ui-button { white-space: normal; }
+
+/* Modal content carries its own opt-in class because portal overlays are outside the shell. */
+.settings-audit-export { color: var(--text-strong); font-family: var(--font-ui); font-size: .875rem; line-height: 1.6; overflow-wrap: anywhere; }
+.settings-audit-export label { display: block; margin-block: .75rem .375rem; font-weight: 600; }
+.settings-audit-export select { width: 100%; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid var(--border-strong); border-radius: .5rem; background: var(--surface-muted); color: var(--text-strong); font: inherit; }
+.settings-audit-export select:focus-visible { outline: 2px solid var(--brand); outline-offset: 3px; }
+.settings-audit-export .settings-caption { color: var(--text-soft); font-size: .75rem; line-height: 1.6; }
+
+@media (max-width: 64rem) {
+  .app-shell .settings-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 40rem) {
+  .app-shell .settings-panel { padding: 1rem; }
+  .app-shell .settings-field { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .app-shell .page-actions .ui-button { min-height: 2.75rem; white-space: normal; }
+  .app-shell .settings-switch-row { gap: .625rem; }
+}
+@media (forced-colors: active) {
+  .app-shell .settings-switch-track { border: 1px solid ButtonText; }
+  .app-shell .settings-switch-track > span { background: ButtonText; }
+  .app-shell .settings-switch[aria-checked="true"] .settings-switch-track { background: Highlight; }
+}

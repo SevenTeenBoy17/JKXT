@@ -1,0 +1,40 @@
+/* V4 right-pane baseline. No selectors target navigation, header or login. */
+.blueprint-v5{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;font-size:16px;line-height:1.625;color:var(--text-strong);min-width:0}
+.page-shell:has(.blueprint-v5){font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;min-width:0}
+.page-shell:has(.blueprint-v5)>.page-header{padding-bottom:20px;align-items:center;border-bottom:1px solid var(--border-soft);gap:20px}
+.page-shell:has(.blueprint-v5) .page-title{font-size:28px;line-height:1.4;font-weight:700;letter-spacing:0}
+.page-shell:has(.blueprint-v5) .page-subtitle{font-size:15px;line-height:1.7;max-width:76ch}
+.page-shell:has(.blueprint-v5) .page-breadcrumbs{font-size:13px}
+.blueprint-v5 :is(h2,h3,p){overflow-wrap:anywhere}
+.blueprint-v5 h2{font-size:20px;line-height:1.5;font-weight:650}
+.blueprint-v5 h3{font-size:16px;line-height:1.5;font-weight:650}
+.blueprint-v5 :is(button,input,select,textarea){font:inherit}
+.blueprint-v5 :is(button,input,select),.page-shell:has(.blueprint-v5) .page-actions .ui-button{min-height:44px}
+.blueprint-v5 :is(button,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.blueprint-v5 .ui-button,.page-shell:has(.blueprint-v5) .page-actions .ui-button{font-size:14px;border-radius:8px;line-height:1.5;white-space:nowrap;box-shadow:none;background-image:none}
+.blueprint-v5 .ui-button__shine,.page-shell:has(.blueprint-v5) .page-actions .ui-button__shine{display:none}
+.blueprint-v5 .ui-button:not(:disabled):hover{transform:none}
+.blueprint-v5 button:disabled{cursor:not-allowed}
+.blueprint-v5 :is(small,.ops-muted,.plan-meta){font-size:13px}
+.bp-asset{display:inline-block;flex-shrink:0;object-fit:contain}
+.bp-asset--symbol{background-image:url('../../assets/blueprint-v5/symbols-clean-transparent.png');background-repeat:no-repeat;background-size:480% 320%}
+.bp-asset--empty{max-width:100%;height:auto}
+/* The modal layer blocks the whole app, while preserving its unchanged design. */
+.bp-portal{position:relative;z-index:120}
+.bp-backdrop{position:fixed;inset:0;background:rgb(18 28 49 / .34);display:flex;padding:24px;isolation:isolate}
+.bp-backdrop--dialog{align-items:center;justify-content:center}
+.bp-backdrop--drawer{justify-content:flex-end;padding:16px}
+.bp-layer{background:var(--surface-raised);border:1px solid var(--border-strong);box-shadow:0 20px 60px rgb(24 35 61 / .16);border-radius:12px;display:flex;flex-direction:column;min-width:0;max-height:calc(100dvh - 48px);outline:none}
+.bp-layer--dialog{width:min(760px,100%)}
+.bp-layer--drawer{width:min(600px,100%);height:100%;max-height:100%;margin-left:auto}
+.bp-layer__header{padding:24px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border-soft);flex-shrink:0}
+.bp-layer__header h2{margin:0;font-size:22px;line-height:1.4}
+.bp-layer__header p{margin:8px 0 0;font-size:14px;line-height:1.6;color:var(--text-medium)}
+.bp-close{width:44px;height:44px;border-radius:8px;border:1px solid var(--border-soft);background:var(--surface-raised);display:grid;place-items:center;flex-shrink:0;color:var(--text-medium)}
+.bp-close:hover:not(:disabled){background:var(--surface-muted)}
+.bp-layer__body{padding:24px;overflow-y:auto;overscroll-behavior:contain;min-height:0}
+.bp-layer__footer{padding:16px 24px;border-top:1px solid var(--border-soft);flex-shrink:0;background:var(--surface-raised);border-radius:0 0 12px 12px;display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.bp-layer__footer>div{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+@media(max-width:767px){.page-shell:has(.blueprint-v5) .page-title{font-size:24px}.page-shell:has(.blueprint-v5)>.page-header{align-items:flex-start}.bp-backdrop{padding:12px}.bp-layer{max-height:calc(100dvh - 24px)}.bp-backdrop--drawer{padding:0}.bp-layer--drawer{max-height:100%;border-radius:0;width:100%}.bp-layer__header,.bp-layer__body{padding:20px}.bp-layer__footer{padding:16px 20px}.bp-layer__header h2{font-size:20px}}
+@media(forced-colors:active){.bp-backdrop{background:Canvas}.bp-layer,.bp-close{border:1px solid CanvasText}.bp-asset{forced-color-adjust:none}}
+@media(prefers-reduced-motion:reduce){.blueprint-v5 *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

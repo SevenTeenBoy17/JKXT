@@ -1,0 +1,13 @@
+<configuration>
+  <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="jkxt-backend"/>
+
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>ts=%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} level=%level app=${appName} traceId=%X{traceId:-} thread="%thread" logger=%logger{36} msg="%replace(%msg){'&quot;','\\&quot;'}"%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>

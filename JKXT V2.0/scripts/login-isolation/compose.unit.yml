@@ -1,0 +1,47 @@
+name: jkxt-entry-${JKXT_TEST_RUN_ID:?Set unique lowercase run id}
+services:
+  jkxt-test-entry-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: jkxt_test_entry_${JKXT_TEST_RUN_ID:?Set run id}
+      POSTGRES_USER: jkxt_test_entry
+      POSTGRES_PASSWORD: ${JKXT_TEST_PASSWORD:?Inject ephemeral test password}
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 2s
+      retries: 30
+  jkxt-test-entry-redis:
+    image: redis:7-alpine
+    command: [redis-server, --save, '', --appendonly, 'no']
+    tmpfs:
+      - /data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      retries: 30
+  runner:
+    image: maven:3.9.9-eclipse-temurin-21
+    working_dir: /candidate/backend
+    profiles: [test]
+    volumes:
+      - type: bind
+        source: ${JKXT_CANDIDATE_ROOT:?Set verified candidate root}
+        target: /candidate
+      - maven-cache:/root/.m2
+    environment:
+      JKXT_TEST_DATASOURCE_URL: jdbc:postgresql://jkxt-test-entry-db:5432/jkxt_test_entry_${JKXT_TEST_RUN_ID:?Set run id}
+      JKXT_TEST_DATASOURCE_USERNAME: jkxt_test_entry
+      JKXT_TEST_DATASOURCE_PASSWORD: ${JKXT_TEST_PASSWORD:?Inject ephemeral test password}
+      JKXT_TEST_REDIS_HOST: jkxt-test-entry-redis
+      JKXT_TEST_REDIS_PORT: '6379'
+      SPRING_PROFILES_ACTIVE: test
+    depends_on:
+      jkxt-test-entry-db:
+        condition: service_healthy
+      jkxt-test-entry-redis:
+        condition: service_healthy
+    command: [mvn, -B, -Dtest=TestDatabaseIsolationGuardTest, test]
+volumes:
+  maven-cache:

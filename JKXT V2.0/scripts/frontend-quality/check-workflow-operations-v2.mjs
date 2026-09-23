@@ -1,0 +1,84 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..');
+const require=createRequire(import.meta.url);
+const Babel=require(path.join(root,'assets/vendor/babel-standalone.7.29.0.min.js'));
+const sourcePath=path.join(root,'src/pages/operations-workbench.jsx');
+assert.ok(fs.existsSync(sourcePath),'Dedicated operational workbench is absent');
+const calls=[];const context=vm.createContext({window:{navigateTo: route=>calls.push(route)},React:{},Intl,Date,console});
+vm.runInContext(Babel.transform(fs.readFileSync(sourcePath,'utf8'),{presets:['react']}).code,context);
+const run=s=>vm.runInContext(s,context); const checks=[];
+function check(name,fn){try{fn();checks.push({name,pass:true})}catch(e){checks.push({name,pass:false,error:e.message})}}
+check('emergency title uses plan and type, not ordinal or uuid',()=>{context.item={id:'raw-uuid',planName:'期中考试',emergencyType:'TEACHER_SICK_LEAVE',revisionNo:2,status:'ACTIVE'};assert.equal(run('opsEmergencyView(item).name'),'期中考试');assert.match(run('opsEmergencyView(item).type'),/病假/);assert.equal(run('opsEmergencyView(item).status'),'记录有效');assert.equal(run('opsEmergencyView(item).sourceVersion'),'第 2 版')});
+check('unknown types/states and absent values remain honest',()=>{context.item={emergencyType:'FUTURE_TYPE',status:'FUTURE_STATE'};assert.equal(run('opsEmergencyView(item).type'),'FUTURE_TYPE');assert.equal(run('opsEmergencyView(item).status'),'FUTURE_STATE');assert.equal(run('opsEmergencyView(item).sourceVersion'),'来源版次未提供')});
+check('source version navigation fails closed unless both ids exist',()=>{context.item={planId:'p1',revisionId:'r1'};assert.equal(run('opsSourceTarget(item).revisionId'),'r1');context.item={planId:'p1'};assert.equal(run('opsSourceTarget(item)'),null);context.item={revisionId:'r1'};assert.equal(run('opsSourceTarget(item)'),null)});
+check('risk routing follows actual object ownership',()=>{assert.equal(run('OPS_RISK_DESTINATIONS.ACTIVE_EMERGENCIES.route'),'emergency');assert.equal(run('OPS_RISK_DESTINATIONS.PENDING_APPROVALS.route'),'approvals');assert.equal(run('OPS_RISK_DESTINATIONS.INVALID_REVISIONS.route'),'exam-plans');assert.equal(run('OPS_RISK_DESTINATIONS.FUTURE'),undefined)});
+check('counts do not coerce missing booleans or strings to zero',()=>{for(const input of ['null','undefined','true','"4"','-1'])assert.equal(run(`opsCount(${input})`),'未提供');assert.equal(run('opsCount(0)'),0);assert.equal(run('opsCount(13)'),13)});
+check('risk categories stay separate from overlapping backend counts',()=>{context.payload={ready:false,blockingIssueCount:13,totals:{activeEmergencies:13,plans:26},issues:[{code:'ACTIVE_EMERGENCIES',count:13}]};assert.equal(run('opsReadinessView(payload).categoryCount'),1);assert.equal(run('opsReadinessView(payload).blockingCount'),13);assert.equal(run('opsReadinessView(payload).readyLabel'),'需要核查')});
+check('readiness incomplete payload cannot report no risk',()=>{context.payload={};assert.equal(run('opsReadinessView(payload).categoryCount'),'未提供');assert.equal(run('opsReadinessView(payload).readyLabel'),'状态未提供')});
+check('sorting does not mutate original data and dates use Beijing time',()=>{context.rows=[{id:1,updatedAt:'2026-09-01T00:00:00Z'},{id:2,updatedAt:'2026-09-05T00:00:00Z'}];assert.equal(run('opsRecentRows(rows)[0].id'),2);assert.equal(context.rows[0].id,1);assert.match(run('opsDate("2026-09-05T02:03:04Z")'),/10:03/)});
+const planSource=fs.readFileSync(path.join(root,'src/pages/exam-plans.jsx'),'utf8');
+vm.runInContext(Babel.transform(planSource,{presets:['react']}).code,context);
+context.React={createElement:(type,props,...children)=>({type,props:{...props,children}}),useState:initial=>[typeof initial==='function'?initial():initial,()=>{}],useRef:initial=>({current:initial}),useCallback:fn=>fn};
+context.Button='Button';context.ResourceState='ResourceState';
+// V5 adds a decorative asset dependency; keep all existing business assertions unchanged.
+context.BlueprintAsset='BlueprintAsset';
+for (const name of new Set(planSource.match(/\bIcon\w+\b/g))) context[name]=name;
+const descendants=value=>!value||typeof value!=='object'?[]:Array.isArray(value)?value.flatMap(descendants):[value,...descendants(value.props?.children)];
+const renderedText=value=>typeof value==='string'||typeof value==='number'?String(value):Array.isArray(value)?value.map(renderedText).join(''):value&&typeof value==='object'?renderedText(value.props?.children):'';
+check('source revision resolves exactly even when the current revision is newer',()=>{
+  context.revisions=[{id:'new',revisionNo:2},{id:'source',revisionNo:1}];
+  assert.equal(run('resolvePlanRevision(revisions,"source","new").id'),'source');
+  assert.equal(run('resolvePlanRevision(revisions,"missing","new")'),null);
+  assert.equal(run('resolvePlanRevision(revisions,"","missing")'),null);
+});
+check('missing source revision renders a safe error and working return, never lifecycle actions',()=>{
+  context.useLiveResource=()=>[{status:'ready',data:[{id:'plan-A',activeRevisionId:'new'},[{id:'new'}]]},()=>{}];
+  let back=0;context.goBack=()=>back++;
+  const tree=run('PlanDetail({plan:{id:"plan-A"},initialRevisionId:"missing",onBack:goBack,returnTarget:{returnRoute:"emergency"}})');
+  assert.match(renderedText(tree),/指定版本不可用/);
+  assert.equal(descendants(tree).filter(n=>n.type===context.PlanLifecycleActions).length,0);
+  descendants(tree).find(n=>n.type==='Button'&&renderedText(n)==='返回考试计划').props.onClick();
+  assert.equal(back,1);
+  descendants(tree).find(n=>n.type==='Button'&&renderedText(n)==='返回来源页面').props.onClick();
+  assert.equal(calls.at(-1),'emergency');
+});
+check('constraints are not displayed as violations and absent validation is not success',()=>{
+  const absent=run('PlanConflictReview({revision:{},rules:[]})');
+  assert.match(renderedText(absent),/尚未返回完整校验结果/);
+  assert.doesNotMatch(renderedText(absent),/该次校验通过/);
+  assert.match(renderedText(absent),/空列表也不代表没有冲突/);
+  context.revision={validationSummary:{valid:false,issues:[{message:'教师同时间冲突',resourceId:'teacher-A'}]}};
+  const failed=run('PlanConflictReview({revision,rules:[{code:"DAILY_LIMIT"}]})');
+  assert.match(renderedText(failed),/该次校验未通过/);
+  assert.match(renderedText(failed),/教师同时间冲突/);
+  assert.match(renderedText(failed),/查看 1 条约束配置/);
+});
+check('known emergency handling terms are translated without changing raw records',()=>{
+  context.facts={strategy:'MINIMAL_DUTY_SUBSTITUTION',substitutions:1};
+  const tree=run('OpsResourceFacts({value:facts})');
+  assert.match(renderedText(tree),/尽量保留原安排/);
+  assert.match(renderedText(tree),/替补数/);
+  assert.equal(context.facts.strategy,'MINIMAL_DUTY_SUBSTITUTION');
+});
+check('emergency source return selection is one-shot and closing it survives a later visit',()=>{
+  let hooks=[],cursor=0;const effects=[];
+  context.React.useState=initial=>{const i=cursor++;if(!(i in hooks))hooks[i]=typeof initial==='function'?initial():initial;return [hooks[i],next=>{hooks[i]=next;}];};
+  context.React.useRef=initial=>{const i=cursor++;if(!(i in hooks))hooks[i]={current:initial};return hooks[i];};
+  context.React.useEffect=fn=>{const i=cursor++;if(!(i in hooks)){hooks[i]=true;effects.push(fn);}};
+  context.PageShell='PageShell';context.IconChevron='IconChevron';context.orgName=()=> '测试学校';
+  context.useLiveResource=()=>[{status:'ready',data:[{id:'event-A',planId:'plan-A',revisionId:'source-A',planName:'期末考试',revisionNo:1,status:'ACTIVE'}]},()=>{}];
+  context.window.__jkxtEmergencyReturnId='event-A';
+  const renderEmergency=()=>{cursor=0;const tree=run('OpsEmergencyPage()');effects.splice(0).forEach(fn=>fn());return tree;};
+  const selected=tree=>descendants(tree).some(n=>n.props?.['aria-pressed']===true);
+  const first=renderEmergency();assert.equal(selected(first),true);assert.equal(context.window.__jkxtEmergencyReturnId,'');
+  descendants(first).find(n=>n.props?.['aria-label']==='关闭记录详情').props.onClick();
+  assert.equal(selected(renderEmergency()),false);
+  hooks=[];
+  assert.equal(selected(renderEmergency()),false,'An unrelated new visit must not reopen the closed record');
+});
+console.log(JSON.stringify({contract:'WorkflowOperations/v2',checks,passed:checks.filter(c=>c.pass).length,total:checks.length},null,2));if(checks.some(c=>!c.pass))process.exitCode=1;
