@@ -1,0 +1,52 @@
+{
+  "schema": "JKXTStaticInventory/v1",
+  "generated_at": "2026-09-23T15:50:47.164Z",
+  "git_sha": "f206bcf6dff291d346cf5c3cf5a68bfce938935e",
+  "base_sha": "f206bcf6dff291d346cf5c3cf5a68bfce938935e",
+  "scope": "Published current-source candidate including nonignored candidate additions, root release tools/configuration and authored documents; excludes volatile release evidence, generated inventory JSON/CSV and original-machine files",
+  "worktree_diff_sha256": "065e3d4cb88461c416f11c7df8ad0ee0f6edc033960632605f90f531f89fba61",
+  "modified_tracked_files": [
+    "JKXT V2.0/backend/pom.xml",
+    "JKXT V2.0/backend/src/main/java/com/jkxt/examops/service/DeterministicInvigilatorAllocator.java",
+    "JKXT V2.0/backend/src/test/java/com/jkxt/examops/service/DeterministicInvigilatorAllocatorTest.java",
+    "JKXT V2.0/backend/src/test/java/com/jkxt/release/RegisteredApiInventoryTest.java",
+    "compose.release-test.yml",
+    "scripts/release/capture-source.mjs",
+    "scripts/release/check-release.mjs",
+    "scripts/release/check-release.test.mjs",
+    "scripts/release/inventory.mjs",
+    "scripts/release/record-command.ps1",
+    "scripts/release/run-isolated.ps1"
+  ],
+  "counts": {
+    "files": 693,
+    "deep_read": 31,
+    "scanned": 494,
+    "unread": 168,
+    "categories": {
+      "documentation": 39,
+      "configuration-or-build": 27,
+      "script-or-test-data-generator": 125,
+      "frontend-entry": 1,
+      "media-asset": 41,
+      "third-party-vendor-or-font": 128,
+      "other": 2,
+      "backend-source": 164,
+      "database-migration": 30,
+      "backend-test": 74,
+      "frontend-source": 62
+    },
+    "controllers": 31,
+    "static_routes": 188,
+    "frontend_request_sites": 212,
+    "frontend_files": 47,
+    "unresolved_frontend_requests": 15,
+    "route_rows_with_frontend_candidates": 139,
+    "backend_test_files": 73,
+    "async_token_locations": 23
+  },
+  "actual_spring_registration": "NOT_COLLECTED_BY_THIS_SCRIPT; see separate runtime collector",
+  "behavior_tests": "NOT_RUN_BY_THIS_SCRIPT",
+  "execution_package_84": "MISSING_FROM_THIS_TRACKED_SNAPSHOT; parent task searches external delivery locations",
+  "parse_warnings": []
+}

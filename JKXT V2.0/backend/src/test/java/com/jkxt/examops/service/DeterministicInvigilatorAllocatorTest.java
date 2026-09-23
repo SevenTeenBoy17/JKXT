@@ -25,6 +25,54 @@ class DeterministicInvigilatorAllocatorTest {
   private final DeterministicInvigilatorAllocator allocator = new DeterministicInvigilatorAllocator();
 
   @Test
+  void dailyCapGreedyDeadEndMustNotClaimAnExistingMorningBEveningASolutionIsInfeasible() {
+    LocalDate day = LocalDate.of(2028, 6, 5);
+    TeacherInput a = new TeacherInput(id("daily-counterexample-a"), "A", "A", null, false,
+        Set.of(), Set.of(), List.of(), List.of());
+    TeacherInput b = new TeacherInput(id("daily-counterexample-b"), "B", "B", null, false,
+        Set.of(), Set.of(), List.of(),
+        List.of(new TeacherWindow(day.atTime(8, 0), day.atTime(10, 0))));
+    RoomInput room = new RoomInput(id("daily-counterexample-room"), "R", "Room", 30);
+    ExamRoomInput morning = new ExamRoomInput(id("daily-counterexample-morning"), Set.of(),
+        room.id(), "Morning", "G1", day, LocalTime.of(8, 0), LocalTime.of(10, 0), 10, 1);
+    ExamRoomInput evening = new ExamRoomInput(id("daily-counterexample-evening"), Set.of(),
+        room.id(), "Evening", "G1", day, LocalTime.of(16, 0), LocalTime.of(18, 0), 10, 1);
+    var roles = com.fasterxml.jackson.databind.node.JsonNodeFactory.instance.arrayNode().add("INVIGILATOR").add("CHIEF");
+    var profiles = Map.of(
+        a.id(), new ExamOperationsHardConstraints.TeacherEligibility(roles, null, false, null, 1, null),
+        b.id(), new ExamOperationsHardConstraints.TeacherEligibility(roles, null, false, null, 1, null));
+    ScheduleFixture fixture = new ScheduleFixture("daily-cap-counterexample", "Synthetic A/B witness", 42L,
+        List.of(a, b), List.of(room), List.of(morning, evening));
+
+    // Independent witness, not a repetition of allocator selection: B covers morning, A evening.
+    assertThat(b.dutyWindows()).containsExactly(new TeacherWindow(day.atTime(8, 0), day.atTime(10, 0)));
+    assertThat(a.dutyWindows()).isEmpty();
+    assertThat(b.id()).isNotEqualTo(a.id());
+    assertThat(profiles.values()).allSatisfy(profile -> {
+      assertThat(profile.maxDailySessions()).isEqualTo(1);
+      assertThat(profile.qualifications().toString()).contains("INVIGILATOR", "CHIEF");
+      var constraints = new ExamOperationsHardConstraints();
+      assertThat(constraints.teacherEligible("CHIEF", constraints.defaultDutyQualification("CHIEF"), profile, day)).isTrue();
+    });
+
+    ScheduleSolverResult result = allocator.allocate(fixture, profiles);
+    assertThat(result.status()).as("A greedy daily-cap dead end is not a proof of infeasibility")
+        .isIn("succeeded", "failed");
+    if (result.feasible()) {
+      assertThat(result.assignments()).hasSize(2);
+      assertThat(result.assignments().stream().filter(x -> x.examId().equals(morning.examId())))
+          .singleElement().satisfies(x -> assertThat(x.teacherId()).isEqualTo(b.id()));
+      assertThat(result.assignments().stream().filter(x -> x.examId().equals(evening.examId())))
+          .singleElement().satisfies(x -> assertThat(x.teacherId()).isEqualTo(a.id()));
+      assertThat(result.assignments()).allSatisfy(x -> assertThat(x.role()).isEqualTo("main"));
+    } else {
+      assertThat(result.solverStatus()).isEqualTo("DETERMINISTIC_UNKNOWN");
+      assertThat(result.errorCode()).isEqualTo("DETERMINISTIC_ALLOCATION_EXHAUSTED");
+      assertThat(result.assignments()).isEmpty();
+    }
+  }
+
+  @Test
   void assignsSixHundredPostsDeterministicallyWithoutOverlapOrLeaveViolation() {
     LocalDate firstDay = LocalDate.of(2028, 6, 1);
     List<TeacherInput> teachers = new ArrayList<>();

@@ -23,6 +23,8 @@
     <jkxt.flywayPluginVersion>10.20.1</jkxt.flywayPluginVersion>
     <ortools.version>9.15.6755</ortools.version>
     <testcontainers.version>2.0.5</testcontainers.version>
+    <!-- Explicit per-run output prevents new evidence from reusing old reports. -->
+    <jkxt.test.reportsDirectory>${project.build.directory}/surefire-reports</jkxt.test.reportsDirectory>
   </properties>
 
   <dependencies>
@@ -119,6 +121,13 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <reportsDirectory>${jkxt.test.reportsDirectory}</reportsDirectory>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

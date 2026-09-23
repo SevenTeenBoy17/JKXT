@@ -1,0 +1,2984 @@
+[
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 29,
+    "operation": "prepare",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 31,
+    "operation": "prepare",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/imports/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/imports/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 35,
+    "operation": "prepare",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/nl-policy/parse",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/nl-policy/parse"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 41,
+    "operation": "submit",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 43,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/imports/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/imports/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/ai-workflow.js",
+    "line": 46,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/schedule-jobs",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/schedule-jobs"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 94,
+    "operation": "(top-level/dynamic)",
+    "call": "fetch",
+    "method": "GET_OR_OPTIONS",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 166,
+    "operation": "captcha",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/captcha",
+    "wrapper": "api.auth.captcha",
+    "routes": [
+      "POST /api/v1/auth/captcha"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 167,
+    "operation": "login",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/login",
+    "wrapper": "api.auth.login",
+    "routes": [
+      "POST /api/v1/auth/login"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 168,
+    "operation": "logout",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/logout",
+    "wrapper": "api.auth.logout",
+    "routes": [
+      "POST /api/v1/auth/logout"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 169,
+    "operation": "me",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/auth/me",
+    "wrapper": "api.auth.me",
+    "routes": [
+      "GET /api/v1/auth/me"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 173,
+    "operation": "get",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/auth/me/preferences",
+    "wrapper": "api.preferences.get",
+    "routes": [
+      "GET /api/v1/auth/me/preferences"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 174,
+    "operation": "update",
+    "call": "api.patch",
+    "method": "PATCH",
+    "request_pattern": "/auth/me/preferences",
+    "wrapper": "api.preferences.update",
+    "routes": [
+      "PATCH /api/v1/auth/me/preferences"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 178,
+    "operation": "get",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/org/settings/appearance",
+    "wrapper": "api.appearance.get",
+    "routes": [
+      "GET /api/v1/org/settings/appearance"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 179,
+    "operation": "update",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/org/settings/appearance",
+    "wrapper": "api.appearance.update",
+    "routes": [
+      "PUT /api/v1/org/settings/appearance"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 194,
+    "operation": "list",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-plans",
+    "wrapper": "api.examPlans.list",
+    "routes": [
+      "GET /api/v1/exam-plans"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 195,
+    "operation": "get",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}",
+    "wrapper": "api.examPlans.get",
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 196,
+    "operation": "create",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans",
+    "wrapper": "api.examPlans.create",
+    "routes": [
+      "POST /api/v1/exam-plans"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 197,
+    "operation": "revisions",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions",
+    "wrapper": "api.examPlans.revisions",
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 198,
+    "operation": "revision",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}",
+    "wrapper": "api.examPlans.revision",
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions/{revisionId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 199,
+    "operation": "validate",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/validate",
+    "wrapper": "api.examPlans.validate",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 200,
+    "operation": "createRevision",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions",
+    "wrapper": "api.examPlans.createRevision",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 201,
+    "operation": "startPlanning",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/planning-jobs",
+    "wrapper": "api.examPlans.startPlanning",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/planning-jobs"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 202,
+    "operation": "planningJob",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/planning-jobs/{dynamic}",
+    "wrapper": "api.examPlans.planningJob",
+    "routes": [
+      "GET /api/v1/planning-jobs/{jobId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 203,
+    "operation": "cancelPlanning",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/planning-jobs/{dynamic}/cancel",
+    "wrapper": "api.examPlans.cancelPlanning",
+    "routes": [
+      "POST /api/v1/planning-jobs/{jobId}/cancel"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 204,
+    "operation": "submitApproval",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/submit-approval",
+    "wrapper": "api.examPlans.submitApproval",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/submit-approval"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 205,
+    "operation": "approve",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/approve",
+    "wrapper": "api.examPlans.approve",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/approve"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 206,
+    "operation": "reject",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/reject",
+    "wrapper": "api.examPlans.reject",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/reject"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 207,
+    "operation": "publish",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/publish",
+    "wrapper": "api.examPlans.publish",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/publish"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 208,
+    "operation": "emergencyChange",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/emergency-changes",
+    "wrapper": "api.examPlans.emergencyChange",
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/emergency-changes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 209,
+    "operation": "sessions",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/sessions",
+    "wrapper": "api.examPlans.sessions",
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/sessions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 210,
+    "operation": "rooms",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/rooms",
+    "wrapper": "api.examPlans.rooms",
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/rooms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 211,
+    "operation": "seats",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/seats",
+    "wrapper": "api.examPlans.seats",
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/seats"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 212,
+    "operation": "assignments",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/duties",
+    "wrapper": "api.examPlans.assignments",
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/duties"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 213,
+    "operation": "constraints",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/constraints",
+    "wrapper": "api.examPlans.constraints",
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/constraints"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 215,
+    "operation": "jointInputSnapshot",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": "api.examPlans.jointInputSnapshot",
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 216,
+    "operation": "replaceJointInput",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "{dynamic}",
+    "wrapper": "api.examPlans.replaceJointInput",
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 220,
+    "operation": "readiness",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/operations/readiness",
+    "wrapper": "api.operations.readiness",
+    "routes": [
+      "GET /api/v1/operations/readiness"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 221,
+    "operation": "approvals",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/approval-requests",
+    "wrapper": "api.operations.approvals",
+    "routes": [
+      "GET /api/v1/approval-requests"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 222,
+    "operation": "emergencyChanges",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/emergency-changes",
+    "wrapper": "api.operations.emergencyChanges",
+    "routes": [
+      "GET /api/v1/emergency-changes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 230,
+    "operation": "get",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/org/settings",
+    "wrapper": "api.orgSettings.get",
+    "routes": [
+      "GET /api/v1/org/settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 231,
+    "operation": "update",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/org/settings",
+    "wrapper": "api.orgSettings.update",
+    "routes": [
+      "PUT /api/v1/org/settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 235,
+    "operation": "list",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/terms",
+    "wrapper": "api.terms.list",
+    "routes": [
+      "GET /api/v1/terms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 236,
+    "operation": "current",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/terms/current",
+    "wrapper": "api.terms.current",
+    "routes": [
+      "GET /api/v1/terms/current"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 237,
+    "operation": "create",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/terms",
+    "wrapper": "api.terms.create",
+    "routes": [
+      "POST /api/v1/terms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 238,
+    "operation": "update",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/terms/{dynamic}",
+    "wrapper": "api.terms.update",
+    "routes": [
+      "PUT /api/v1/terms/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 239,
+    "operation": "activate",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/terms/{dynamic}/activate",
+    "wrapper": "api.terms.activate",
+    "routes": [
+      "POST /api/v1/terms/{id}/activate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/api.js",
+    "line": 240,
+    "operation": "remove",
+    "call": "api.del",
+    "method": "DELETE",
+    "request_pattern": "/terms/{dynamic}",
+    "wrapper": "api.terms.remove",
+    "routes": [
+      "DELETE /api/v1/terms/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "WRAPPER_DEFINITION"
+  },
+  {
+    "file": "JKXT V2.0/src/app.jsx",
+    "line": 152,
+    "operation": "check",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/auth/me",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/auth/me"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/app.jsx",
+    "line": 177,
+    "operation": "App",
+    "call": "api.preferences.get",
+    "method": "GET",
+    "request_pattern": "/auth/me/preferences",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/auth/me/preferences"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/app.jsx",
+    "line": 177,
+    "operation": "App",
+    "call": "api.appearance.get",
+    "method": "GET",
+    "request_pattern": "/org/settings/appearance",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/org/settings/appearance"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/app.jsx",
+    "line": 335,
+    "operation": "handleLogout",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/logout",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/logout"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/kpis.jsx",
+    "line": 180,
+    "operation": "KPIRow",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/teachers",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/teachers"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/kpis.jsx",
+    "line": 181,
+    "operation": "KPIRow",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/classrooms",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/classrooms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/kpis.jsx",
+    "line": 182,
+    "operation": "KPIRow",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/kpis.jsx",
+    "line": 183,
+    "operation": "KPIRow",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/stats/history",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/stats/history"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/onboarding.jsx",
+    "line": 97,
+    "operation": "syncPendingTourState",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/me/onboarded",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/me/onboarded"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/onboarding.jsx",
+    "line": 162,
+    "operation": "syncServerCompletion",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/me/onboarded",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/me/onboarded"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/ai-policy.jsx",
+    "line": 190,
+    "operation": "load",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/ai/providers",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/ai/providers"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/ai-policy.jsx",
+    "line": 190,
+    "operation": "load",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/ai-policy.jsx",
+    "line": 215,
+    "operation": "refine",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/nl-policy/refine",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/nl-policy/refine"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 151,
+    "operation": "ClassFormModal",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/classes/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/classes/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 181,
+    "operation": "submit",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/classes/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/classes/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 182,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/classes",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/classes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 234,
+    "operation": "SubjectFormModal",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/subjects/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/subjects/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 264,
+    "operation": "submit",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/subjects/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/subjects/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 265,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/subjects",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/subjects"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 330,
+    "operation": "submit",
+    "call": "api.upload",
+    "method": "POST",
+    "request_pattern": "/import/{dynamic}/commit",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 387,
+    "operation": "ClassesSubjectsPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/classes",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/classes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 387,
+    "operation": "ClassesSubjectsPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/subjects",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/subjects"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 430,
+    "operation": "removeClass",
+    "call": "api.del",
+    "method": "DELETE",
+    "request_pattern": "/classes/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "DELETE /api/v1/classes/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classes-subjects.jsx",
+    "line": 452,
+    "operation": "removeSubject",
+    "call": "api.del",
+    "method": "DELETE",
+    "request_pattern": "/subjects/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "DELETE /api/v1/subjects/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 96,
+    "operation": "ClassroomFormModal",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/classrooms/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/classrooms/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 131,
+    "operation": "submit",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/classrooms/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/classrooms/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 132,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/classrooms",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/classrooms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 196,
+    "operation": "submit",
+    "call": "api.upload",
+    "method": "POST",
+    "request_pattern": "/import/classrooms/commit",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 246,
+    "operation": "ClassroomsPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/classrooms",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/classrooms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/classrooms.jsx",
+    "line": 299,
+    "operation": "removeClassroom",
+    "call": "api.del",
+    "method": "DELETE",
+    "request_pattern": "/classrooms/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "DELETE /api/v1/classrooms/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/dashboard.jsx",
+    "line": 14,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 28,
+    "operation": "useScheduleEditData",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}/assignments",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/assignments"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 29,
+    "operation": "useScheduleEditData",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/teachers",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/teachers"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 30,
+    "operation": "useScheduleEditData",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 64,
+    "operation": "requestScheduleReplacement",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/tasks/{dynamic}/schedule/check-conflicts",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/tasks/{taskId}/schedule/check-conflicts"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 67,
+    "operation": "requestScheduleReplacement",
+    "call": "api.patch",
+    "method": "PATCH",
+    "request_pattern": "/tasks/{dynamic}/schedule",
+    "wrapper": null,
+    "routes": [
+      "PATCH /api/v1/tasks/{taskId}/schedule"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 372,
+    "operation": "changeHistory",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/tasks/{dynamic}/schedule/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/tasks/{taskId}/schedule/check-conflicts",
+      "POST /api/v1/tasks/{taskId}/schedule/undo",
+      "POST /api/v1/tasks/{taskId}/schedule/redo"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/edit.jsx",
+    "line": 394,
+    "operation": "publish",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/tasks/{dynamic}/publish",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/tasks/{taskId}/publish"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 216,
+    "operation": "submit",
+    "call": "api.examPlans.create",
+    "method": "POST",
+    "request_pattern": "/exam-plans",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 336,
+    "operation": "JointInputWorkspace",
+    "call": "api.examPlans.jointInputSnapshot",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/inputs/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/demands",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/demand-classes",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/demand-windows",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/candidates",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/enrollments",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/candidate-windows",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/special-requirements",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/room-pool",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/room-windows",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/seat-topology",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/teacher-pool",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/avoidances",
+      "GET /api/v1/plan-revisions/{revisionId}/inputs/campus-travel"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 380,
+    "operation": "commit",
+    "call": "api.examPlans.replaceJointInput",
+    "method": "POST",
+    "request_pattern": "/plan-revisions/{dynamic}/inputs/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/demands",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/demand-classes",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/demand-windows",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/candidates",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/enrollments",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/candidate-windows",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/special-requirements",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/room-pool",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/room-windows",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/seat-topology",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/teacher-pool",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/avoidances",
+      "POST /api/v1/plan-revisions/{revisionId}/inputs/campus-travel"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 512,
+    "operation": "monitorPlanningJob",
+    "call": "api.examPlans.planningJob",
+    "method": "GET",
+    "request_pattern": "/planning-jobs/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/planning-jobs/{jobId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 554,
+    "operation": "startPlanning",
+    "call": "api.examPlans.startPlanning",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/planning-jobs",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/planning-jobs"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 584,
+    "operation": "cancelPlanning",
+    "call": "api.examPlans.cancelPlanning",
+    "method": "POST",
+    "request_pattern": "/planning-jobs/{dynamic}/cancel",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/planning-jobs/{jobId}/cancel"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 606,
+    "operation": "createSuccessor",
+    "call": "api.examPlans.createRevision",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 618,
+    "operation": "createEmergency",
+    "call": "api.examPlans.emergencyChange",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/emergency-changes",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/emergency-changes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 639,
+    "operation": "decideApproval",
+    "call": "api.examPlans.approve",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/approve",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/approve"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 640,
+    "operation": "decideApproval",
+    "call": "api.examPlans.reject",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/reject",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/reject"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 650,
+    "operation": "publishRevision",
+    "call": "api.examPlans.publish",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/publish",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/publish"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 672,
+    "operation": "PlanLifecycleActions",
+    "call": "api.examPlans.validate",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 674,
+    "operation": "PlanLifecycleActions",
+    "call": "api.examPlans.submitApproval",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/submit-approval",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/submit-approval"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 734,
+    "operation": "PlanTabContent",
+    "call": "api.examPlans.sessions",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/sessions",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/sessions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 736,
+    "operation": "PlanTabContent",
+    "call": "api.examPlans.rooms",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/rooms",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/rooms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 736,
+    "operation": "PlanTabContent",
+    "call": "api.examPlans.seats",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/seats",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/seats"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 739,
+    "operation": "PlanTabContent",
+    "call": "api.examPlans.assignments",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/duties",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/duties"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 740,
+    "operation": "PlanTabContent",
+    "call": "api.examPlans.constraints",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/constraints",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/constraints"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 780,
+    "operation": "PlanDetail",
+    "call": "api.examPlans.get",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 780,
+    "operation": "PlanDetail",
+    "call": "api.examPlans.revisions",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/exam-plans.jsx",
+    "line": 830,
+    "operation": "ExamPlansPage",
+    "call": "api.examPlans.list",
+    "method": "GET",
+    "request_pattern": "/exam-plans",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/history.jsx",
+    "line": 122,
+    "operation": "loadHistory",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/stats/history",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/stats/history"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/login.jsx",
+    "line": 771,
+    "operation": "LoginPage",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/captcha",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/captcha"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/login.jsx",
+    "line": 772,
+    "operation": "LoginPage",
+    "call": "api.auth.captcha",
+    "method": "POST",
+    "request_pattern": "/auth/captcha",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/captcha"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/login.jsx",
+    "line": 1008,
+    "operation": "handleLogin",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/login",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/login"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/login.jsx",
+    "line": 1016,
+    "operation": "handleLogin",
+    "call": "api.auth.logout",
+    "method": "POST",
+    "request_pattern": "/auth/logout",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/logout"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/login.jsx",
+    "line": 1026,
+    "operation": "handleLogin",
+    "call": "api.auth.logout",
+    "method": "POST",
+    "request_pattern": "/auth/logout",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/logout"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 27,
+    "operation": "ops6Queue",
+    "call": "api.operations.approvals",
+    "method": "GET",
+    "request_pattern": "/approval-requests",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/approval-requests"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 33,
+    "operation": "ops6Queue",
+    "call": "api.examPlans.revision",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions/{revisionId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 104,
+    "operation": "Ops6Changes",
+    "call": "api.revision",
+    "method": "WRAPPER",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 104,
+    "operation": "Ops6Changes",
+    "call": "api.assignments",
+    "method": "WRAPPER",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 104,
+    "operation": "Ops6Changes",
+    "call": "api.assignments",
+    "method": "WRAPPER",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 112,
+    "operation": "Ops6Deliveries",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/operations/notification-deliveries",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/operations/notification-deliveries"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 140,
+    "operation": "Ops6VersionArrangement",
+    "call": "api.examPlans.revision",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions/{revisionId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 141,
+    "operation": "Ops6VersionArrangement",
+    "call": "api.examPlans.assignments",
+    "method": "GET",
+    "request_pattern": "/plan-revisions/{dynamic}/duties",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/plan-revisions/{revisionId}/duties"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 156,
+    "operation": "Ops6ApprovalReview",
+    "call": "api.examPlans.revision",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions/{revisionId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 156,
+    "operation": "Ops6ApprovalReview",
+    "call": "api.operations.approvals",
+    "method": "GET",
+    "request_pattern": "/approval-requests",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/approval-requests"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 172,
+    "operation": "execute",
+    "call": "api.examPlans.revision",
+    "method": "GET",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-plans/{planId}/revisions/{revisionId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 175,
+    "operation": "execute",
+    "call": "api.examPlans.publish",
+    "method": "POST",
+    "request_pattern": "/exam-plans/{dynamic}/revisions/{dynamic}/publish",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-plans/{planId}/revisions/{revisionId}/publish"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-approvals.jsx",
+    "line": 175,
+    "operation": "execute",
+    "call": "api.examPlans.{dynamic}",
+    "method": "WRAPPER",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-v6-emergency.jsx",
+    "line": 153,
+    "operation": "Ops6EmergencyPage",
+    "call": "api.operations.emergencyChanges",
+    "method": "GET",
+    "request_pattern": "/emergency-changes",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/emergency-changes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-workbench.jsx",
+    "line": 117,
+    "operation": "OpsRiskPage",
+    "call": "api.operations.readiness",
+    "method": "GET",
+    "request_pattern": "/operations/readiness",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/operations/readiness"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/operations-workbench.jsx",
+    "line": 175,
+    "operation": "OpsEmergencyPage",
+    "call": "api.operations.emergencyChanges",
+    "method": "GET",
+    "request_pattern": "/emergency-changes",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/emergency-changes"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 52,
+    "operation": "TeacherScheduleTimeline",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 69,
+    "operation": "TeacherScheduleTimeline",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}/assignments",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/assignments"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 243,
+    "operation": "TeacherFormModal",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/teachers/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/teachers/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 276,
+    "operation": "submit",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/teachers/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/teachers/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 277,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/teachers",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/teachers"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 358,
+    "operation": "submit",
+    "call": "api.upload",
+    "method": "POST",
+    "request_pattern": "/import/teachers/commit",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 418,
+    "operation": "PeoplePage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/teachers",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/teachers"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/people.jsx",
+    "line": 630,
+    "operation": "removeTeacher",
+    "call": "api.del",
+    "method": "DELETE",
+    "request_pattern": "/teachers/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "DELETE /api/v1/teachers/{id}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick-step1.jsx",
+    "line": 85,
+    "operation": "downloadQkTemplate",
+    "call": "fetch",
+    "method": "GET_OR_OPTIONS",
+    "request_pattern": "/import/templates/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/import/templates/{kind}",
+      "GET /api/v1/import/{kind}/template",
+      "POST /api/v1/import/{kind}/validate",
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick-step1.jsx",
+    "line": 85,
+    "operation": "downloadQkTemplate",
+    "call": "api.url",
+    "method": "URL_ONLY",
+    "request_pattern": "/import/templates/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/import/templates/{kind}",
+      "GET /api/v1/import/{kind}/template",
+      "POST /api/v1/import/{kind}/validate",
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick-step4.jsx",
+    "line": 40,
+    "operation": "qkBackendHref",
+    "call": "api.url",
+    "method": "URL_ONLY",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick-step4.jsx",
+    "line": 709,
+    "operation": "fetchDownload",
+    "call": "fetch",
+    "method": "GET_OR_OPTIONS",
+    "request_pattern": "/exam-tasks/{dynamic}/export",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/export"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick-step4.jsx",
+    "line": 709,
+    "operation": "fetchDownload",
+    "call": "api.url",
+    "method": "URL_ONLY",
+    "request_pattern": "/exam-tasks/{dynamic}/export",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/export"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 512,
+    "operation": "ensureBackendTask",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 558,
+    "operation": "finalSnapshot",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/schedule-jobs/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/schedule-jobs/{jobId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 566,
+    "operation": "viaSse",
+    "call": "api.eventSource",
+    "method": "GET",
+    "request_pattern": "/schedule-jobs/{dynamic}/events",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/schedule-jobs/{jobId}/events"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 684,
+    "operation": "startUpload",
+    "call": "api.upload",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/uploads",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/uploads"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 739,
+    "operation": "useExampleData",
+    "call": "api.upload",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/uploads",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/uploads"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 749,
+    "operation": "useExampleData",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/imports/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/imports/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 792,
+    "operation": "validateImports",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/imports/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/imports/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 843,
+    "operation": "startScheduling",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/imports/validate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/imports/validate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/quick.jsx",
+    "line": 854,
+    "operation": "startScheduling",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/exam-tasks/{dynamic}/schedule-jobs",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/exam-tasks/{taskId}/schedule-jobs"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 235,
+    "operation": "AppearanceSettings",
+    "call": "api.preferences.get",
+    "method": "GET",
+    "request_pattern": "/auth/me/preferences",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/auth/me/preferences"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 236,
+    "operation": "AppearanceSettings",
+    "call": "api.appearance.get",
+    "method": "GET",
+    "request_pattern": "/org/settings/appearance",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/org/settings/appearance"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 261,
+    "operation": "savePreferences",
+    "call": "api.preferences.update",
+    "method": "PATCH",
+    "request_pattern": "/auth/me/preferences",
+    "wrapper": null,
+    "routes": [
+      "PATCH /api/v1/auth/me/preferences"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 276,
+    "operation": "saveSchool",
+    "call": "api.appearance.update",
+    "method": "PUT",
+    "request_pattern": "/org/settings/appearance",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/org/settings/appearance"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 399,
+    "operation": "SettingsPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/auth/me",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/auth/me"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 413,
+    "operation": "SettingsPage",
+    "call": "api.terms.list",
+    "method": "GET",
+    "request_pattern": "/terms",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/terms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 428,
+    "operation": "SettingsPage",
+    "call": "api.orgSettings.get",
+    "method": "GET",
+    "request_pattern": "/org/settings",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/org/settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 460,
+    "operation": "saveAllowanceUnit",
+    "call": "api.orgSettings.update",
+    "method": "PUT",
+    "request_pattern": "/org/settings",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/org/settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 482,
+    "operation": "activateTerm",
+    "call": "api.terms.activate",
+    "method": "POST",
+    "request_pattern": "/terms/{dynamic}/activate",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/terms/{id}/activate"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 485,
+    "operation": "activateTerm",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/auth/me",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/auth/me"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 509,
+    "operation": "createTerm",
+    "call": "api.terms.create",
+    "method": "POST",
+    "request_pattern": "/terms",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/terms"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/settings.jsx",
+    "line": 536,
+    "operation": "changePassword",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/auth/me/change-password",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/auth/me/change-password"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/stats-supervise.jsx",
+    "line": 29,
+    "operation": "loadStats",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/stats/supervise?dim={dynamic}&metric={dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/stats/supervise"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 48,
+    "operation": "useSuperResource",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 78,
+    "operation": "useSuperObject",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 105,
+    "operation": "superPost",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 124,
+    "operation": "superPut",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 305,
+    "operation": "SuperDashboardPage",
+    "call": "useSuperObject",
+    "method": "GET",
+    "request_pattern": "/admin/security/overview",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/security/overview"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 307,
+    "operation": "SuperDashboardPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 308,
+    "operation": "SuperDashboardPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "/admin/tenants",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/tenants"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 309,
+    "operation": "SuperDashboardPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "/admin/accounts",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/accounts"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 314,
+    "operation": "SuperDashboardPage",
+    "call": "useSuperObject",
+    "method": "GET",
+    "request_pattern": "/admin/system-health",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/system-health"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 609,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/admin/tenants",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/tenants"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 805,
+    "operation": "SuperTenantsPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "/admin/tenants",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/tenants"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 822,
+    "operation": "changeTenantStatus",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/tenants/{dynamic}/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/tenants/{tenantId}/suspend",
+      "POST /api/v1/admin/tenants/{tenantId}/restore"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 965,
+    "operation": "SuperAccountFormModal",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/tenants",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/tenants"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 989,
+    "operation": "submit",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/admin/accounts",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/accounts"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1059,
+    "operation": "SuperAccountsPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "/admin/accounts",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/accounts"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1078,
+    "operation": "accountAction",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/accounts/{dynamic}/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/accounts/{accountId}/reset-password",
+      "POST /api/v1/admin/accounts/{accountId}/force-logout",
+      "POST /api/v1/admin/accounts/{accountId}/disable",
+      "POST /api/v1/admin/accounts/{accountId}/delete"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1349,
+    "operation": "saveSuperPlatformSettings",
+    "call": "api.put",
+    "method": "PUT",
+    "request_pattern": "/admin/platform-settings",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/admin/platform-settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1352,
+    "operation": "saveSuperPlatformSettings",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/platform-settings",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/platform-settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1377,
+    "operation": "SuperSystemSettingsPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/platform-settings",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/platform-settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1538,
+    "operation": "SuperAuditPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1706,
+    "operation": "scanSuperBackupArtifacts",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/backups/run",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/backups/run"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1720,
+    "operation": "SuperSecurityPage",
+    "call": "useSuperObject",
+    "method": "GET",
+    "request_pattern": "/admin/security/overview",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/security/overview"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1773,
+    "operation": "render",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/security/ip-ban",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/security/ip-ban"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1783,
+    "operation": "render",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/security/ip-allowlist",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/security/ip-allowlist"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 1996,
+    "operation": "SuperAnnouncementsPage",
+    "call": "useSuperResource",
+    "method": "GET",
+    "request_pattern": "/admin/announcements",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/announcements"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 2008,
+    "operation": "announcementAction",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/announcements/{dynamic}/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/announcements/{announcementId}/publish",
+      "POST /api/v1/admin/announcements/{announcementId}/push",
+      "POST /api/v1/admin/announcements/{announcementId}/retract"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 2014,
+    "operation": "createAnnouncement",
+    "call": "superPost",
+    "method": "POST",
+    "request_pattern": "/admin/announcements",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/admin/announcements"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/super.jsx",
+    "line": 2030,
+    "operation": "updateAnnouncement",
+    "call": "superPut",
+    "method": "PUT",
+    "request_pattern": "/admin/announcements/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "PUT /api/v1/admin/announcements/{announcementId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 85,
+    "operation": "TaskDetailPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 86,
+    "operation": "TaskDetailPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}/assignments",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/assignments"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 99,
+    "operation": "TaskDetailPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/org/settings",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/org/settings"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 186,
+    "operation": "downloadReal",
+    "call": "fetch",
+    "method": "GET_OR_OPTIONS",
+    "request_pattern": "/exam-tasks/{dynamic}/export",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/export"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 186,
+    "operation": "downloadReal",
+    "call": "api.url",
+    "method": "URL_ONLY",
+    "request_pattern": "/exam-tasks/{dynamic}/export",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}/export"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/task-detail.jsx",
+    "line": 228,
+    "operation": "TaskDetailPage",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/tasks/{dynamic}/publish",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/tasks/{taskId}/publish"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/tasks-page.jsx",
+    "line": 234,
+    "operation": "downloadTemplate",
+    "call": "fetch",
+    "method": "GET_OR_OPTIONS",
+    "request_pattern": "/import/templates/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/import/templates/{kind}",
+      "GET /api/v1/import/{kind}/template",
+      "POST /api/v1/import/{kind}/validate",
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/tasks-page.jsx",
+    "line": 234,
+    "operation": "downloadTemplate",
+    "call": "api.url",
+    "method": "URL_ONLY",
+    "request_pattern": "/import/templates/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/import/templates/{kind}",
+      "GET /api/v1/import/{kind}/template",
+      "POST /api/v1/import/{kind}/validate",
+      "POST /api/v1/import/{kind}/commit"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/tasks-page.jsx",
+    "line": 287,
+    "operation": "TaskQueueDrawer",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks/{dynamic}",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks/{taskId}"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/pages/tasks-page.jsx",
+    "line": 341,
+    "operation": "TasksPage",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/sidebar.jsx",
+    "line": 11,
+    "operation": "load",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "{dynamic}",
+    "wrapper": null,
+    "routes": [],
+    "mapping": "UNRESOLVED_DYNAMIC_REQUEST",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/sidebar.jsx",
+    "line": 18,
+    "operation": "Sidebar",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/system-health",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/system-health"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/sidebar.jsx",
+    "line": 23,
+    "operation": "Sidebar",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/tasks.jsx",
+    "line": 141,
+    "operation": "RecentTasksCard",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/exam-tasks",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/exam-tasks"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/timeline.jsx",
+    "line": 737,
+    "operation": "TimelineCard",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/timeline/schedule",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/timeline/schedule"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/topbar.jsx",
+    "line": 521,
+    "operation": "loadTenants",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/tenants",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/tenants"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/topbar.jsx",
+    "line": 566,
+    "operation": "refreshNotifs",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/admin/announcements",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/admin/announcements"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/topbar.jsx",
+    "line": 579,
+    "operation": "refreshNotifs",
+    "call": "api.get",
+    "method": "GET",
+    "request_pattern": "/notifications",
+    "wrapper": null,
+    "routes": [
+      "GET /api/v1/notifications"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/topbar.jsx",
+    "line": 616,
+    "operation": "markRead",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/notifications/{dynamic}/read",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/notifications/{id}/read"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  },
+  {
+    "file": "JKXT V2.0/src/topbar.jsx",
+    "line": 631,
+    "operation": "markAllRead",
+    "call": "api.post",
+    "method": "POST",
+    "request_pattern": "/notifications/read-all",
+    "wrapper": null,
+    "routes": [
+      "POST /api/v1/notifications/read-all"
+    ],
+    "mapping": "STATIC_ROUTE_CANDIDATE",
+    "callsite_kind": "PAGE_OR_COMPONENT_CALL_SITE"
+  }
+]

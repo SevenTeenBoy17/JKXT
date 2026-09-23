@@ -107,7 +107,10 @@ public class DeterministicInvigilatorAllocator {
                 .thenComparing(teacher -> teacher.id().toString()))
             .orElse(null);
         if (selected == null) {
-          boolean intrinsicallyUnavailable = withinDailyLimit.stream()
+          // Greedy choices consume daily capacity; their dead end is not a proof that
+          // the original problem is infeasible (e.g. B early/A late). Only static
+          // qualification and availability may establish this local impossibility.
+          boolean intrinsicallyUnavailable = qualified.stream()
               .noneMatch(teacher -> available(teacher, dutyStart, dutyEnd, List.of()));
           long elapsed = elapsedMillis(started);
           Map<String, Object> refs = new LinkedHashMap<>();
@@ -128,7 +131,9 @@ public class DeterministicInvigilatorAllocator {
                   ? "No active teacher satisfies the required " + dutyRole + " qualification"
                   : withinDailyLimit.isEmpty()
                       ? "Every qualified teacher has reached the configured daily session limit"
-                  : "No leave-safe, duty-window-eligible and conflict-free teacher is available for every required post",
+                  : intrinsicallyUnavailable
+                      ? "No qualified teacher is available within the required leave and duty windows"
+                      : "Deterministic search did not complete; earlier assignments may need to be reconsidered",
               Map.copyOf(refs));
           return new ScheduleSolverResult(
               qualified.isEmpty() || intrinsicallyUnavailable ? "infeasible" : "failed",

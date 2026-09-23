@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { collectSourceSnapshot, discoverTestClasses } from './check-release.mjs';
+const [root, output] = process.argv.slice(2);
+if (!root || !output) throw new Error('Usage: capture-source.mjs repository output.json');
+if (fs.existsSync(output)) throw new Error('Refusing to overwrite source identity');
+const snapshot = collectSourceSnapshot(root);
+const result = { ...snapshot, requiredClasses: discoverTestClasses(root, snapshot) };
+fs.mkdirSync(path.dirname(output), { recursive: true });
+fs.writeFileSync(output, JSON.stringify(result, null, 2));

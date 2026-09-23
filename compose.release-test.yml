@@ -1,0 +1,29 @@
+# Fresh ephemeral resources only; never attach an existing business volume.
+services:
+  jkxt-test-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: jkxt_test_${JKXT_RELEASE_RUN:?set an isolated run suffix}
+      POSTGRES_USER: jkxt_test
+      POSTGRES_PASSWORD: ${JKXT_RELEASE_DB_PASSWORD:?set a disposable test password}
+    ports:
+      - "127.0.0.1:${JKXT_RELEASE_DB_PORT:-25432}:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U jkxt_test -d $$POSTGRES_DB']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  jkxt-test-redis:
+    image: redis:7-alpine
+    command: [redis-server, --save, "", --appendonly, "no"]
+    ports:
+      - "127.0.0.1:${JKXT_RELEASE_REDIS_PORT:-26379}:6379"
+    tmpfs:
+      - /data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 30

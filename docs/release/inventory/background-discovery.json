@@ -1,0 +1,140 @@
+[
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/ai/config/LlmTestModeGuard.java",
+    "line": 19,
+    "token": "@PostConstruct",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/examops/service/ExamPlanPlanningService.java",
+    "line": 177,
+    "token": "CompletableFuture.runAsync",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/api/SchedulingController.java",
+    "line": 20,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/api/SchedulingController.java",
+    "line": 82,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleJobService.java",
+    "line": 62,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleJobService.java",
+    "line": 136,
+    "token": "CompletableFuture.runAsync",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleJobService.java",
+    "line": 171,
+    "token": "CompletableFuture.runAsync",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleJobService.java",
+    "line": 192,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 14,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 32,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 41,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 46,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 55,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 56,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 56,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 73,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 75,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 86,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+    "line": 87,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/security/DemoAccountSecurityGuard.java",
+    "line": 45,
+    "token": "@EventListener",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/security/ProductionSecurityGate.java",
+    "line": 43,
+    "token": "@PostConstruct",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/tasks/api/ExamTaskController.java",
+    "line": 24,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  },
+  {
+    "file": "JKXT V2.0/backend/src/main/java/com/jkxt/tasks/api/ExamTaskController.java",
+    "line": 92,
+    "token": "SseEmitter",
+    "status": "STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED"
+  }
+]
