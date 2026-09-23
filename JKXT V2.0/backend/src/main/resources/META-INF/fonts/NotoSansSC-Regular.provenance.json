@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "family": "Noto Sans SC",
+  "upstream": {
+    "repository": "https://github.com/google/fonts",
+    "commit": "2894aab31764f10f29c421bdfd2340d3b382d384",
+    "directory": "ofl/notosanssc",
+    "fontPath": "NotoSansSC[wght].ttf",
+    "inputs": {
+      "NotoSansSC-variable.ttf": {
+        "bytes": 17772300,
+        "gitBlobSha1": "fb0637bafbcd804fe32152370a1225990745b4bc",
+        "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+      },
+      "OFL.txt": {
+        "bytes": 4388,
+        "gitBlobSha1": "1c9f43281b8f216c5461fe9ac729afbade7724e4",
+        "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+      },
+      "METADATA.pb": {
+        "bytes": 1053,
+        "gitBlobSha1": "94723577311c60831fabdb3e0d4450d0ed6763a5",
+        "sha256": "3de4c75126b7b78011abb6773dd88ca3041ab512623681bd9234ef50019afc37"
+      }
+    }
+  },
+  "transform": {
+    "python": "3.12.14",
+    "fonttools": "4.65.0",
+    "fonttoolsWheelSha256": "3060b8c1fc2329fa20265b7c138614143ea7c1624e26c5c180c76aeb74deae6f",
+    "axisLocation": {
+      "wght": 400
+    },
+    "recalcTimestamp": false,
+    "updateFontNames": true,
+    "static": true,
+    "optimize": true,
+    "reorderTables": true,
+    "scriptSha256": "6aa78440e83c5eec1cd0c7499599027142bfde33a8eac41c62cfabf7f2e8a604"
+  },
+  "source": {
+    "tables": [
+      "BASE",
+      "GDEF",
+      "GPOS",
+      "GSUB",
+      "GlyphOrder",
+      "HVAR",
+      "OS/2",
+      "STAT",
+      "avar",
+      "cmap",
+      "fvar",
+      "gasp",
+      "glyf",
+      "gvar",
+      "head",
+      "hhea",
+      "hmtx",
+      "loca",
+      "maxp",
+      "name",
+      "post",
+      "prep",
+      "vhea",
+      "vmtx"
+    ],
+    "glyphCount": 31036,
+    "unicodeCmapCount": 30890,
+    "nameIds": {
+      "0": [
+        "(c) 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."
+      ],
+      "1": [
+        "Noto Sans SC Thin"
+      ],
+      "2": [
+        "Regular"
+      ],
+      "4": [
+        "Noto Sans SC Thin"
+      ],
+      "5": [
+        "Version 2.004-H2;hotconv 1.0.118;makeotfexe 2.5.65603"
+      ],
+      "6": [
+        "NotoSansSC-Thin"
+      ],
+      "13": [
+        "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL"
+      ],
+      "14": [
+        "http://scripts.sil.org/OFL"
+      ]
+    },
+    "headCreated": 3702531239,
+    "headModified": 3750934487,
+    "fsType": 0,
+    "weight": 100
+  },
+  "sourceAxes": {
+    "wght": [
+      100,
+      100,
+      900
+    ]
+  },
+  "output": {
+    "path": "fonts/NotoSansSC-Regular.ttf",
+    "bytes": 10595876,
+    "sha256": "26305be85f5378dc7d53f3dfa6c852a7e46621b226423400c1821aca9fc01c41",
+    "lostUnicodeMappings": [],
+    "tables": [
+      "BASE",
+      "GDEF",
+      "GPOS",
+      "GSUB",
+      "GlyphOrder",
+      "OS/2",
+      "STAT",
+      "cmap",
+      "gasp",
+      "glyf",
+      "head",
+      "hhea",
+      "hmtx",
+      "loca",
+      "maxp",
+      "name",
+      "post",
+      "prep",
+      "vhea",
+      "vmtx"
+    ],
+    "glyphCount": 31036,
+    "unicodeCmapCount": 30890,
+    "nameIds": {
+      "0": [
+        "(c) 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."
+      ],
+      "1": [
+        "Noto Sans SC"
+      ],
+      "2": [
+        "Regular"
+      ],
+      "4": [
+        "Noto Sans SC Regular"
+      ],
+      "5": [
+        "Version 2.004-H2;hotconv 1.0.118;makeotfexe 2.5.65603"
+      ],
+      "6": [
+        "NotoSansSC-Regular"
+      ],
+      "13": [
+        "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL"
+      ],
+      "14": [
+        "http://scripts.sil.org/OFL"
+      ]
+    },
+    "headCreated": 3702531239,
+    "headModified": 3750934487,
+    "fsType": 0,
+    "weight": 400
+  },
+  "determinism": {
+    "independentBuilds": 2,
+    "sha256A": "26305be85f5378dc7d53f3dfa6c852a7e46621b226423400c1821aca9fc01c41",
+    "sha256B": "26305be85f5378dc7d53f3dfa6c852a7e46621b226423400c1821aca9fc01c41"
+  }
+}

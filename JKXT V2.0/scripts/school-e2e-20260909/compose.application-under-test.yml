@@ -1,0 +1,7 @@
+# Isolated acceptance instance only. Never use this override for the live private stack.
+services:
+  app:
+    environment:
+      JKXT_DEPLOY_MODE: saas
+    volumes:
+      - C:/Users/nuoya/AppData/Local/JKXT/runtime/school-e2e-20260909/jkxt-backend-rolefix.jar:/app/jkxt-backend.jar:ro

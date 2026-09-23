@@ -1,0 +1,69 @@
+name: jkxt-demo-task4-entry20260920v2
+services:
+  jkxt-test-demo-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: jkxt_test_demo_entry20260920v2
+      POSTGRES_USER: jkxt_test_demo_admin
+      POSTGRES_PASSWORD: ${JKXT_DEMO_TEST_ADMIN_PASSWORD:?Ephemeral provisioning password required}
+      JKXT_DEMO_TEST_PASSWORD: ${JKXT_DEMO_TEST_PASSWORD:?Ephemeral runtime password required}
+    volumes:
+      - ./provision-demo-task4.sh:/docker-entrypoint-initdb.d/10-demo.sh:ro
+    tmpfs: [/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$${POSTGRES_USER}" -d "$${POSTGRES_DB}"']
+      interval: 2s
+      retries: 30
+  jkxt-test-demo-redis:
+    image: redis:7-alpine
+    command: [redis-server, --save, '', --appendonly, 'no']
+    tmpfs: [/data]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      retries: 30
+  demo-storage-init:
+    image: redis:7-alpine
+    volumes: [demo-storage:/demo-storage]
+    depends_on:
+      jkxt-test-demo-redis: {condition: service_healthy}
+    command:
+      - sh
+      - -ec
+      - |
+        test ! -L /demo-storage
+        printf '%s\n' 'demo:508d56a8-e7b0-41b3-a930-4312388df510' > /demo-storage/.jkxt-demo-environment
+        redis-cli -h jkxt-test-demo-redis SET jkxt:environment:identity demo:508d56a8-e7b0-41b3-a930-4312388df510
+  demo-runner:
+    image: maven:3.9.9-eclipse-temurin-21
+    working_dir: /candidate/backend
+    profiles: [test]
+    volumes:
+      - type: bind
+        source: ${JKXT_CANDIDATE_ROOT:?Verified candidate root required}
+        target: /candidate
+      - demo-storage:/demo-storage
+      - maven-cache:/root/.m2
+    environment:
+      JKXT_TEST_DATASOURCE_URL: jdbc:postgresql://jkxt-test-demo-db:5432/jkxt_test_demo_entry20260920v2
+      JKXT_TEST_DATASOURCE_USERNAME: jkxt_test_demo_app
+      JKXT_TEST_DATASOURCE_PASSWORD: ${JKXT_DEMO_TEST_PASSWORD:?Ephemeral runtime password required}
+      JKXT_TEST_REDIS_HOST: jkxt-test-demo-redis
+      JKXT_TEST_REDIS_PORT: '6379'
+      SPRING_PROFILES_ACTIVE: test
+      JKXT_DEPLOY_MODE: demo
+      JKXT_DEMO_ENVIRONMENT_ID: 508d56a8-e7b0-41b3-a930-4312388df510
+      JKXT_DEMO_DATABASE_NAME: jkxt_test_demo_entry20260920v2
+      JKXT_DEMO_DATABASE_USER: jkxt_test_demo_app
+      JKXT_DEMO_STORAGE_ROOT: /demo-storage
+      JKXT_AUTH_CAPTCHA_DEBUG: 'false'
+      JKXT_NOTIFY_EMAIL_ENABLED: 'false'
+      JKXT_NOTIFY_SMS_ENABLED: 'false'
+      JKXT_SECURITY_DISABLE_DEMO_ACCOUNTS: 'true'
+    depends_on:
+      jkxt-test-demo-db: {condition: service_healthy}
+      demo-storage-init: {condition: service_completed_successfully}
+    command: [mvn, -B, '-Dtest=DemoWorkspaceIntegrationTest,DemoResetConcurrencyTest,DemoExpiryTest', clean, test]
+volumes:
+  demo-storage:
+  maven-cache:

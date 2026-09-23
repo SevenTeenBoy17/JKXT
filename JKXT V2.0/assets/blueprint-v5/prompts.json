@@ -1,0 +1,23 @@
+[
+  {
+    "name": "symbols-green",
+    "refs": [
+      "D:/VB/JKXT/JKXT V2.0/docs/design/right-pane-blueprints-v4/01-risk-overview.png"
+    ],
+    "prompt": "Use case: stylized-concept. Asset type: ultra-high-resolution isolated icon atlas for the Quick Chinese school invigilation admin UI. Input image is style reference ONLY. Extract and faithfully recreate the restrained professional small pictograms from its priority rows, then extend the same family. Solid EXACT chroma key green #00FF00 background, flat uniform no gradient, no backdrop shadow. 3 columns by 2 rows precisely equal square cells in a landscape 3:2 canvas. Row1 column1 red rounded warning triangle with white exclamation; c2 warm amber staff bust with small exclamation badge; c3 muted violet envelope with small white cross badge. Row2 c1 indigo teacher ID clipboard; c2 teal examination chair; c3 amber calendar. Each icon centered exactly in its cell, occupying 50% of cell width, generous clear green around it, no overlap. Match original refined semi-flat gentle enamel highlights and clean silhouette, extremely restrained depth, no glossy toy 3D, no thick shadows, no words no letters no captions no numbers no watermark. The icon interior must NOT use chroma green. Keep all background exact #00FF00. Highest quality and resolution available, ideally 3072x2048. An asset atlas not a screen mockup."
+  },
+  {
+    "name": "empty-green",
+    "refs": [
+      "D:/VB/JKXT/JKXT V2.0/docs/design/right-pane-blueprints-v4/13-new-account-empty.png"
+    ],
+    "prompt": "Use case: stylized-concept. Asset type: single empty-school-task illustration for a Chinese exam administration product. Input is style reference only: recreate its quiet three blank document illustration. Solid exact chroma green #00FF00 uniform backdrop, no gradient or green spill. Center three slightly overlapping white paper documents with muted periwinkle #94A6CE thin outlines: left sheet contains a small grid, central taller sheet contains four simple list lines and dots, right sheet has a small outline clock; curled top-right corners. Tiny two pale periwinkle four-point accents at sides only. Flat, crisp, polished professional product empty state; no typography, no words, no watermark, no extra props or characters. Illustration fills middle 70% width, balanced 3:2 landscape composition, generous empty green padding. Match input shapes and proportions with no kawaii or toy effect. Ultra high definition edge detail ideally 3072x2048."
+  },
+  {
+    "name": "controls-green",
+    "refs": [
+      "D:/VB/JKXT/JKXT V2.0/docs/design/right-pane-blueprints-v4/08-manual-workbench.png"
+    ],
+    "prompt": "Use case: ui-mockup. Asset type: reusable UI component visual specification atlas, not a complete app. Faithfully extract the same restrained Chinese administrative UI control style from reference: slim borders, indigo #555BD2 actions, 8px corners, readable dark Chinese sans-serif, never neon glow. Exact flat chroma key green #00FF00 background around twelve isolated controls in an aligned 3 columns x4 rows layout. Row1 primary button '校验并保存', secondary bordered button '取消', disabled grey button '提交改派'. Row2 search input '考场或科目' with small search outline icon, select '全部状态' with down chevron, segmented '时段 / 考场' with 时段 selected. Row3 white neutral status '草稿', mint status '已发布', amber status '待核查'. Row4 outlined refresh icon button, close icon button, collapsed chevron disclosure control. Each control separately centered in equal clear green cell, no connecting elements, no outerpanel. Restrained one-family visual language, no fake photographic shadows, no toy3D. White surfaces pure white, never green; exact labels, functional clarity. Highest possible resolution 3072x2048. These are asset reference skins; actual frontend will implement semantic interactive labels and geometry."
+  }
+]

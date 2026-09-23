@@ -1,0 +1,34 @@
+jkxt:
+  deploy:
+    mode: saas
+    fixed-org-id: ${JKXT_FIXED_ORG_ID:${FIXED_ORG_ID:00000000-0000-0000-0000-000000000001}}
+    external-sms-enabled: ${JKXT_EXTERNAL_SMS_ENABLED:true}
+  security:
+    # Production cloud must never ship usable known-credential demo super-admins.
+    disable-demo-accounts: ${JKXT_DISABLE_DEMO_ACCOUNTS:true}
+    # 迭代9 (WF1 DevOps P0 / 苏格拉底 T6)：严格生产前置门。saas 默认已全安全(disable-demo=true /
+    # cookie-secure=true / captcha-debug 继承 false)，故打开此门只会在有人误配不安全默认时"响亮拒绝启动"，
+    # 正常部署不受影响。真实 private 生产部署也应把 JKXT_STRICT_PRODUCTION_CHECKS=true 并配齐安全默认;
+    # 演示/UAT/冒烟栈保持关闭(default false)。
+    strict-production-checks: ${JKXT_STRICT_PRODUCTION_CHECKS:true}
+  auth:
+    cookie-secure: ${JKXT_AUTH_COOKIE_SECURE:true}
+    cookie-same-site: ${JKXT_AUTH_COOKIE_SAME_SITE:Lax}
+    # saas 的入口(云 LB/ingress)因环境而异，无法预设，故沿用"留空 = 不信任 X-Forwarded-For"的安全默认。
+    # 若 app 前面确实有 LB/ingress，务必把 JKXT_AUTH_TRUSTED_PROXIES 设为它的实际网段，否则登录审计 IP
+    # 会记成 LB 的地址(失真但不失守)；配错成过宽的网段则等于把伪造 XFF 重新放行，两害相权取其轻。
+    trusted-proxies: ${JKXT_AUTH_TRUSTED_PROXIES:}
+    # A3② 公网多租户默认开启登录 IP 节流(30 次失败/5 分钟)。saas 面向公网，撞库是真实威胁面，故默认开；
+    # 阈值给得较宽，正常用户与共享出口的小团队不会触发。前提是 trusted-proxies 配对(否则所有请求都记成 LB
+    # 的同一个 IP → 节流会误伤全网；未配 trusted-proxies 时节流仍以 getRemoteAddr 为准，通常即 LB 地址)。
+    ip-throttle:
+      enabled: ${JKXT_AUTH_IP_THROTTLE_ENABLED:true}
+      max-attempts: ${JKXT_AUTH_IP_THROTTLE_MAX:30}
+      window-seconds: ${JKXT_AUTH_IP_THROTTLE_WINDOW:300}
+  llm:
+    enabled: ${JKXT_LLM_ENABLED:false}
+    allow-test-mocks: false
+    provider: ${JKXT_LLM_PROVIDER:aliyun}
+    base-url: ${JKXT_LLM_BASE_URL:}
+    fallback-base-url: ${JKXT_LLM_FALLBACK_BASE_URL:}
+    api-key: ${JKXT_LLM_API_KEY:}

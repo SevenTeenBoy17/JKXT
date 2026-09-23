@@ -1,0 +1,10 @@
+{$PUBLIC_DOMAIN} {
+	encode zstd gzip
+
+	reverse_proxy nginx:80
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+	}
+}

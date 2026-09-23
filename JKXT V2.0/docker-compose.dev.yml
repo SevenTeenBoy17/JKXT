@@ -1,0 +1,6 @@
+# Compatibility entrypoint for P1 prompts that still name docker-compose.dev.yml.
+# The canonical service definitions live in docker-compose.yml to avoid drift.
+name: jkxt-v2
+
+include:
+  - docker-compose.yml

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+set -eu
+
+IMAGE="${MAVEN_DOCKER_IMAGE:-maven:3.9.9-eclipse-temurin-21}"
+docker run --rm \
+  -v "$PWD:/workspace" \
+  -v "$HOME/.m2:/root/.m2" \
+  -w /workspace \
+  "$IMAGE" mvn "$@"
