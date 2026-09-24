@@ -16,7 +16,7 @@ if (!(Test-Path -LiteralPath (Join-Path $JavaHome 'bin/java.exe')) -or !(Test-Pa
   throw 'Explicit Java 21 and native Maven paths are required'
 }
 # Never inherit business connection strings, JVM properties or paid-provider keys.
-Get-ChildItem Env: | Where-Object { $_.Name -match '^(JKXT_|SPRING_|POSTGRES_|REDIS_|DOCKER_|TESTCONTAINERS_|MAVEN_|M2_HOME$|JVM_CONFIG_MAVEN_PROPS$|DATABASE_URL$|JAVA_TOOL_OPTIONS$|JDK_JAVA_OPTIONS$|_JAVA_OPTIONS$)' } | ForEach-Object {
+Get-ChildItem Env: | Where-Object { $_.Name -match '^(JKXT_|SPRING_|SERVER_|MANAGEMENT_|POSTGRES_|REDIS_|DOCKER_|TESTCONTAINERS_|MAVEN_|M2_HOME$|JVM_CONFIG_MAVEN_PROPS$|DATABASE_URL$|JAVA_TOOL_OPTIONS$|JDK_JAVA_OPTIONS$|_JAVA_OPTIONS$)' } | ForEach-Object {
   Remove-Item -LiteralPath ('Env:' + $_.Name)
 }
 $env:JAVA_HOME = $JavaHome
@@ -78,6 +78,7 @@ $mappings = (Join-Path $evidence 'spring-mappings.json').Replace('\','/')
 & (Join-Path $PSScriptRoot 'record-command.ps1') -Id full-maven-suite -Executable $Maven -Arguments @(
   '-B','-o','-s',(Join-Path $PSScriptRoot 'maven-settings.xml'),'-gs',(Join-Path $PSScriptRoot 'maven-settings.xml'),
   "-Djkxt.test.reportsDirectory=$reports",'-Djkxt.testcontainers.enabled=true',
+  '-Dserver.address=127.0.0.1',
   "-Djkxt.release.mappingOutput=$mappings","-Djkxt.release.runId=$Run",
   "-Djkxt.release.gitSha=$sha","-Djkxt.release.sourceDigest=$($source.sha256)",'test'
 ) -WorkingDirectory $backend -EvidenceDirectory $evidence

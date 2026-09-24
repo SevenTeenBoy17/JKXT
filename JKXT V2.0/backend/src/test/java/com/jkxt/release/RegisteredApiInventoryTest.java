@@ -14,6 +14,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
+import org.apache.coyote.AbstractProtocol;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,6 +24,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
+import org.springframework.web.servlet.HandlerMapping;
 
 /** Captures instantiated Spring handlers, not regex guesses; requires real isolated PG/Redis. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -33,6 +38,12 @@ class RegisteredApiInventoryTest {
 
   @Test
   void recordsActualMappingsAndIsolatedStorageAssertions() throws Exception {
+    var webContext = (ServletWebServerApplicationContext) context;
+    var webServer = (TomcatWebServer) webContext.getWebServer();
+    var protocol = (AbstractProtocol<?>) webServer.getTomcat().getConnector().getProtocolHandler();
+    assertThat(protocol.getAddress()).isNotNull();
+    String serverAddress = protocol.getAddress().getHostAddress();
+    assertThat(serverAddress).isEqualTo("127.0.0.1");
     String database = jdbc.queryForObject("select current_database()", String.class);
     assertThat(database).matches("jkxt_test_[a-z0-9_]+");
     int migrationVersion = jdbc.queryForObject(
@@ -71,6 +82,22 @@ class RegisteredApiInventoryTest {
     assertThat(routes).isNotEmpty();
     assertThat(routes.stream().map(row -> row.get("path").toString()))
         .contains("/api/v1/auth/login", "/api/v1/health", "/api/v1/exam-plans/{planId}");
+    // Actuator uses a separate mapping class; ordinary MVC discovery must not silently omit it.
+    List<Map<String, Object>> supplemental = new ArrayList<>();
+    context.getBeansOfType(RequestMappingInfoHandlerMapping.class).forEach((beanName, mapping) -> {
+      if (mapping instanceof RequestMappingHandlerMapping) return;
+      mapping.getHandlerMethods().forEach((info, method) -> {
+        for (String route : info.getPatternValues().stream().sorted().toList()) {
+          supplemental.add(Map.of("mappingBean", beanName, "path", route,
+              "methods", info.getMethodsCondition().isEmpty() ? List.of("ANY")
+                  : info.getMethodsCondition().getMethods().stream().map(Enum::name).sorted().toList(),
+              "handler", method.getBeanType().getName() + "#" + method.getMethod().getName()));
+        }
+      });
+    });
+    supplemental.sort(Comparator.comparing(row -> row.get("path").toString() + row.get("methods")));
+    assertThat(supplemental.stream().map(row -> row.get("path").toString()))
+        .contains("/actuator/health", "/actuator/info");
     Map<String, Object> report = new LinkedHashMap<>();
     report.put("schema", "JKXTSpringMappings/v1");
     report.put("collection", "RequestMappingHandlerMapping");
@@ -86,7 +113,13 @@ class RegisteredApiInventoryTest {
     report.put("migrationVersion", migrationVersion);
     report.put("failedMigrations", failedMigrations);
     report.put("redisPing", pong);
+    report.put("serverAddress", serverAddress);
     report.put("mappings", routes);
+    report.put("supplementalRequestMappings", supplemental);
+    report.put("handlerMappingTypes", context.getBeansOfType(HandlerMapping.class).entrySet().stream()
+        .map(entry -> Map.of("bean", entry.getKey(), "type", entry.getValue().getClass().getName()))
+        .sorted(Comparator.comparing(row -> row.get("bean"))).toList());
+    report.put("nonRequestMappingScope", "HandlerMapping types enumerated; static resource files, dynamic router functions, filters and background jobs require separate trace evidence.");
     Path output = Path.of(System.getProperty("jkxt.release.mappingOutput", "target/release-runtime-mappings.json"));
     Files.createDirectories(output.toAbsolutePath().getParent());
     mapper.writerWithDefaultPrettyPrinter().writeValue(output.toFile(), report);

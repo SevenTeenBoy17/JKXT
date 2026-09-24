@@ -1,3 +1,6 @@
+# Random-port integration servers remain local to this machine.
+server:
+  address: 127.0.0.1
 spring:
   datasource:
     url: ${JKXT_TEST_DATASOURCE_URL:}
