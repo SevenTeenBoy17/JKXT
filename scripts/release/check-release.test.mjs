@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { collectSourceSnapshot, discoverTestClasses, discoverTestMethods, hash, junitMethodIdentity, parseJUnit, validateRelease } from './check-release.mjs';
+import { buildExecutionPackage } from './execution-package.mjs';
 
 // Entirely synthetic verifier fixtures. A passing fixture is never product acceptance.
 const basicXml = '<testsuite name="ReleaseFixture" tests="1" failures="0" errors="0" skipped="0"><testcase name="positive" classname="fixture.FixtureTest"/></testsuite>';
@@ -34,8 +35,9 @@ function fixture(t) {
     fs.writeFileSync(path.join(root, file), data);
     return { path: file, sha256: hash(data) };
   };
-  const provenance = write('fixture-source.md', 'SYNTHETIC original execution package fixture. Not supplied customer acceptance.');
-  const pkg = write('package.json', { schema: 'JKXTExecutionPackage/v1', sourceArtifacts: [provenance], scenarios: Array.from({ length: 84 }, (_, i) => ({ id: `FIXTURE-${i + 1}`, title: `Synthetic scenario ${i + 1}` })) });
+  const provenance = write('fixture-source.md', `SYNTHETIC verifier fixture, not customer acceptance.\n基线：\`${gitSha}\`。共 84 项场景\n## FIXTURE｜Synthetic\n| 编号 | 场景 | 给定 | 操作 | 必须观察到的结果 |\n|---|---|---|---|---|\n` + Array.from({ length: 84 }, (_, i) => `| FIXTURE-${String(i + 1).padStart(2, '0')} | Synthetic ${i + 1} | Input | Action | Expected |`).join('\n'));
+  const architecture = write('fixture-architecture.md', 'SYNTHETIC verifier fixture.\n## 一、Scope\nNot product evidence.\n');
+  const pkg = write('package.json', buildExecutionPackage(root, [{ ...provenance, role: 'matrix' }, { ...architecture, role: 'architecture' }]));
   const runtime = write('mappings.json', { schema: 'JKXTSpringMappings/v1', collection: 'RequestMappingHandlerMapping', environment: 'isolated-test', runId, gitSha, sourceDigest, mappings: [{ path: '/fixture', methods: ['GET'], handler: 'FixtureController#fixture' }] });
   const xml = write('TEST-fixture.xml', basicXml);
   const log = write('command.txt', 'Synthetic fixture command log; no product command executed.');
@@ -122,6 +124,19 @@ test('reject static routes masquerading as runtime mappings', t => {
   runtime.collection = 'annotation-regex';
   f.report.runtimeMappings.artifact = f.write('mappings.json', runtime);
   assert.throws(() => f.run(), /NOT_RUNTIME_MAPPINGS/);
+});
+
+for (const [label, mutate] of [
+  ['replaced scenario ID', pkg => { pkg.scenarios[0].id = 'REPLACED-01'; }],
+  ['weakened scenario expectation', pkg => { pkg.scenarios[0].expected = 'A toast is sufficient'; }],
+  ['invented extra scenario with no source', pkg => { pkg.scenarios.push({ id: 'INVENTED-01', title: 'Invented' }); }],
+]) test(`reject normalized package ${label} despite recomputed artifact hash`, t => {
+  const f = fixture(t);
+  const pkg = JSON.parse(fs.readFileSync(path.join(f.root, f.report.executionPackage.artifact.path), 'utf8'));
+  mutate(pkg);
+  f.report.executionPackage.scenarioCount = pkg.scenarios.length;
+  f.report.executionPackage.artifact = f.write('package.json', pkg);
+  assert.throws(() => f.run(), /PACKAGE_SOURCE_MISMATCH|INVALID_PACKAGE_SOURCE/);
 });
 test('reject a single green XML file when another required source test class is missing', t => {
   const f = fixture(t);

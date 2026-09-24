@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { hash, collectSourceSnapshot, discoverTestClasses, discoverTestMethods, parseJUnit } from './check-release.mjs';
+import { validateExecutionPackage } from './execution-package.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const release = path.join(root, 'docs/release');
 const selected = process.argv[2];
@@ -34,12 +35,22 @@ const active = all.find(x => x.record.id === selected);
 if (!active) throw new Error('Selected execution does not exist');
 const source = collectSourceSnapshot(root);
 const head = execFileSync('git', ['rev-parse','HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+const packageFile = path.join(release, 'execution-package.json');
+let executionPackage = { status:'MISSING', scenarioCount:0 };
+if (fs.existsSync(packageFile)) {
+  const pkg = read(packageFile);
+  validateExecutionPackage(root, pkg);
+  executionPackage = { status:'VERIFIED', scenarioCount:pkg.scenarios.length,
+    architectureSectionCount:pkg.architectureDecisions.length,
+    artifact:{path:relative(packageFile),sha256:hash(fs.readFileSync(packageFile))},
+    note:'Source documents verified only; does not mark any business scenario PASS.' };
+}
 const blockers = [
   'Docker engine unavailable; dedicated PostgreSQL 16 / Redis 7 were not created; DB suites BLOCKED.',
-  'Original 84-scenario execution package is MISSING; no scenario coverage has been invented.',
   'Spring runtime inventory attempt was rejected by TestDatabaseIsolationGuard before storage access; actual mappings NOT_COLLECTED.',
   'Full integration, migration containers, DB/export assertions and all G2+ release criteria remain NOT_RUN.'
 ];
+if (executionPackage.status !== 'VERIFIED') blockers.push('Original 84-scenario execution package is MISSING; no scenario coverage has been invented.');
 if (active.record.gitSha !== head || active.record.sourceDigest !== source.sha256) blockers.push('Selected unit evidence is not bound to the current complete source snapshot; rerun after freeze.');
 const baseline = {
   schema: 'JKXTReleaseBaseline/v1', phase: 'g0-g1', status: 'BLOCKED', blockers,
@@ -52,7 +63,7 @@ const baseline = {
   tests: { status:'BLOCKED', requiredClasses:discoverTestClasses(root,source),
     declaredMethods:discoverTestMethods(root,source).length,...active.counts,reports:active.refs,
     note:'Counts describe only the selected actually executed unit/slice subset. Unrun classes are not skips or passes.' },
-  executionPackage:{status:'MISSING',scenarioCount:0},
+  executionPackage,
   runtimeMappings:{status:'BLOCKED',count:0,commandId:'runtime-mapping-guard-block'},
   history: all.map(x => ({ id:x.record.id,exitCode:x.record.exitCode,startedUtc:x.record.startedUtc,
     endedUtc:x.record.endedUtc,gitSha:x.record.gitSha,commandRecord:x.recordPath,

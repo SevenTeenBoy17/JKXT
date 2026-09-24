@@ -42,4 +42,4 @@ node --check scripts/release/inventory.mjs
 
 首次生成源快照统计：676 个文件；31 个 Controller；188 条静态业务路由；47 个前端 JS/JSX；72 个 Java 测试源文件。后续新建测试与受检文件会使文件数增加，以本轮 `summary.json` 为准，禁止复用这里的文字作为测试数量。
 
-当前实际注册与执行结果由主任务的隔离 Spring/数据库测试另外收集；本脚本对此明确写 `NOT_COLLECTED`/`NOT_RUN`。用户所指 84 项执行包未在源快照中发现，标 `MISSING`；不自行虚构 84 项已读/已测场景。
+当前实际注册与执行结果由主任务的隔离 Spring/数据库测试另外收集；本脚本对此明确写 `NOT_COLLECTED`/`NOT_RUN`。2026-09-24用户补充的84项矩阵及12节架构文档已完整阅读、原字节留存并验证来源，见 `../inputs/` 和 `../execution-package.json`；`summary.json` 动态校验该包，标 `VERIFIED_INPUT_ONLY`，不再沿用历史MISSING。`../scenario-ledger.json`逐项保留未运行状态，不因材料齐备而增加业务PASS。

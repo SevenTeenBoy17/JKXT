@@ -5,6 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { validateExecutionPackage } from './execution-package.mjs';
 
 const HEX = /^[a-f0-9]{64}$/;
 const SHA = /^[a-f0-9]{40}$/;
@@ -266,6 +267,7 @@ export function validateRelease({ root, reportPath, phase = 'g0-g1' }) {
   demand(report.executionPackage.scenarioCount === pkg.scenarios.length, 'SCENARIO_COUNT_MISMATCH', 'Use actual package count');
   demand(Array.isArray(pkg.sourceArtifacts) && pkg.sourceArtifacts.length > 0, 'MISSING_PACKAGE_SOURCE', 'Original supplied execution package provenance required');
   for (const ref of pkg.sourceArtifacts) artifact(root, ref);
+  validateExecutionPackage(root, pkg);
   demand(report.runtimeMappings?.status === 'COLLECTED' && commands.has(report.runtimeMappings.commandId), 'MISSING_RUNTIME_MAPPINGS', 'Successful runtime collection command required');
   const runtime = parseJson(artifact(root, report.runtimeMappings.artifact));
   demand(runtime.schema === 'JKXTSpringMappings/v1' && runtime.collection === 'RequestMappingHandlerMapping' && runtime.environment === 'isolated-test', 'NOT_RUNTIME_MAPPINGS', 'Static regex inventory is not Spring registration evidence');

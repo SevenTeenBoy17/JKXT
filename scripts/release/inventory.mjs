@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { validateExecutionPackage } from './execution-package.mjs';
 
 // G0 static inventory, deliberately NOT a Spring runtime route collector or test runner.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -43,6 +44,9 @@ const deep = new Set([
   'backend/src/main/java/com/jkxt/ai/client/OpenAiCompatibleLlmClient.java',
   'backend/src/main/java/com/jkxt/ai/config/LlmTestModeGuard.java',
 ].map(p => app + p));
+// The main agent fully read both supplied documents in this intake; retain their original bytes.
+deep.add('docs/release/inputs/02_后端与全栈验收矩阵.md');
+deep.add('docs/release/inputs/03_架构与优化决策.md');
 const textExtensions = new Set(['.java', '.js', '.jsx', '.mjs', '.cjs', '.css', '.html', '.json', '.xml', '.yml', '.yaml', '.properties', '.sql', '.ps1', '.sh', '.cmd', '.py', '.md', '.txt', '.example', '.conf']);
 const texts = new Map();
 const hash = b => crypto.createHash('sha256').update(b).digest('hex');
@@ -259,6 +263,14 @@ for(const route of routes) route.frontend_reachability = route.frontend_matches.
   ? 'STATIC_UI_CALL_CANDIDATE_NOT_CLICK_TESTED' : 'NO_STATIC_UI_CALL_OBSERVED_NOT_PROOF_OF_UNREACHABILITY';
 const asyncPatterns = /@Scheduled|@Async|@EventListener|@PostConstruct|CompletableFuture\.runAsync|SseEmitter|RedisMessageListener|StreamMessageListener|WebSocket|\.receive\(|\.subscribe\(/g;
 const background = java.flatMap(([file, source]) => [...source.matchAll(asyncPatterns)].filter(m => !source.slice(Math.max(0,m.index-10),m.index).includes('import ')).map(m => ({ file, line:lineAt(source,m.index),token:m[0],status:'STATIC_DISCOVERY_NOT_RUNTIME_VERIFIED' })));
+const packageFile = path.join(root,'docs/release/execution-package.json');
+let executionPackage = {status:'MISSING',scenarioCount:0};
+if (fs.existsSync(packageFile)) {
+  const pkg = validateExecutionPackage(root,JSON.parse(fs.readFileSync(packageFile,'utf8')));
+  executionPackage = {status:'VERIFIED_INPUT_ONLY',scenarioCount:pkg.scenarios.length,
+    architectureSections:pkg.architectureDecisions.length,artifact:'docs/release/execution-package.json',
+    sha256:hash(fs.readFileSync(packageFile)),businessPassCount:0};
+}
 const summary = { schema:'JKXTStaticInventory/v1', generated_at:new Date().toISOString(), git_sha:sha,
   base_sha:'f206bcf6dff291d346cf5c3cf5a68bfce938935e', scope:'Published current-source candidate including nonignored candidate additions, root release tools/configuration and authored documents; excludes volatile release evidence, generated inventory JSON/CSV and original-machine files',
   worktree_diff_sha256:hash(execFileSync('git',['diff','HEAD','--'],{cwd:root})),
@@ -268,7 +280,7 @@ const summary = { schema:'JKXTStaticInventory/v1', generated_at:new Date().toISO
     frontend_request_sites:frontend.length,frontend_files:frontendFiles.length,unresolved_frontend_requests:frontend.filter(r=>r.mapping==='UNRESOLVED_DYNAMIC_REQUEST').length,
     route_rows_with_frontend_candidates:routes.filter(r=>r.frontend_matches.length).length,backend_test_files:tests.length,async_token_locations:background.length},
   actual_spring_registration:'NOT_COLLECTED_BY_THIS_SCRIPT; see separate runtime collector',
-  behavior_tests:'NOT_RUN_BY_THIS_SCRIPT', execution_package_84:'MISSING_FROM_THIS_TRACKED_SNAPSHOT; parent task searches external delivery locations',parse_warnings:parseWarnings };
+  behavior_tests:'NOT_RUN_BY_THIS_SCRIPT', execution_package_84:executionPackage,parse_warnings:parseWarnings };
 fs.mkdirSync(out,{recursive:true});
 const json=(name,data)=>fs.writeFileSync(path.join(out,name),JSON.stringify(data,null,2)+'\n');
 const csv=(name,data,columns)=>{const enc=v=>'"'+(Array.isArray(v)?JSON.stringify(v):String(v??'')).replaceAll('"','""')+'"';fs.writeFileSync(path.join(out,name),'\uFEFF'+[columns.map(enc).join(','),...data.map(r=>columns.map(c=>enc(r[c])).join(','))].join('\n')+'\n');};

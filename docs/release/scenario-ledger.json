@@ -1,0 +1,2283 @@
+{
+  "schema": "JKXTScenarioLedger/v1",
+  "initializedAt": "2026-09-24T07:10:57.571Z",
+  "gitSha": "cfab40ec62979ea64ead58506d516399ce52378a",
+  "sourceDigest": "ed10e1a915603e52c90f8a3c29139483f07b064e1145e86531c8d50d6458169d",
+  "executionPackage": {
+    "path": "docs/release/execution-package.json",
+    "sha256": "94d450bde8c1443d6f13436c3983bfde5b5c7e7d9bd24b0cb7adc51dba77b9ca"
+  },
+  "meaning": "All entries are required acceptance work. NOT_RUN is not PASS or scope exclusion. Candidate references in SCENARIO-COVERAGE-REVIEW-20260924.md are static pointers, not executed coverage.",
+  "scenarios": [
+    {
+      "id": "ENV-01",
+      "title": "生产安全开关真实生效",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 10
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ENV-02",
+      "title": "不安全生产配置拒绝启动",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 11
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ENV-03",
+      "title": "双层代理真实来源",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 12
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ENV-04",
+      "title": "部署模式不混用",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 13
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ENV-05",
+      "title": "测试数据库身份保护",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 14
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ENV-06",
+      "title": "干净检出可重复运行",
+      "group": "ENV",
+      "phase": "G1/G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 15
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-01",
+      "title": "首次改密服务端约束",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 20
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-02",
+      "title": "会话撤销与索引过期",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 21
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-03",
+      "title": "学校与平台入口隔离",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 22
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-04",
+      "title": "CSRF 正反向",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 23
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-05",
+      "title": "并发登录与暴力尝试",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 24
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AUTH-06",
+      "title": "临时密码与真实二次认证",
+      "group": "AUTH",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 25
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-01",
+      "title": "普通管理员跨校拒绝",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 30
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-02",
+      "title": "教师只操作本人",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 31
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-03",
+      "title": "只读角色全路径",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 32
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-04",
+      "title": "批处理逐项授权",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 33
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-05",
+      "title": "租户停用和权限变更",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 34
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PERM-06",
+      "title": "双层鉴权一致",
+      "group": "PERM",
+      "phase": "G2",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 35
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-01",
+      "title": "CRUD 真正落库",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 40
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-02",
+      "title": "业务编号唯一范围",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 41
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-03",
+      "title": "关联删除与历史保留",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 42
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-04",
+      "title": "复合外键删除语义",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 43
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-05",
+      "title": "学期切换边界",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 44
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "DATA-06",
+      "title": "分页排序与空数据",
+      "group": "DATA",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 45
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-01",
+      "title": "原子导入与错误定位",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 50
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-02",
+      "title": "真实文件验证",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 51
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-03",
+      "title": "跨表引用一致",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 52
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-04",
+      "title": "重放和并发导入",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 53
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-05",
+      "title": "已复核输入防变更",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 54
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "IMPORT-06",
+      "title": "敏感文件访问与保留",
+      "group": "IMPORT",
+      "phase": "G3",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 55
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "SOLVE-01",
+      "title": "岗位覆盖与资格",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 60
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "SOLVE-02",
+      "title": "跨任务时间和跨校区移动",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 61
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "SOLVE-03",
+      "title": "反例：先排错人不等于无解",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 62
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": [
+        "Prior unit red/green evidence exists for truthful UNKNOWN; bind a fresh run explicitly before changing scenario status."
+      ]
+    },
+    {
+      "id": "SOLVE-04",
+      "title": "独立结果验证器",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 63
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "SOLVE-05",
+      "title": "硬软约束与公平口径",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 64
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "SOLVE-06",
+      "title": "整体预算与失败分类",
+      "group": "SOLVE",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 65
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-01",
+      "title": "发布时重新校验",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 70
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-02",
+      "title": "审批职责分离",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 71
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-03",
+      "title": "并发编辑防覆盖",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 72
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-04",
+      "title": "发布幂等与事务事件",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 73
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-05",
+      "title": "已发布版本不可静默改变",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 74
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "PUBLISH-06",
+      "title": "完整考务闭环",
+      "group": "PUBLISH",
+      "phase": "G4",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 75
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-01",
+      "title": "提交后进程中断",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 80
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-02",
+      "title": "计算中进程中断",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 81
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-03",
+      "title": "队列满载不拖垮应用",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 82
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-04",
+      "title": "真实取消",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 83
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-05",
+      "title": "SSE 重连与权限",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 84
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "ASYNC-06",
+      "title": "依赖失效与多实例",
+      "group": "ASYNC",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 85
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-01",
+      "title": "未配置通道诚实关闭",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 90
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-02",
+      "title": "真实外部通道验收",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 91
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Separate approval required before real external sending, paid calls or production actions; no silent exclusion",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-03",
+      "title": "本人已读防串用",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 92
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-04",
+      "title": "故障注入不进入生产功能",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 93
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-05",
+      "title": "发布与消费解耦",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 94
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "NOTIFY-06",
+      "title": "确认/拒绝/签到状态一致",
+      "group": "NOTIFY",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 95
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-01",
+      "title": "同版本同口径",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 100
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-02",
+      "title": "津贴与时长算术",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 101
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-03",
+      "title": "导出内容真正正确",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 102
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-04",
+      "title": "导出授权与输入安全",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 103
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-05",
+      "title": "审计可追责",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 104
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "REPORT-06",
+      "title": "公告阅读真实",
+      "group": "REPORT",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 105
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-01",
+      "title": "缺少密钥失败关闭",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 110
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-02",
+      "title": "真实模型与回退",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 111
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Separate approval required before real external sending, paid calls or production actions; no silent exclusion",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-03",
+      "title": "策略 DSL 严格约束",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 112
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-04",
+      "title": "策略与输入版本绑定",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 113
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-05",
+      "title": "超时重试和额度原子性",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 114
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "AI-06",
+      "title": "数据最小化与审计脱敏",
+      "group": "AI",
+      "phase": "G5",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 115
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-01",
+      "title": "备份失败不成功",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 120
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-02",
+      "title": "恢复真实性",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 121
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-03",
+      "title": "异机备份和最小权限",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 122
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-04",
+      "title": "健康与就绪区分",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 123
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-05",
+      "title": "告警有实际送达",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 124
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Separate approval required before real external sending, paid calls or production actions; no silent exclusion",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "OPS-06",
+      "title": "安全功能真实执行",
+      "group": "OPS",
+      "phase": "G6",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 125
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-01",
+      "title": "所有控件追溯",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 130
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-02",
+      "title": "错误态与输入保留",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 131
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-03",
+      "title": "重复点击与提交状态",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 132
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-04",
+      "title": "生产构建与缓存",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 133
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-05",
+      "title": "角色体验和可访问性",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 134
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "FRONT-06",
+      "title": "新旧端真实闭环",
+      "group": "FRONT",
+      "phase": "G7",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 135
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-01",
+      "title": "新装迁移与升级迁移",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 140
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-02",
+      "title": "完整测试真实执行",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 141
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-03",
+      "title": "支持版本与漏洞扫描",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 142
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-04",
+      "title": "容量基线与失效场景",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 143
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-05",
+      "title": "同一候选版本证据",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 144
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Isolated development/test only",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    },
+    {
+      "id": "RELEASE-06",
+      "title": "交付资料和人工放行",
+      "group": "RELEASE",
+      "phase": "G8",
+      "scope": "REQUIRED",
+      "status": "NOT_RUN",
+      "source": {
+        "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+        "line": 145
+      },
+      "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+      "authorization": "Separate approval required before real external sending, paid calls or production actions; no silent exclusion",
+      "execution": {
+        "testIds": [],
+        "commands": [],
+        "environment": null,
+        "candidateSha": null,
+        "sourceDigest": null,
+        "exitCode": null,
+        "assertions": [],
+        "reports": [],
+        "defects": [],
+        "retests": []
+      },
+      "notes": []
+    }
+  ]
+}

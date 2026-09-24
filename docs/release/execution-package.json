@@ -1,0 +1,945 @@
+{
+  "schema": "JKXTExecutionPackage/v1",
+  "baselineSha": "f206bcf6dff291d346cf5c3cf5a68bfce938935e",
+  "scope": "Acceptance requirements only; not test execution or production authorization",
+  "sourceArtifacts": [
+    {
+      "role": "matrix",
+      "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sha256": "27289a1ca019087740f2ed7e7c83ea147db6e1726c7d33ff4034858628fe0c5c"
+    },
+    {
+      "role": "architecture",
+      "path": "docs/release/inputs/03_架构与优化决策.md",
+      "sha256": "227cd4656dbdd90cd4e0aada8f3832f659868e402f35e98dd24088ff18ed87a4"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "ENV-01",
+      "group": "ENV",
+      "title": "生产安全开关真实生效",
+      "given": "独立新库、生产候选配置和已知演示种子",
+      "operation": "启动应用并读取脱敏后的有效配置，再分别尝试演示与正式账号登录",
+      "expected": "严格生产检查已开启；演示账号不可登录；正式初始化账号可用；证据记录实际 profile，不以 env 文件文本代替",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 10
+    },
+    {
+      "id": "ENV-02",
+      "group": "ENV",
+      "title": "不安全生产配置拒绝启动",
+      "given": "严格生产模式",
+      "operation": "分别开启验证码调试、关闭 Secure Cookie、保留演示账号",
+      "expected": "每个不安全组合都启动失败并给出不含密钥的原因；测试组合不修改真实环境",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 11
+    },
+    {
+      "id": "ENV-03",
+      "group": "ENV",
+      "title": "双层代理真实来源",
+      "given": "隔离的 Caddy→Nginx→后端拓扑",
+      "operation": "从两个不同来源登录，并在测试请求中提供伪造转发头",
+      "expected": "来源区别可见；伪造前缀不改变客户端身份；两个来源不合并成代理容器 IP",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 12
+    },
+    {
+      "id": "ENV-04",
+      "group": "ENV",
+      "title": "部署模式不混用",
+      "given": "private 与 saas 两套隔离候选配置",
+      "operation": "分别读取组织范围、访问跨校入口和切换组织",
+      "expected": "private 固定组织；saas 仅授权用户可切换；不会为了安全开关而改变业务模式",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 13
+    },
+    {
+      "id": "ENV-05",
+      "group": "ENV",
+      "title": "测试数据库身份保护",
+      "given": "TestDatabaseIsolationGuard 和独立数据库",
+      "operation": "分别使用缺失测试变量、业务库名称、错误 Redis 地址启动测试",
+      "expected": "保护拒绝这些组合；正确 jkxt_test_<run> 和隔离端点可通过；不得删除或弱化保护",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 14
+    },
+    {
+      "id": "ENV-06",
+      "group": "ENV",
+      "title": "干净检出可重复运行",
+      "given": "未携带个人 .env、Cookie、原机产物的新工作区",
+      "operation": "按仓库脚本启动测试依赖并运行测试",
+      "expected": "依赖、端口、配置均可重建；mvnw 的 Docker 依赖与网络明确；不存在对原机隐藏文件的依赖",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 15
+    },
+    {
+      "id": "AUTH-01",
+      "group": "AUTH",
+      "title": "首次改密服务端约束",
+      "given": "新建必须改密的账号",
+      "operation": "登录后绕过页面直接调用业务写接口，再完成改密",
+      "expected": "改密前仅允许批准的安全端点；改密后取得正常权限；不能只依赖前端弹窗",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 20
+    },
+    {
+      "id": "AUTH-02",
+      "group": "AUTH",
+      "title": "会话撤销与索引过期",
+      "given": "短 TTL、可控时钟、同一用户两端会话",
+      "operation": "推进时钟跨过用户会话索引寿命，使用仍存续会话后执行禁用/重置密码",
+      "expected": "所有被撤销会话立即失效；活跃续期不造成索引失联；服务端绝对有效期仍受限",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 21
+    },
+    {
+      "id": "AUTH-03",
+      "group": "AUTH",
+      "title": "学校与平台入口隔离",
+      "given": "独立学校和平台会话，若引入 WIP 则采用统一新协议",
+      "operation": "交错登录、刷新、退出、打开多标签页",
+      "expected": "不同入口不会覆盖身份或串用组织；API、下载、进度订阅均遵守同一会话协议",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 22
+    },
+    {
+      "id": "AUTH-04",
+      "group": "AUTH",
+      "title": "CSRF 正反向",
+      "given": "Cookie 认证的已登录用户",
+      "operation": "对新增、编辑、发布、上传、改密、退出分别发送缺失、错误、正确 CSRF 证据",
+      "expected": "不合法写请求被拒绝且无副作用；合法请求成功；未登录端点采用明确保护策略",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 23
+    },
+    {
+      "id": "AUTH-05",
+      "group": "AUTH",
+      "title": "并发登录与暴力尝试",
+      "given": "同一账号及多个账号、隔离 Redis",
+      "operation": "并发错误登录后正确登录，并重启或断开 Redis",
+      "expected": "失败计数不丢失；响应不泄露账号详情；依赖故障按已定义策略失败且告警",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 24
+    },
+    {
+      "id": "AUTH-06",
+      "group": "AUTH",
+      "title": "临时密码与真实二次认证",
+      "given": "账号初始化、密码重置、2FA 能力标记",
+      "operation": "读取账号状态并执行相应登录流程",
+      "expected": "临时密码不入日志且只按批准流程交付；未实现第二因素不得显示已启用；角色与改密标记不能充当 2FA 状态",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 25
+    },
+    {
+      "id": "PERM-01",
+      "group": "PERM",
+      "title": "普通管理员跨校拒绝",
+      "given": "学校 A/B 各有同名教师和不同任务",
+      "operation": "A 管理员替换 URL、请求体、查询参数里的 B 学校资源 ID",
+      "expected": "读取、写入、下载、导出均拒绝；B 数据不改变；不泄露存在性细节",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 30
+    },
+    {
+      "id": "PERM-02",
+      "group": "PERM",
+      "title": "教师只操作本人",
+      "given": "两名绑定账号的教师",
+      "operation": "教师 A 确认、拒绝、签到、标记已读本人及教师 B 的资源",
+      "expected": "本人合法操作成功；他人操作拒绝；教师不能查看全校不必要的个人信息",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 31
+    },
+    {
+      "id": "PERM-03",
+      "group": "PERM",
+      "title": "只读角色全路径",
+      "given": "VIEWER 与普通管理员",
+      "operation": "分别执行所有业务 GET 和所有写方法",
+      "expected": "只读范围符合角色矩阵；禁止的 POST/PUT/PATCH/DELETE 无副作用；不能通过旧入口绕过",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 32
+    },
+    {
+      "id": "PERM-04",
+      "group": "PERM",
+      "title": "批处理逐项授权",
+      "given": "合法 ID 与跨校 ID 混合的批量请求",
+      "operation": "导入绑定、批量删除、通知、导出",
+      "expected": "按固定事务策略全拒绝或明确逐行拒绝；绝不悄悄处理越权元素",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 33
+    },
+    {
+      "id": "PERM-05",
+      "group": "PERM",
+      "title": "租户停用和权限变更",
+      "given": "多个活跃会话、正在轮询的任务",
+      "operation": "停用学校、降权账号并继续使用旧会话",
+      "expected": "规定窗口内所有请求按新权限执行；进度流不能继续泄露数据；恢复不复活旧凭据",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 34
+    },
+    {
+      "id": "PERM-06",
+      "group": "PERM",
+      "title": "双层鉴权一致",
+      "given": "控制器、SecurityFilterChain、业务服务和仓储",
+      "operation": "用真实登录会话覆盖关键端点",
+      "expected": "URL 规则与方法权限不相互误拦；授权条件一致；测试不只 mock 掉安全过滤器",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 35
+    },
+    {
+      "id": "DATA-01",
+      "group": "DATA",
+      "title": "CRUD 真正落库",
+      "given": "空白学校和合法教师/考场/班级/科目",
+      "operation": "创建、修改、刷新、重启应用再读取",
+      "expected": "值一致、版本递增、审计可追溯；页面成功提示对应已提交事务",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 40
+    },
+    {
+      "id": "DATA-02",
+      "group": "DATA",
+      "title": "业务编号唯一范围",
+      "given": "A/B 学校相同编号，A 内重复编号",
+      "operation": "并发创建教师、考场、考试记录",
+      "expected": "A/B 可各有同编号；A 内按约束拒绝重复且返回稳定业务错误",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 41
+    },
+    {
+      "id": "DATA-03",
+      "group": "DATA",
+      "title": "关联删除与历史保留",
+      "given": "教师和考场已有已发布记录",
+      "operation": "尝试删除、停用，再查看历史与报表",
+      "expected": "不会孤儿记录、丢历史或静默级联；明确软删除或受控拒绝；姓名变更不篡改既有快照",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 42
+    },
+    {
+      "id": "DATA-04",
+      "group": "DATA",
+      "title": "复合外键删除语义",
+      "given": "V30 适配关联及被引用 schedule_run",
+      "operation": "在隔离库按产品允许的生命周期删除或归档源记录",
+      "expected": "org_id 不被置空；游标与 run 引用成对一致；验证 ON DELETE SET NULL 与 NOT NULL/CHECK 是否兼容",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 43
+    },
+    {
+      "id": "DATA-05",
+      "group": "DATA",
+      "title": "学期切换边界",
+      "given": "学校业务时区和跨年、假期、学期交界日期",
+      "operation": "切换当前学期并刷新各页面和导出",
+      "expected": "一个学校只有一个当前学期；仪表盘、任务、历史、报表同口径；覆盖设置实际保存",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 44
+    },
+    {
+      "id": "DATA-06",
+      "group": "DATA",
+      "title": "分页排序与空数据",
+      "given": "零条、单条、多页、相同排序值数据",
+      "operation": "组合搜索、过滤、分页后增删记录",
+      "expected": "总数与筛选一致；排序有稳定 tie-breaker；空页可回退；不因全量读导致不受限资源消耗",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 45
+    },
+    {
+      "id": "IMPORT-01",
+      "group": "IMPORT",
+      "title": "原子导入与错误定位",
+      "given": "含一行合法、一行错误和重复编号的工作簿",
+      "operation": "预检并提交导入",
+      "expected": "返回行列与原因；预检不写正式库；提交按明确全量或部分策略执行；失败不留下半套关联",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 50
+    },
+    {
+      "id": "IMPORT-02",
+      "group": "IMPORT",
+      "title": "真实文件验证",
+      "given": "扩展名伪装、损坏 ZIP、重复 ZIP 条目、超限内容、异常解压比的测试夹具",
+      "operation": "通过所有上传入口提交",
+      "expected": "文件类型、大小、解压与资源限制实际生效；拒绝后无残留；不依赖浏览器 accept 属性",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 51
+    },
+    {
+      "id": "IMPORT-03",
+      "group": "IMPORT",
+      "title": "跨表引用一致",
+      "given": "考试引用不存在的教师、考场、班级或其他学校资源",
+      "operation": "执行预检与提交",
+      "expected": "服务端识别并拒绝错误关系；不自动使用演示默认对象代替",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 52
+    },
+    {
+      "id": "IMPORT-04",
+      "group": "IMPORT",
+      "title": "重放和并发导入",
+      "given": "同一文件指纹、相同幂等键与不同文件内容",
+      "operation": "重复点击、请求超时重发、并发提交",
+      "expected": "同一操作不重复导入；同键异内容返回冲突；结果可查询，不依赖用户猜测是否成功",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 53
+    },
+    {
+      "id": "IMPORT-05",
+      "group": "IMPORT",
+      "title": "已复核输入防变更",
+      "given": "AI/排班已复核的一组三表",
+      "operation": "上传新版本后提交旧 policyId 或旧 reviewedUploads",
+      "expected": "服务端拒绝过期输入；提示重新校验和复核；旧结果来源保留",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 54
+    },
+    {
+      "id": "IMPORT-06",
+      "group": "IMPORT",
+      "title": "敏感文件访问与保留",
+      "given": "带教师信息的上传文件及中间结果",
+      "operation": "匿名、跨校和过期链接下载，随后按保留规则清理",
+      "expected": "敏感文件不作为公开静态 uploads 服务；授权与有效期受控；按规则清理并可审计",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 55
+    },
+    {
+      "id": "SOLVE-01",
+      "group": "SOLVE",
+      "title": "岗位覆盖与资格",
+      "given": "两间考场、不同主副监需求、至少一名不具备主监资格的教师",
+      "operation": "分别走旧任务、新计划及手动调整入口",
+      "expected": "人数精确覆盖；主监资格有效且未过期；无重复人次占位；不同入口执行相同约束",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 60
+    },
+    {
+      "id": "SOLVE-02",
+      "group": "SOLVE",
+      "title": "跨任务时间和跨校区移动",
+      "given": "同校两个活跃考试任务、区间重叠和相邻校区场次",
+      "operation": "依次和并发生成、调整排班",
+      "expected": "检查同校已生效占用，不只当前 run；区间按约定边界；移动时间足够；不重复计入历史无效版本",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 61
+    },
+    {
+      "id": "SOLVE-03",
+      "group": "SOLVE",
+      "title": "反例：先排错人不等于无解",
+      "given": "早场 08:00–09:00 与晚场 10:00–11:00 各需一名主监；A/B 都合格且每日最多一场；A 两场可用；B 晚场请假；A 编号排前",
+      "operation": "执行确定性分配",
+      "expected": "可行解为早 B、晚 A；先早 A 导致卡住属于搜索失败，不是业务证明无解；可回溯或交给完整求解器",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 62
+    },
+    {
+      "id": "SOLVE-04",
+      "group": "SOLVE",
+      "title": "独立结果验证器",
+      "given": "求解结果中分别注入缺岗、重复教师、资格无效、时段重叠、超容量",
+      "operation": "通过独立验证器与发布入口",
+      "expected": "每一项错误均被拒绝；验证器不简单复制求解器同一 helper；结果不可因算法返回 succeeded 就被信任",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 63
+    },
+    {
+      "id": "SOLVE-05",
+      "group": "SOLVE",
+      "title": "硬软约束与公平口径",
+      "given": "同次数不同长度考试、班主任上限、固定锁定岗位及稀缺人员",
+      "operation": "运行不同策略组合与不可满足组合",
+      "expected": "硬约束不自动降软；软约束有量化违反项；时长/次数/主监负担分别报告；不向用户宣称唯一最优",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 64
+    },
+    {
+      "id": "SOLVE-06",
+      "group": "SOLVE",
+      "title": "整体预算与失败分类",
+      "given": "模型无效、真正无解、预算耗尽和可行但未证最优的夹具",
+      "operation": "运行求解及重试",
+      "expected": "整体 deadline 覆盖重试；MODEL_INVALID、INFEASIBLE、UNKNOWN、FEASIBLE 明确区分；保留 seed/版本/输入哈希/耗时",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 65
+    },
+    {
+      "id": "PUBLISH-01",
+      "group": "PUBLISH",
+      "title": "发布时重新校验",
+      "given": "已生成有效排班后教师被停用或新增请假",
+      "operation": "调用旧/新全部发布入口",
+      "expected": "全部拒绝过期不合格方案；不能只检查结果非空；不发出通知",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 70
+    },
+    {
+      "id": "PUBLISH-02",
+      "group": "PUBLISH",
+      "title": "审批职责分离",
+      "given": "已提交审批方案及提交人、另一批准人",
+      "operation": "提交人自审、另一人审批、未审批发布",
+      "expected": "自审和跳过必需审批均被拒绝；合法审批可发布；如果产品允许简化流程须显式规则而非接口旁路",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 71
+    },
+    {
+      "id": "PUBLISH-03",
+      "group": "PUBLISH",
+      "title": "并发编辑防覆盖",
+      "given": "两个管理员读取相同版本游标",
+      "operation": "同时修改同一排班并发布",
+      "expected": "只允许满足版本条件的事务提交；另一个收到冲突并保留输入；不存在半新半旧发布结果",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 72
+    },
+    {
+      "id": "PUBLISH-04",
+      "group": "PUBLISH",
+      "title": "发布幂等与事务事件",
+      "given": "同一方案同一或不同请求重试",
+      "operation": "双击或并发发布，并注入提交失败",
+      "expected": "最终有效版本唯一；通知事件不重复；事务回滚不留下成功通知",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 73
+    },
+    {
+      "id": "PUBLISH-05",
+      "group": "PUBLISH",
+      "title": "已发布版本不可静默改变",
+      "given": "已发布方案、已读教师和后续紧急替班",
+      "operation": "编辑、撤销、重做、创建后继版本",
+      "expected": "保持历史版本可核验；通过受控后继或变更流程生效并通知受影响教师；旧新页面同指向有效版本",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 74
+    },
+    {
+      "id": "PUBLISH-06",
+      "group": "PUBLISH",
+      "title": "完整考务闭环",
+      "given": "新计划与旧任务适配数据",
+      "operation": "规划→校验→审批→发布→通知→本人确认/签到→应急处理→结束归档",
+      "expected": "每一步状态由真实副作用产生；归档不可错误回退；旧接口不能绕开新流程的强制约束",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 75
+    },
+    {
+      "id": "ASYNC-01",
+      "group": "ASYNC",
+      "title": "提交后进程中断",
+      "given": "任务状态已持久化，尚未被执行器领取",
+      "operation": "在隔离测试中终止并恢复应用",
+      "expected": "任务可重新领取或明确失败；不会永久 QUEUED；结果和副作用幂等",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 80
+    },
+    {
+      "id": "ASYNC-02",
+      "group": "ASYNC",
+      "title": "计算中进程中断",
+      "given": "处于 RUNNING 的旧排班和新规划任务",
+      "operation": "终止 worker 后重启",
+      "expected": "租约/心跳或等价机制回收；失联任务可恢复；不继续占有永不释放的运行锁",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 81
+    },
+    {
+      "id": "ASYNC-03",
+      "group": "ASYNC",
+      "title": "队列满载不拖垮应用",
+      "given": "超过候选容量的并发排班请求",
+      "operation": "同时登录、查询、取消任务",
+      "expected": "按资源预算限流；不无限排队；请求线程不会不受限执行重计算；明确返回排队/繁忙状态",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 82
+    },
+    {
+      "id": "ASYNC-04",
+      "group": "ASYNC",
+      "title": "真实取消",
+      "given": "等待中与计算中任务",
+      "operation": "点击取消并重复请求",
+      "expected": "取消在规定窗口内生效；不只改页面；已取消结果不得晚到覆盖有效方案",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 83
+    },
+    {
+      "id": "ASYNC-05",
+      "group": "ASYNC",
+      "title": "SSE 重连与权限",
+      "given": "运行任务、已登录用户及会话过期状态",
+      "operation": "断网重连、刷新、跨校订阅、过期会话继续读流",
+      "expected": "可恢复进度或受控轮询；终态不遗漏；越权和过期订阅失效；新会话头协议兼容实际浏览器能力",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 84
+    },
+    {
+      "id": "ASYNC-06",
+      "group": "ASYNC",
+      "title": "依赖失效与多实例",
+      "given": "数据库/Redis 短时不可用、两个 worker 同时领取",
+      "operation": "恢复服务并重试",
+      "expected": "状态可解释、有告警；不会双份生效；事务提交不确定时按幂等查询恢复而非盲目重做",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 85
+    },
+    {
+      "id": "NOTIFY-01",
+      "group": "NOTIFY",
+      "title": "未配置通道诚实关闭",
+      "given": "默认 LoggingEmailSender/LoggingSmsSender 或空提供方配置",
+      "operation": "发布并打开通知详情",
+      "expected": "显示未配置或仅记录；不把开关 true 或 LOGGED 算作外部成功送达",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 90
+    },
+    {
+      "id": "NOTIFY-02",
+      "group": "NOTIFY",
+      "title": "真实外部通道验收",
+      "given": "仅在经用户批准并启用外部通道时，使用测试收件人和限额",
+      "operation": "调用真实提供方并读取已支持的回执",
+      "expected": "保存可核验提供方消息 ID；区分受理、送达、已读；失败可重试；未启用时列为范围未交付而非冒充通过",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 91
+    },
+    {
+      "id": "NOTIFY-03",
+      "group": "NOTIFY",
+      "title": "本人已读防串用",
+      "given": "A/B 教师各自通知、投递处于多个状态",
+      "operation": "本人读取、他人读取、重复已读和未投递已读",
+      "expected": "只允许本人合法状态转换；重复幂等；外来 receipt 不得覆盖服务端证明字段",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 92
+    },
+    {
+      "id": "NOTIFY-04",
+      "group": "NOTIFY",
+      "title": "故障注入不进入生产功能",
+      "given": "生产 API 与测试用 failDeliveryIds 等字段",
+      "operation": "发送包含故障注入参数的正式请求",
+      "expected": "生产拒绝或隔离测试字段；正常用户不能触发模拟失败路径；测试环境仍可验证重试",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 93
+    },
+    {
+      "id": "NOTIFY-05",
+      "group": "NOTIFY",
+      "title": "发布与消费解耦",
+      "given": "通知 outbox 已提交且提供方缓慢/失败",
+      "operation": "发布考试并执行消费者重试",
+      "expected": "发布数据库事务不因网络调用长期占锁；失败与排班成功分别展示；有死信或人工处理路径",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 94
+    },
+    {
+      "id": "NOTIFY-06",
+      "group": "NOTIFY",
+      "title": "确认/拒绝/签到状态一致",
+      "given": "已发布本人岗位、重复请求、提前过迟签到",
+      "operation": "接受、拒绝、签到及应急换人",
+      "expected": "窗口和资格由后端判断；已换出的教师不能确认旧岗位；审计、通知、工作台同步",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 95
+    },
+    {
+      "id": "REPORT-01",
+      "group": "REPORT",
+      "title": "同版本同口径",
+      "given": "同一学校/学期多次重排、失败 run 与有效 run",
+      "operation": "查看仪表盘、列表、统计、历史和导出",
+      "expected": "全部按明确有效版本聚合；不重复累计过期重排或失败版本",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 100
+    },
+    {
+      "id": "REPORT-02",
+      "group": "REPORT",
+      "title": "津贴与时长算术",
+      "given": "90 分钟和150分钟岗位、不同岗位单价及跨日时间",
+      "operation": "计算个人/总表和历史导出",
+      "expected": "计价单位一致，金额使用确定舍入；总额与明细之和对齐；未配置单价不编造",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 101
+    },
+    {
+      "id": "REPORT-03",
+      "group": "REPORT",
+      "title": "导出内容真正正确",
+      "given": "含中文姓名、长字段和零记录的已发布方案",
+      "operation": "下载 XLSX/PDF 并重新解析",
+      "expected": "校验内容、工作表、编码和实际版本；不能仅检查 HTTP 200、文件扩展名或下载事件",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 102
+    },
+    {
+      "id": "REPORT-04",
+      "group": "REPORT",
+      "title": "导出授权与输入安全",
+      "given": "用户可编辑字段、跨校或过期访问",
+      "operation": "导出教师表/审计表并尝试未授权下载",
+      "expected": "权限一致；不将用户字符串变成公式；敏感字段按角色裁剪；大导出受控",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 103
+    },
+    {
+      "id": "REPORT-05",
+      "group": "REPORT",
+      "title": "审计可追责",
+      "given": "成功与失败的关键写操作",
+      "operation": "修改、导入、审批、发布、重置密码、备份、恢复",
+      "expected": "有真实 actor/组织/目标/版本/trace；不记录明文密码、Cookie、密钥；失败与已提交事务准确区分",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 104
+    },
+    {
+      "id": "REPORT-06",
+      "group": "REPORT",
+      "title": "公告阅读真实",
+      "given": "已发布公告、实际接收者和未读教师",
+      "operation": "推送、读取和重复读取",
+      "expected": "推送不增加已读人数；按唯一接收者真实回执聚合；未读不使用租户数乘常数估算",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 105
+    },
+    {
+      "id": "AI-01",
+      "group": "AI",
+      "title": "缺少密钥失败关闭",
+      "given": "关闭 AI 或不存在合法提供方",
+      "operation": "调用解析及摘要入口",
+      "expected": "明确不可用；不返回假成功或固定评分；非 AI 排班在许可范围内正常工作",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 110
+    },
+    {
+      "id": "AI-02",
+      "group": "AI",
+      "title": "真实模型与回退",
+      "given": "经批准测试密钥、合法模型与预算",
+      "operation": "主模型失败、可用回退与全部失败",
+      "expected": "每一步记录真实提供方与状态；AI失败不被伪装成真实AI结果；禁用跨未经批准来源回退",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 111
+    },
+    {
+      "id": "AI-03",
+      "group": "AI",
+      "title": "策略 DSL 严格约束",
+      "given": "未知教师、未知字段、不合法参数和提示注入文本",
+      "operation": "自然语言解析后执行约束确认",
+      "expected": "未知或不可执行内容明确标出；白名单校验；不得 eval 或直接生成可执行 SQL；硬约束需可追溯",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 112
+    },
+    {
+      "id": "AI-04",
+      "group": "AI",
+      "title": "策略与输入版本绑定",
+      "given": "已解析 policyId 与更换上传/主数据版本",
+      "operation": "提交求解与发布",
+      "expected": "服务端验证学校、任务、版本与指纹；不能跨任务套用策略；结果可追溯原输入",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 113
+    },
+    {
+      "id": "AI-05",
+      "group": "AI",
+      "title": "超时重试和额度原子性",
+      "given": "多个同时AI请求、429、慢响应和大响应",
+      "operation": "并发调用并取消",
+      "expected": "总预算、速率、月额度有实际限制；重试有限且可观测；计费不因竞态绕过",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 114
+    },
+    {
+      "id": "AI-06",
+      "group": "AI",
+      "title": "数据最小化与审计脱敏",
+      "given": "包含教师姓名、联系信息和自由文本",
+      "operation": "检查发送给提供方的请求及应用日志",
+      "expected": "仅发送功能所需数据；标识映射可回溯；日志与错误不泄密；不得把所有原始个人数据默认发外部",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 115
+    },
+    {
+      "id": "OPS-01",
+      "group": "OPS",
+      "title": "备份失败不成功",
+      "given": "隔离库、错误密码、不可写目录或模拟磁盘满",
+      "operation": "运行备份命令并登记产物",
+      "expected": "导出失败整体非零退出；临时/空/校验不符产物不登记 succeeded；无半成品冒充完成",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 120
+    },
+    {
+      "id": "OPS-02",
+      "group": "OPS",
+      "title": "恢复真实性",
+      "given": "完整备份、空白恢复库和已知校验数据",
+      "operation": "恢复后执行登录/读取/导出及数据对账",
+      "expected": "结构和数据一致；迁移与应用兼容；记录实际RPO/RTO及备份时间，不只写目标值",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 121
+    },
+    {
+      "id": "OPS-03",
+      "group": "OPS",
+      "title": "异机备份和最小权限",
+      "given": "生产候选存储策略及应用容器",
+      "operation": "验证挂载权限和副本，模拟本机卷不可用",
+      "expected": "应用不能任意改写备份；有独立恢复副本和保留策略；恢复凭据与应用凭据分离",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 122
+    },
+    {
+      "id": "OPS-04",
+      "group": "OPS",
+      "title": "健康与就绪区分",
+      "given": "依赖正常、DB不可用、Redis不可用、AI不可用",
+      "operation": "读取 liveness/readiness 并执行核心请求",
+      "expected": "探针按实际依赖语义报告；关闭AI不会错误判定整站不可用；核心不可用不能仍显示全绿",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 123
+    },
+    {
+      "id": "OPS-05",
+      "group": "OPS",
+      "title": "告警有实际送达",
+      "given": "任务超时、备份失败、认证异常测试事件",
+      "operation": "触发后检查告警接收端",
+      "expected": "告警可关联 trace 与故障；记录真实接收证据；仅写日志不算告警通知成功",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 124
+    },
+    {
+      "id": "OPS-06",
+      "group": "OPS",
+      "title": "安全功能真实执行",
+      "given": "平台设置、IP封禁、自动备份、维护开关",
+      "operation": "修改后观察登录/请求拦截/任务/恢复行为",
+      "expected": "要么真实生效且可撤销，要么明确不可用；只保存配置或审计行不算功能完成",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 125
+    },
+    {
+      "id": "FRONT-01",
+      "group": "FRONT",
+      "title": "所有控件追溯",
+      "given": "运行页面的按钮、菜单、快捷操作和隐藏角色入口",
+      "operation": "逐项操作并记录网络与数据变化",
+      "expected": "每个可见业务操作对应实际处理；只toast/定时器的业务效果不能算完成；演示开关不进入生产",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 130
+    },
+    {
+      "id": "FRONT-02",
+      "group": "FRONT",
+      "title": "错误态与输入保留",
+      "given": "后端返回401/403/409/422/429/503或网络断开",
+      "operation": "操作表单、上传、修改和发布",
+      "expected": "中文错误可操作且有trace；权限错误不假装成功；版本冲突保留未提交输入",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 131
+    },
+    {
+      "id": "FRONT-03",
+      "group": "FRONT",
+      "title": "重复点击与提交状态",
+      "given": "高延迟真实服务",
+      "operation": "双击、刷新、后退、超时重试",
+      "expected": "前端防重复加后端幂等；不产生重复任务/通知；可恢复正确终态",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 132
+    },
+    {
+      "id": "FRONT-04",
+      "group": "FRONT",
+      "title": "生产构建与缓存",
+      "given": "干净检出的候选源码及升级前后资源",
+      "operation": "构建并浏览全部关键页面、模拟旧缓存",
+      "expected": "不使用开发版React与浏览器JSX编译；资源指纹一致；版本切换无混合旧新JS",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 133
+    },
+    {
+      "id": "FRONT-05",
+      "group": "FRONT",
+      "title": "角色体验和可访问性",
+      "given": "管理员/教师/只读及键盘用户，不同桌面宽度",
+      "operation": "导航、编辑、确认对话框、阅读表格",
+      "expected": "按钮权限与后端一致；焦点可达、状态可读；长中文和缩放不遮挡关键操作",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 134
+    },
+    {
+      "id": "FRONT-06",
+      "group": "FRONT",
+      "title": "新旧端真实闭环",
+      "given": "真实后端、独立数据库、合法账号，不拦截核心API为mock",
+      "operation": "执行导入至归档的完整浏览器流程并校验导出",
+      "expected": "测试同时有HTTP、落库、UI和文件证据；不能只截页面图或通过DOM存在判断",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 135
+    },
+    {
+      "id": "RELEASE-01",
+      "group": "RELEASE",
+      "title": "新装迁移与升级迁移",
+      "given": "空库及代表旧版本的脱敏数据库",
+      "operation": "执行全部追加迁移并启动候选应用",
+      "expected": "两条路径均成功；历史Flyway校验不被删除掩盖；不自动执行clean/repair规避差异",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 140
+    },
+    {
+      "id": "RELEASE-02",
+      "group": "RELEASE",
+      "title": "完整测试真实执行",
+      "given": "已发现全部测试和正确隔离依赖",
+      "operation": "运行构建、单测、集成与E2E并解析报告",
+      "expected": "失败0、错误0；必需场景未执行/跳过0；套件发现数与实际执行数对应；旧报告不得冒充当前",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 141
+    },
+    {
+      "id": "RELEASE-03",
+      "group": "RELEASE",
+      "title": "支持版本与漏洞扫描",
+      "given": "候选依赖树、前端锁文件、镜像",
+      "operation": "生成SBOM并扫描实际运行产物",
+      "expected": "运行可达的严重风险按发布政策阻断；支持状态和例外有负责人；不是仅检查直接依赖文件",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 142
+    },
+    {
+      "id": "RELEASE-04",
+      "group": "RELEASE",
+      "title": "容量基线与失效场景",
+      "given": "已记录CPU/内存/数据量/并发的测试环境",
+      "operation": "运行普通API与计算任务的混合负载和恢复演练",
+      "expected": "对批准容量给出P95/P99/错误率/队列等结果；超容量受控；无凭空性能数字",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 143
+    },
+    {
+      "id": "RELEASE-05",
+      "group": "RELEASE",
+      "title": "同一候选版本证据",
+      "given": "固定Git SHA、构建ID和镜像摘要",
+      "operation": "对照全部报告、部署和回滚演练",
+      "expected": "证据绑定同一候选；变更后受影响门禁重跑；不能以旧提交通过盖章",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 144
+    },
+    {
+      "id": "RELEASE-06",
+      "group": "RELEASE",
+      "title": "交付资料和人工放行",
+      "given": "候选版本全部必需门禁通过",
+      "operation": "核对部署手册、管理员手册、备份恢复、升级回滚、已知限制和学校UAT签认",
+      "expected": "产物可交接；剩余范围明确；生产迁移、域名切换和真实通知须另行批准；不自动部署公网",
+      "sourcePath": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+      "sourceLine": 145
+    }
+  ],
+  "architectureDecisions": [
+    {
+      "id": "ADR-01",
+      "title": "一、优先补齐真实闭环，不再另造一套系统",
+      "content": "当前项目已经有Spring Boot后端、数据库、会话、安全过滤器、多个排班/规划入口与通知模型。建议保持模块化单体，先以接口与数据不变量收口。微服务、Kubernetes和全量TypeScript迁移不是本轮先决条件；没有容量与维护收益证据不引入。\n\n用户要求“后端功能均正常”，应落实为：所有已承诺交付的可见功能和可调用入口都有真实实现与验收；不是删掉做不出来的核心功能，也不是把缺配置服务隐藏后给全站打满分。可选外部能力需要单独确认交付范围。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 3
+    },
+    {
+      "id": "ADR-02",
+      "title": "二、以功能证据链组织代码，而不是仅按目录打勾",
+      "content": "每项业务都追踪：页面事件、前端请求、实际控制器、权限、业务服务、事务和数据库、异步事件、最终输出及测试。对Spring运行时路由与OpenAPI交叉核对，再补充后台任务、脚本、流式订阅和下载。对不在OpenAPI的功能不能默认忽略。\n\n成功标准示例：新增教师不仅返回201，还应产生正确org_id的记录；刷新/重启后存在；跨校读写被拒；无权限请求没有副作用；相关报表使用正确数据。错误对象不能只是一个“保存失败”，要区分校验、权限、版本冲突、依赖故障，并给用户可操作提示与trace。\n\n现有配置、迁移和历史文档可能落后于真实代码。注释“已修复”、目录“安全中心”、文件名“Production”都不能代替实际执行。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 9
+    },
+    {
+      "id": "ADR-03",
+      "title": "三、新旧排班必须统一硬约束，但不要求不同引擎输出完全相同",
+      "content": "旧 `ScheduleFixture.TeacherInput` 不承载主监资格字段；新 `DeterministicInvigilatorAllocator` 通过独立eligibility、资格要求和既有岗位映射处理。这个差异是已确认的代码事实，不等于已经证明所有旧入口都会排错。执行者需追踪入口是否作了充分预过滤和桥接，建立跨入口能力矩阵。\n\n建议一份规范化输入快照承载学校、学期、输入版本、教师可用性、主副监资格、有效占用、考场容量和业务策略。快速排班、AI策略排班、手工调整及发布必须使用同一套业务约束定义。已发布历史数据不能被当前教师姓名/资格修改静默改写。\n\n配置开关要区分“不可关闭的安全/业务底线”与“学校可选偏好”。班主任上限、回避、时长平衡等由业务范围定义硬/软，不因求解困难擅自降软。性别或年龄示例不是普遍强制规则，不能把原型文案当作规范依据。\n\n### 最小反例：资源够用也可能被贪心顺序用错\n\n早场08:00–09:00、晚场10:00–11:00，各需一名主监。A/B均有资格且每日最多一场。A两场可用；B晚场请假；A的编号排序靠前。有效安排是早场B、晚场A。\n\n按当前已读分配器“按时间与岗位依次取当前负载最小者”的局部路径，可能先给早场A，再在晚场耗尽可用者。该结果不能证明问题本身无解。此处是静态推导的待复现风险，尚未在JKXT实际Java运行环境执行。\n\n整改选项：先分配最受限制岗位并增加回溯/修复；或对监考分配使用完整CP-SAT/匹配求解，并保留整体时间预算。优先选有测试与容量依据的最小变更。未知或预算耗尽输出搜索未完成，不伪装INFEASIBLE。\n\n### 独立验证结果\n\n对小规模问题提供独立穷举/匹配对照；对产出提供独立硬约束检查。验证器不能只是把求解器内部同一个eligibility函数再调用一遍。不同算法可以输出不同但同样可行的安排；验证的是完整覆盖、约束与目标度量，不是逐人排列完全一致。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 17
+    },
+    {
+      "id": "ADR-04",
+      "title": "四、确定唯一生效版本和发布入口规则",
+      "content": "当前有旧task/run与新plan/revision两个链路；新链路存在审批与严格发布检查，而旧发布实现门槛不同。建议逐步以一个领域发布服务/统一校验边界作为权威；旧API通过适配保留兼容，明确逐步退出条件，不直接删除破坏调用方。\n\n发布必须针对当前输入和有效资格重校验。重复发布要幂等，旧版本冲突拒绝覆盖。已发布安排发生变更时使用受控后继版本或应急变更，保存差异、操作者、原因与通知对象。仪表盘、工作台、统计、下载、通知共同指向已定义的生效版本。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 37
+    },
+    {
+      "id": "ADR-05",
+      "title": "五、数据库：保护真实数据与可升级性",
+      "content": "保留PostgreSQL约束、组织字段、唯一性和历史记录。核心跨表关系优先用数据库可表达的外键、唯一或排他约束兜底；跨行条件不要随意塞进只能可靠约束单行的CHECK。\n\n重点复核V30复合外键 `(org_id, projected_run_id)` 的 `ON DELETE SET NULL`：PostgreSQL默认将该外键涉及的所有引用列置空，可能触发org_id非空约束；即便仅清run字段，还需要维护配对游标CHECK。具体采用受控拒绝、清游标的追加迁移或历史保留，由合法删除场景决定，不机械删除约束。\n\n每次迁移都测试新装与旧版升级。已有迁移不直接改；不通过clean/repair删除历史校验问题。数据库测试必须使用独立PostgreSQL；测试配置已有身份保护，不以H2模拟代替PostgreSQL触发器、JSONB或锁语义验收。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 43
+    },
+    {
+      "id": "ADR-06",
+      "title": "六、会话与安全：保护既有正确机制，补齐寿命和协议",
+      "content": "现有Cookie/Redis会话与权限过滤应保留并完善。优先处理用户会话索引与会话本体TTL不一致、绝对过期、账号状态/权限版本变化、强制改密服务端限制、跨学校和本人资源范围。\n\n学校与平台入口隔离如采用WIP，应作为一个协议迁移：登录、me、退出、请求上下文、CSRF、SSE、下载、多标签页同批设计、分步验证。不能只复制新后端类而让旧前端继续发送旧请求。\n\nCSRF采用成熟SPA支持机制并按目标Spring版本文档实现。会话Cookie仍HttpOnly；用于前端读取的CSRF载体与会话凭据分开。普通写请求、multipart上传和登出都覆盖，不能为图方便把全部业务路径豁免。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 51
+    },
+    {
+      "id": "ADR-07",
+      "title": "七、异步任务：数据库里有QUEUED并不等于任务可靠保存",
+      "content": "进程内Executor只保存内存执行意图。为计算任务增加持久领取、租约/心跳、超时回收、取消与恢复语义；可优先复用已有数据库任务表和outbox，不必立即引入额外中间件。\n\n按数据规模限制同时计算数、每校排队量和输入复杂度。整体deadline覆盖重试；区分排队与计算时间。请求线程不承担不受限的求解，取消不是只更新页面文案。失联任务恢复后不能把晚到结果覆盖用户已经修改或取消的版本。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 59
+    },
+    {
+      "id": "ADR-08",
+      "title": "八、通知与平台功能必须真实",
+      "content": "`LoggingEmailSender`明确只记录日志并返回LOGGED；`NotificationDispatcher`已区分logged_only，不应把它说成完全假成功，也不能把enabled=true说成SMTP接入成功。\n\n新通知service对非IN_APP通道返回CHANNEL_NOT_CONFIGURED，已有部分真实性保护。需要完善的是统一两套通知口径、实际消费调度、重试、本人阅读、确认/拒绝/签到与历史版本的关系。生产请求中的failDeliveryIds等测试用途参数应隔离；客户端提交的阅读receipt不能覆盖服务器提供方证据。\n\n新增外部发送器时，以事务事件提交与消费者实际发送解耦。用批准的测试收件人和真实提供方消息ID验证，不把“提供方受理”升格成已读。2FA、IP封禁、自动备份、维护开关都必须验证实际使用方；仅保存配置不算实现。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 65
+    },
+    {
+      "id": "ADR-09",
+      "title": "九、备份与运行观测",
+      "content": "备份脚本采用失败即终止、临时文件、非空检查、成功后改名与完成清单；服务端重算校验和，不把任意.sql登记为成功。恢复演练比哈希存在更重要。\n\n应用仅按最小权限读取备份；使用独立备份身份、保留策略与异机副本。不要为备份便利给业务容器挂Docker socket。恢复流程在隔离库验证，并记录真实RPO/RTO。公网单校部署也需要这些底线。\n\n健康探针区分进程存活、能否接受业务和可选AI故障。告警需实际送达测试；只有日志不算告警已接通。客户端来源IP必须按单层/双层代理各自配置，不盲用同一份反向代理配置。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 73
+    },
+    {
+      "id": "ADR-10",
+      "title": "十、前端整改与后端同步",
+      "content": "首要的是业务输入输出与真实状态，不是重新美化。统一请求层处理权限、CSRF、必要的幂等键、版本游标、超时和trace。相同业务重试复用同一幂等键；用户改动意图才生成新键；写超时先查状态，不盲目再提交。\n\n生产构建逐步替换浏览器Babel与React开发包；保留global/window桥接的兼容过程，审查现有babel-script-scope、脚本顺序、动态Tailwind类及缓存。先有路由和视觉回归，再拆大组件；不把一次性全量模块化作为先决条件。\n\n原生EventSource构造参数仅提供URL和withCredentials等标准选项，不能像普通fetch一样注入自定义请求头。若会话隔离强制要求上下文头，需选择支持相同协议的流读取实现或受控Cookie/入口设计，并测试浏览器实际行为。不要把长期会话密钥塞进查询参数解决。\n\n加载、空态、失败、权限不足、旧版本冲突、断网、重复点击、多标签页和下载都需要真实后端验证。截图用于视觉检查，不证明业务落库或通知成功。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 81
+    },
+    {
+      "id": "ADR-11",
+      "title": "十一、团队与Codex协同",
+      "content": "一个集成负责人维护共享契约和迁移编号；身份安全、数据导入、算法发布、通知报表、前端可分别在独立分支/worktree处理。只有实际存在子代理时才并行；不能把角色名称列表当作真正独立审阅。\n\n各阶段做到小提交、小回归、真实证据与可恢复进度。使用AGENTS.md保持约束，使用STATUS/DECISIONS/API-CATALOG记录状态；指令与计划不是测试结果。创建本地环境脚本时遵守沙盒和审批，不要求无限权限。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 91
+    },
+    {
+      "id": "ADR-12",
+      "title": "十二、放行只针对明确范围",
+      "content": "84项场景是最低基线，不是所有端点或所有可能输入的替代。发现新入口补充场景；对从交付范围排除的功能取得明确认可。必需场景未执行、缺报告、关键跳过、仅mock真实依赖均不得生产放行。真正上线需人工批准和学校业务确认；代码审查不是法律、合规或素材授权认证。",
+      "sourcePath": "docs/release/inputs/03_架构与优化决策.md",
+      "sourceLine": 97
+    }
+  ]
+}

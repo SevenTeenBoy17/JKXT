@@ -1,82 +1,19 @@
 [
   {
-    "path": "docs/release/GATE-CONTRACT.md",
+    "path": "docs/release/STATUS.md",
     "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 9640,
-    "sha256": "5273540ccf9e4cbb19dd5e6def192735ee41f286886908d915fd53bfbf47412b",
+    "bytes": 7447,
+    "sha256": "5ae1c06db3e6a62c154537ebc0f849732fc33f277c99e7bad08b748b6b12fd83",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
-    "path": "docs/release/PLAN.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 5121,
-    "sha256": "aa4cb8bdf8b92afa1e844d1d5f63508bd5e984b39b7bd5d45d14f2d54c04606a",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/TEST-INTEGRITY-REVIEW.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 25627,
-    "sha256": "e5146a1297698659905b5ad75b2585bfcf7c951c7c636851caa4daf150cb6178",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/inventory/README.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 4493,
-    "sha256": "9f84a474cd99b79543e814637e6f0930a47410b244287c322b11bebbc8bf53c1",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/inventory/async-downloads.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 4857,
-    "sha256": "bccaa319db058e878f0a7bd058d939f08ef6310ef338912dac3ab17e9dfd92f4",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/inventory/page-operation-map.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 6748,
-    "sha256": "2547b6be30624b319590804928b15314cd3ae57c8aed6b187ea0e79108a291f7",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/inventory/review-findings.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 4286,
-    "sha256": "075901238304a0f8bf7387a210b96e0ac5a600fcacac24bc008907d411b5891e",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "scripts/release/maven-settings.xml",
+    "path": "docs/release/baseline.json",
     "category": "configuration-or-build",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 376,
-    "sha256": "ff43f9ef8ee5b0fe1957a7f3e7af9e35078ad94b066f245cec4031f1cc6e1ff2",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "scripts/release/summarize.mjs",
-    "category": "script-or-test-data-generator",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 4782,
-    "sha256": "48262dc0e744f44fc411b77d2a38a486039f4edd910cba3f1ac3a3380a5b492a",
+    "bytes": 169757,
+    "sha256": "c1976bf46a854b228481c75cc2057ef2738297d8e4acb5e4a37247a7e85e5ea0",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6183,6 +6120,150 @@
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
+    "path": "docs/release/ARCHITECTURE-DELTA-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 16741,
+    "sha256": "ba7c1a086b0fabcd621ef1e10ab9d5080b621bf51f2079c236c5476d3e6ece04",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/ENVIRONMENT.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 3590,
+    "sha256": "2bd0f1bab0b45724fa3f56c19a8a7e6e1d8739ef78582d9248c6b29d24d5aaf2",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/FINDINGS.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 6136,
+    "sha256": "8cb8b03bd5a73bdab14e9f7bc7c7f6109524b94d97047cb3d1ffe8a7a0f24d63",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/GATE-CONTRACT.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 11457,
+    "sha256": "7a4582b00561f273a4aa37d0489bf1a632770e8a898b17cc6c20731456d0da65",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/PACKAGE-INTEGRITY-REVIEW-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 5903,
+    "sha256": "7eb5d039c3fdd798b7eb3bfa7123fbfd44a4d7200db1cf9ab88b37a7b711a9e8",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/PLAN.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 9349,
+    "sha256": "c15c6d7a1a9e8c8353e870eab087e87ea4ce10ea27538b895815ef6493569b5e",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 30014,
+    "sha256": "5f97b9bc12a9e0f693ff60bdc21112a58245dfd2f9c036d875b95201c7fd1013",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/TEST-INTEGRITY-REVIEW.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 29179,
+    "sha256": "29791d5771215c8d213a229e6a8093dabfd1adc3ad212e4ea58f263d58dc8a57",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/execution-package.json",
+    "category": "configuration-or-build",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 52992,
+    "sha256": "94d450bde8c1443d6f13436c3983bfde5b5c7e7d9bd24b0cb7adc51dba77b9ca",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 24196,
+    "sha256": "27289a1ca019087740f2ed7e7c83ea147db6e1726c7d33ff4034858628fe0c5c",
+    "read_status": "DEEP_READ",
+    "read_basis": "Human full-file read during G0 inventory; no behavior pass implied"
+  },
+  {
+    "path": "docs/release/inputs/03_架构与优化决策.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 10563,
+    "sha256": "227cd4656dbdd90cd4e0aada8f3832f659868e402f35e98dd24088ff18ed87a4",
+    "read_status": "DEEP_READ",
+    "read_basis": "Human full-file read during G0 inventory; no behavior pass implied"
+  },
+  {
+    "path": "docs/release/inventory/README.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 4723,
+    "sha256": "a350f0602efdc5ef4f340936b13f2ad298a99fb44e10df736a76b5c3141c82b3",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/inventory/async-downloads.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 4857,
+    "sha256": "bccaa319db058e878f0a7bd058d939f08ef6310ef338912dac3ab17e9dfd92f4",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/inventory/page-operation-map.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 6748,
+    "sha256": "2547b6be30624b319590804928b15314cd3ae57c8aed6b187ea0e79108a291f7",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/inventory/review-findings.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 4286,
+    "sha256": "075901238304a0f8bf7387a210b96e0ac5a600fcacac24bc008907d411b5891e",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/scenario-ledger.json",
+    "category": "configuration-or-build",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 62814,
+    "sha256": "d71e24d8241e88ba279462be8c8f4755a8ce6706b2ee7382723e3f7259f18e8e",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
     "path": "scripts/release/capture-source.mjs",
     "category": "script-or-test-data-generator",
     "ownership": "PROJECT_SNAPSHOT",
@@ -6195,8 +6276,8 @@
     "path": "scripts/release/check-release.mjs",
     "category": "script-or-test-data-generator",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 18968,
-    "sha256": "7ddc6c108cdc13eceb7a849eaee697cf29647f77885b6c581c776c6d4cf134d1",
+    "bytes": 19075,
+    "sha256": "58aaeaba3bd82a79d1e050f6eadfcb40118a4b4ab747804bcdd5d4a935e2d2e9",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6204,8 +6285,35 @@
     "path": "scripts/release/check-release.test.mjs",
     "category": "script-or-test-data-generator",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 14115,
-    "sha256": "785c08f261b468f165396543b8cf087dabfe6b7fd8b41035d44364d0db6ca8ed",
+    "bytes": 15299,
+    "sha256": "0226733f8ff703ace7234874c0d3e46fe9cc1ecad5610c7bdce2fadd3b97107c",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/execution-package.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 7218,
+    "sha256": "6f7e69893157d608d0f66237dcc442832878cb0c2187f1a4008c0bc4913854aa",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/execution-package.test.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 5886,
+    "sha256": "de9026d8f1d970d93c55ff10b9a00b435b544810253b586e420ed9496d344591",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/initialize-scenarios.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 2588,
+    "sha256": "a9072980b6c5c4cb1a0771979587265da7272d847131467ee29fbd2ab662e2c2",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6213,8 +6321,17 @@
     "path": "scripts/release/inventory.mjs",
     "category": "script-or-test-data-generator",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 22583,
-    "sha256": "435095f16e40a8e4e4a17f2e418f4fcf8fe2db7c9fc1a69cd6791b5f33b0c19f",
+    "bytes": 23332,
+    "sha256": "c22f4a1c71d67c116ca7bfc3dc6d164857a84d3b4fda2766b05bd545080b894e",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/maven-settings.xml",
+    "category": "configuration-or-build",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 376,
+    "sha256": "ff43f9ef8ee5b0fe1957a7f3e7af9e35078ad94b066f245cec4031f1cc6e1ff2",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6228,11 +6345,29 @@
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
+    "path": "scripts/release/record-command.test.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 7528,
+    "sha256": "83dc8ba9989a7dcb4a2d009cd1e65b7f3859fd0e11745f1cbfeddf9b3368b5ee",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
     "path": "scripts/release/run-isolated.ps1",
     "category": "script-or-test-data-generator",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 5994,
-    "sha256": "f0f9b9e14e66547646951407c7104cc5e14af27f84a6c9a84a3d840a1b0d977c",
+    "bytes": 6024,
+    "sha256": "7475628a73190bdd32311e708356c3d2ce0b46a26cd73f8ba78f81572fff6d1b",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/summarize.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 5422,
+    "sha256": "58aa2d93c1a559c344fa99b5ba294f3544354e350cc7cf627170400df3fc252a",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   }

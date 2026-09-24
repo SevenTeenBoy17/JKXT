@@ -21,7 +21,7 @@ function fixture(t) {
   });
   const scripts = path.join(root, 'scripts/release');
   fs.mkdirSync(scripts, { recursive: true });
-  for (const name of ['record-command.ps1', 'capture-source.mjs', 'check-release.mjs']) {
+  for (const name of ['record-command.ps1', 'capture-source.mjs', 'check-release.mjs', 'execution-package.mjs']) {
     fs.copyFileSync(path.join(helperDirectory, name), path.join(scripts, name));
   }
   fs.mkdirSync(path.join(root, 'backend/src/test/java'), { recursive: true });

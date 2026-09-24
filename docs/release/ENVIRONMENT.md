@@ -12,7 +12,7 @@
 | Redis target | `redis:7-alpine`, fresh process/tmpfs, nonstandard loopback port | NOT_STARTED; no original Redis/cookies reused |
 | Testcontainers | Existing two opt-in test classes require `-Djkxt.testcontainers.enabled=true` and fresh containers | NOT_RUN. Do not count their default skips as acceptance |
 | Spring mapping probe | Actual attempted startup rejected by existing test isolation initializer | 1 error, BLOCKED. Static 188 routes are not runtime evidence |
-| Supervisor | Global suspension marker; skill entry absent; typed planning tools unavailable | Formal planning/finalization report MISSING; no acceptance claim |
+| Supervisor | Explicitly suspended by current user instructions | Do not invoke or require it; ordinary project test gates remain |
 
 ## Reproducible isolated start after environment unblock
 
@@ -29,3 +29,7 @@ Each run uses a new name/password, refuses existing named containers/occupied po
 Tests run serially because some fixtures intentionally clear/update shared *test* tables. Retain the named test resources for diagnosis until their evidence is captured; then use the recorded cleanup command for that exact project. Its ephemeral tmpfs data will be lost when stopped; no user/business data should ever enter it.
 
 Environment prerequisites alone do not prove migration correctness, tested rollback, DB assertions, export contents or frontend usability. Those remain separate phase requirements.
+
+## Fresh attempt after supplied documents — 2026-09-24
+
+`run-isolated.ps1 -Run release_g1_20260924_attachments` used the same explicit native Java/Maven paths above. Docker preflight returned 1 (engine named pipe missing); the isolation runner returned 2 and saved `evidence/release_g1_20260924_attachments/environment.json` as BLOCKED with `businessDatabaseAccessed:false`. No PostgreSQL/Redis containers or business tests were started. This is a fresh environment failure, not the reuse of yesterday's report. Targeted Docker runtime-file repair remains pending explicit approval; no volume reset or deletion was performed.
