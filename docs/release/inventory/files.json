@@ -1,55 +1,28 @@
 [
   {
-    "path": "JKXT V2.0/backend/src/test/java/com/jkxt/security/TestNetworkBindingTest.java",
-    "category": "backend-test",
+    "path": "docs/release/G2-SESSION-CODE-REVIEW-20260924.md",
+    "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 1074,
-    "sha256": "ec1406ec69d66577855c34d75cd4772ba10da2a6ee9d8200db4455f802c5cc0a",
+    "bytes": 19497,
+    "sha256": "fa1d48e0788a7b037930e54145f3986b2a0868165a31d103b6ef9e66b16a0941",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
-    "path": "docs/release/DOCKER-RECOVERY-20260924.md",
+    "path": "docs/release/G2-SESSION-RESULTS-20260924.md",
     "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 3107,
-    "sha256": "89b5b4010e20fcbfdb429e076ac2c51a0253b6de5bc44e7d815936d1d069d75b",
+    "bytes": 6785,
+    "sha256": "cf0ca7c4d7df169f815e81bcc197b1f9cccc8de04f5b1c590f0a23ff0ab2f46b",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
-    "path": "docs/release/G1-RUNTIME-SAFETY-20260924.md",
+    "path": "docs/release/G2-SESSION-TEST-INTEGRITY-20260924.md",
     "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 22656,
-    "sha256": "e195e93301b3130b041a040e23529c9a776e9a8bc8665892021240f53f1251f1",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/G1-SUMMARY-INTEGRITY-20260924.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 6190,
-    "sha256": "ab7e3bce8830c6fe535ed709ef02f228d3b34837b79d3f4e0f1f5cb90dc14634",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/RUNTIME-TRACE-DELTA-20260924.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 13293,
-    "sha256": "2e0adc0d42c8fb13a6856e0f1d7cfa85d4496c50800383e0feffaa7c33d15e1d",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "docs/release/STATUS.md",
-    "category": "documentation",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 11107,
-    "sha256": "25a6152cce99bb32143b738653db7c1439607355525b78d67bb474faeb01b10f",
+    "bytes": 22389,
+    "sha256": "f7ec11a919336fa135912e0934cbe94dd4881deececd50aeb67d4701d71d8080",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -57,17 +30,8 @@
     "path": "docs/release/baseline.json",
     "category": "configuration-or-build",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 208454,
-    "sha256": "c3e997377b3b79a9d98bf242aba8f12b28201aba41ce83b589a5da01848e2ca5",
-    "read_status": "SCAN",
-    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
-  },
-  {
-    "path": "scripts/release/summarize.test.mjs",
-    "category": "script-or-test-data-generator",
-    "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 13291,
-    "sha256": "c3960657e2a893726ad52cf21e6ff26add1d40c38691cb8bf4c75882621e914c",
+    "bytes": 222718,
+    "sha256": "7f0e51a5bb26e8ffbc2fa4130da6f416d664cbbc72c0cc126d7493e26beb12e6",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -3054,8 +3018,8 @@
     "path": "JKXT V2.0/backend/src/main/java/com/jkxt/security/auth/SessionService.java",
     "category": "backend-source",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 5035,
-    "sha256": "6b4796fad8e733cdad72ce4253ce9ea40d4f6a98aebb2f7f453b88c9d190ae4d",
+    "bytes": 7136,
+    "sha256": "e88238c56b137cd99c1b9b249b8b8f7844bf0a1525ad88cbdddfc8addac06257",
     "read_status": "DEEP_READ",
     "read_basis": "Human full-file read during G0 inventory; no behavior pass implied"
   },
@@ -4050,6 +4014,15 @@
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
+    "path": "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
+    "category": "backend-test",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 12246,
+    "sha256": "e0d07aad5f077c686e418903906dbc676f0f8cf9248dd332e9d40653f8c9cfc6",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
     "path": "JKXT V2.0/backend/src/test/java/com/jkxt/security/SettingsIsolationAcceptanceTest.java",
     "category": "backend-test",
     "ownership": "PROJECT_SNAPSHOT",
@@ -4073,6 +4046,15 @@
     "ownership": "PROJECT_SNAPSHOT",
     "bytes": 4966,
     "sha256": "c8b064e78f500a3fddd7135e5acfd88863c83df8747a799b257c33a7e1876cfd",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "JKXT V2.0/backend/src/test/java/com/jkxt/security/TestNetworkBindingTest.java",
+    "category": "backend-test",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 1074,
+    "sha256": "ec1406ec69d66577855c34d75cd4772ba10da2a6ee9d8200db4455f802c5cc0a",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6183,6 +6165,15 @@
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
+    "path": "docs/release/DOCKER-RECOVERY-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 3107,
+    "sha256": "89b5b4010e20fcbfdb429e076ac2c51a0253b6de5bc44e7d815936d1d069d75b",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
     "path": "docs/release/ENVIRONMENT.md",
     "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
@@ -6197,6 +6188,33 @@
     "ownership": "PROJECT_SNAPSHOT",
     "bytes": 7316,
     "sha256": "2de8a049b3418706c7c6b2b5e49388691deff3b2311813b87d988f93d92044ca",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/G1-RUNTIME-SAFETY-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 22656,
+    "sha256": "e195e93301b3130b041a040e23529c9a776e9a8bc8665892021240f53f1251f1",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/G1-SUMMARY-INTEGRITY-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 6190,
+    "sha256": "ab7e3bce8830c6fe535ed709ef02f228d3b34837b79d3f4e0f1f5cb90dc14634",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/G2-SESSION-INDEX-SPEC.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 3313,
+    "sha256": "8badb033af9518292f18f8b046e7116506652fa52f946b60071d971667fd59df",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6228,11 +6246,38 @@
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
   {
+    "path": "docs/release/READING-LOG-G2-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 2145,
+    "sha256": "7c412a4a5d8bb1803878e5ee90c43a05ee58b9621718529b55b0aa4d7cb28011",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/RUNTIME-TRACE-DELTA-20260924.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 18908,
+    "sha256": "db739950f696887320754b7d2692599f7626cca8f7273d3dacf7c7bcd235057a",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
     "path": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
     "category": "documentation",
     "ownership": "PROJECT_SNAPSHOT",
     "bytes": 30014,
     "sha256": "5f97b9bc12a9e0f693ff60bdc21112a58245dfd2f9c036d875b95201c7fd1013",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "docs/release/STATUS.md",
+    "category": "documentation",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 8058,
+    "sha256": "4a6d7355372fb45ba9ee8327195d79433414eb5a38acd44e359349fe3e04e32e",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6312,8 +6357,8 @@
     "path": "docs/release/scenario-ledger.json",
     "category": "configuration-or-build",
     "ownership": "PROJECT_SNAPSHOT",
-    "bytes": 62814,
-    "sha256": "d71e24d8241e88ba279462be8c8f4755a8ce6706b2ee7382723e3f7259f18e8e",
+    "bytes": 65901,
+    "sha256": "362e5edb3ed36b463bd2888843c936e4bb309b8748f8f50070fd80ee00c700f7",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   },
@@ -6422,6 +6467,15 @@
     "ownership": "PROJECT_SNAPSHOT",
     "bytes": 12028,
     "sha256": "f19987b07b164b189b5a5a0d6b32b2d479aa80e287f6f0a9ea91702e533db060",
+    "read_status": "SCAN",
+    "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
+  },
+  {
+    "path": "scripts/release/summarize.test.mjs",
+    "category": "script-or-test-data-generator",
+    "ownership": "PROJECT_SNAPSHOT",
+    "bytes": 13291,
+    "sha256": "c3960657e2a893726ad52cf21e6ff26add1d40c38691cb8bf4c75882621e914c",
     "read_status": "SCAN",
     "read_basis": "Machine lexical/AST or text-content inventory; not a human deep read"
   }

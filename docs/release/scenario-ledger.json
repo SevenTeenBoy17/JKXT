@@ -7,7 +7,7 @@
     "path": "docs/release/execution-package.json",
     "sha256": "94d450bde8c1443d6f13436c3983bfde5b5c7e7d9bd24b0cb7adc51dba77b9ca"
   },
-  "meaning": "All entries are required acceptance work. NOT_RUN is not PASS or scope exclusion. Candidate references in SCENARIO-COVERAGE-REVIEW-20260924.md are static pointers, not executed coverage.",
+  "meaning": "All entries are required acceptance work. NOT_RUN and PARTIAL are not PASS or scope exclusions. Per-entry execution records bind actual tested slices; static candidate references never imply execution. Root gitSha/sourceDigest retain initialization provenance.",
   "scenarios": [
     {
       "id": "ENV-01",
@@ -204,7 +204,7 @@
       "group": "AUTH",
       "phase": "G2",
       "scope": "REQUIRED",
-      "status": "NOT_RUN",
+      "status": "PARTIAL",
       "source": {
         "path": "docs/release/inputs/02_后端与全栈验收矩阵.md",
         "line": 21
@@ -212,18 +212,52 @@
       "staticMapping": "docs/release/SCENARIO-COVERAGE-REVIEW-20260924.md",
       "authorization": "Isolated development/test only",
       "execution": {
-        "testIds": [],
-        "commands": [],
-        "environment": null,
-        "candidateSha": null,
-        "sourceDigest": null,
-        "exitCode": null,
-        "assertions": [],
-        "reports": [],
-        "defects": [],
-        "retests": []
+        "testIds": [
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#legitimateRequestRenewsTokenAndRevocationIndexTogether",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#passwordChangeCannotLeaveAnExpiredIndexSessionAuthenticated",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#disableAccountRejectsTokenWhoseRevocationIndexHasExpired",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#missingMembershipFailsClosedWithoutRebuildingAuthorization",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#loggedOutTokenIsNotRecreatedBySubsequentRequests",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#revokedAfterPayloadReadMustNotAuthenticateOrRenew",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#retainingCurrentDeviceMustNotExposeAnEmptyAuthorizationIndex",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#retainingAlreadyLoggedOutDeviceCannotRecreateItsMembership",
+          "com.jkxt.security.SessionIndexExpiryIntegrationTest#retainingUnindexedTokenCannotReauthorizeIt"
+        ],
+        "commands": [
+          "docs/release/evidence/release_g2_20260924_frozen/full-maven-suite.command.json",
+          "docs/release/evidence/frozen-g2-database-assertions.command.json"
+        ],
+        "environment": "docs/release/evidence/release_g2_20260924_frozen/environment.json",
+        "candidateSha": "aa57a6bb8edb5d97fb20495f0744ea6a372d4be7",
+        "sourceDigest": "e929db3ba81409b1f906cd3ba21a8df27b840fc0141fe505fc51a2e5bff1023e",
+        "exitCode": 0,
+        "assertions": [
+          "9 new regression cases pass with real PostgreSQL, Redis and Spring security; 274 existing cases unchanged and pass",
+          "Natural expiration of the owned user index never extends authorization of an orphan token",
+          "Password hash and disabled status checked in database; stale cookies denied with 401",
+          "Deterministic GET/revoke and index-replacement interleavings; not a concurrency stress benchmark",
+          "Independent SQL confirms own synthetic test accounts remaining=0, Flyway=30 and failed migrations=0"
+        ],
+        "reports": [
+          "docs/release/G2-SESSION-RESULTS-20260924.md",
+          "docs/release/G2-SESSION-CODE-REVIEW-20260924.md",
+          "docs/release/G2-SESSION-TEST-INTEGRITY-20260924.md"
+        ],
+        "defects": [
+          "Session index expiry and stale-read authorization reproduced then fixed",
+          "G2-SR-01 retained-device DEL/SADD gap reproduced then fixed",
+          "Invalid retained-member resurrection reproduced then fixed"
+        ],
+        "retests": [
+          "release_g2_20260924_green: 283 executed, 0 failures/errors/skips",
+          "release_g2_20260924_frozen: 283 executed, 0 failures/errors/skips"
+        ]
       },
-      "notes": []
+      "notes": [
+        "PARTIAL only: absolute server-side lifetime, complete issuance/revocation concurrency and all specified administrative expiry actions remain unverified or unimplemented.",
+        "All data synthetic and isolated. Shortened Redis index TTL is not a claim of waiting seven real days; no host clock mutation.",
+        "No browser E2E, production deployment or general authentication acceptance is implied by this slice."
+      ]
     },
     {
       "id": "AUTH-03",

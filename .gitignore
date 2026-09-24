@@ -32,3 +32,8 @@
 **/*cookie*.txt
 .DS_Store
 Thumbs.db
+
+# Per-workstation execution evidence can contain connection details or sessions.
+# Publish reviewed result summaries, never raw evidence or a stale gate baseline.
+/docs/release/evidence/
+/docs/release/baseline.json

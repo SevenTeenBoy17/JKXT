@@ -6455,7 +6455,8 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/P10ReportAdminApiIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/P12DeployModeIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TeacherAccountRoleBindingIntegrationTest.java",
-      "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TenantBusinessIsolationTest.java"
+      "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TenantBusinessIsolationTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java"
     ],
     "test_mapping_status": "STATIC_CANDIDATES_NOT_EXECUTED_COVERAGE",
     "frontend_matches": [
@@ -6512,7 +6513,8 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/P10ReportAdminApiIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/P12DeployModeIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TeacherAccountRoleBindingIntegrationTest.java",
-      "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TenantBusinessIsolationTest.java"
+      "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TenantBusinessIsolationTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java"
     ],
     "test_mapping_status": "STATIC_CANDIDATES_NOT_EXECUTED_COVERAGE",
     "frontend_matches": [
@@ -8313,6 +8315,7 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthLockoutAcceptanceTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/BusinessRbacAcceptanceTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/RbacPermissionMatrixAcceptanceTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/UserPreferencesAndAppearanceIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/tasks/ExamTaskAssignmentsRunSelectionIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/tasks/ExamTaskQuickFlowIntegrationTest.java"
@@ -8409,6 +8412,7 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthLockoutAcceptanceTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/BusinessRbacAcceptanceTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/RbacPermissionMatrixAcceptanceTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/UserPreferencesAndAppearanceIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/tasks/ExamTaskAssignmentsRunSelectionIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/tasks/ExamTaskQuickFlowIntegrationTest.java"
@@ -8468,6 +8472,7 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/platform/TeacherAccountRoleBindingIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/RbacPermissionMatrixAcceptanceTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/SettingsIsolationAcceptanceTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/UserPreferencesAndAppearanceIntegrationTest.java"
     ],
@@ -8585,7 +8590,8 @@
     "test_candidates": [
       "JKXT V2.0/backend/src/test/java/com/jkxt/org/AcademicTermApiIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/p2/P2DatabaseIntegrationTest.java",
-      "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthIntegrationTest.java"
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthIntegrationTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java"
     ],
     "test_mapping_status": "STATIC_CANDIDATES_NOT_EXECUTED_COVERAGE",
     "frontend_matches": [
@@ -8630,6 +8636,7 @@
       "JKXT V2.0/backend/src/test/java/com/jkxt/org/AcademicTermApiIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/p2/P2DatabaseIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/AuthIntegrationTest.java",
+      "JKXT V2.0/backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
       "JKXT V2.0/backend/src/test/java/com/jkxt/security/SettingsIsolationAcceptanceTest.java"
     ],
     "test_mapping_status": "STATIC_CANDIDATES_NOT_EXECUTED_COVERAGE",

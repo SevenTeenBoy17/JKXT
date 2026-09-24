@@ -1,6 +1,54 @@
 # G0 运行时路由与静态追溯差异复核
 
-## 结论与证据边界
+## 当前结论：冻结候选 r2 已补齐 Actuator 注册采集
+
+本文件保留 r1 原始发现；**当前有效候选是 r2，而不是下方历史 r1 SHA**。r2 已在隔离环境真实补充采集 **4 条 Actuator request mappings** 和 **9 个 HandlerMapping bean 类型**。原 194 行 MVC handler 的 method/path/handler/produces/consumes 与 r1 完全相同，188 个静态业务 handler 继续全部匹配。没有新增或遗失业务 handler。
+
+| 当前 r2 证据 | 核对值 |
+| --- | --- |
+| HEAD | `bf320b69a24739166bb23ffb283eba0f48523946` |
+| 源码摘要 | `02116cff45dfebf22733d9bdaf141f070bdfc9413eab508bf2815855ef2c23e7`，本次只读重新采集仍一致 |
+| 实际轮次 | `release_g1_20260924_r2` |
+| Runtime 文件 | `docs/release/evidence/release_g1_20260924_r2/spring-mappings.json` |
+| Runtime 文件 SHA-256 | `818ea1b5877d109e999dfaec892b55b10eb8e4a48dad3f471290dbca3d117e3a` |
+| 采集时间 | `2026-09-24T07:59:52.494084700Z` |
+| 存储及监听 | `jkxt_test_release_g1_20260924_r2`；Flyway V30；Redis PONG；`127.0.0.1` |
+| 主集合 | `mappings` 194 handler 行 / 193 唯一 method/path，与 r1 相同 |
+| 补充集合 | `supplementalRequestMappings` **4 行**，均来自 `webEndpointServletHandlerMapping` |
+| 合并计数 | 两集合合计 **198 handler 行 / 197 唯一 method/path**；没有把 9 个 bean 当作 9 条接口 |
+| HandlerMapping 类型清单 | `handlerMappingTypes` **9 个 bean**，逐项见下表 |
+| 全套命令 | `release_g1_20260924_r2/full-maven-suite.command.json`：exit 0、nativeExit 0、sourceUnchanged true、SHA/摘要均与本表相同 |
+| 独立 JUnit 重数 | 直接读取 r2 的 **73 个 XML**，发现 274、执行 274、失败 0、错误 0、跳过 0；不是复述旧摘要计数 |
+| 汇总及门禁 | `frozen-g1-summary.command.json`、`frozen-g1-gate.command.json` 均 exit 0，日志 SHA-256 核对一致；G0/G1 `PASS`、`productionReady:false` |
+
+### r2 新增的 4 条 Actuator 注册
+
+| 方法 | 实际注册 path/pattern | Handler | 目前证明与未证明 |
+| --- | --- | --- | --- |
+| GET | `/actuator/health/**` | `org.springframework.boot.actuate.endpoint.web.servlet.AbstractWebMvcEndpointHandlerMapping$OperationHandler#handle` | 通配 handler 已注册；未逐个请求或验证 liveness/readiness 子路径的依赖故障语义 |
+| GET | `/actuator/health` | 同上 `OperationHandler#handle` | 实际注册；collector 明确断言包含此路径，不等于停 DB/Redis 后响应一定正确 |
+| GET | `/actuator/info` | 同上 `OperationHandler#handle` | 实际注册；collector 明确断言包含此路径；匿名/角色访问与敏感信息暴露仍需专项测试 |
+| GET | `/actuator` | `org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping$WebMvcLinksHandler#links` | Actuator 链接入口已注册；没有将链接列表当作各链接行为通过 |
+
+上述 4 行全部由独立于普通 MVC 的 `RequestMappingInfoHandlerMapping` 实例运行时枚举。当前门禁返回的 `runtimeMappingCount:194` 仍指主集合，**不是忽略补充集合后宣称全 HTTP 面已覆盖**。补充集合被保存在同一个绑定 SHA/摘要的文件；测试直接断言 health/info 存在。发布 gate 暂未独立强制补充集合的完整模式，需保留此验收能力边界。
+
+### r2 的 9 个 HandlerMapping bean
+
+| Bean | 类型 |
+| --- | --- |
+| `beanNameHandlerMapping` | `org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping` |
+| `controllerEndpointHandlerMapping` | `org.springframework.boot.actuate.endpoint.web.servlet.ControllerEndpointHandlerMapping` |
+| `healthEndpointWebMvcHandlerMapping` | `org.springframework.boot.actuate.endpoint.web.servlet.AdditionalHealthEndpointPathsWebMvcHandlerMapping` |
+| `requestMappingHandlerMapping` | `org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping` |
+| `resourceHandlerMapping` | `org.springframework.web.servlet.handler.SimpleUrlHandlerMapping` |
+| `routerFunctionMapping` | `org.springframework.web.servlet.function.support.RouterFunctionMapping` |
+| `webEndpointServletHandlerMapping` | `org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping` |
+| `welcomePageHandlerMapping` | `org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping` |
+| `welcomePageNotAcceptableHandlerMapping` | `org.springframework.boot.autoconfigure.web.servlet.WelcomePageNotAcceptableHandlerMapping` |
+
+bean 类型存在不代表每类有已生效业务映射；不能据此推断部署了 RouterFunction 功能或额外 health alias。静态文件、动态 router function 的具体模式、welcome page、Servlet/Filter 和代理路由尚未逐项采集与访问验证。因此 r1 的 `TRACE-EXT-07` 更新为 **PARTIAL：Actuator 注册及 HandlerMapping 类型采集已完成；真实授权和依赖失效行为仍 NOT_RUN**。其他 TRACE-EXT 条目及 84 项业务场景不因本次注册采集自动通过。
+
+## 历史 r1 结论与证据边界
 
 本次只读复核证明：静态清单中的 **188 条业务 method/path/controller#handler 均已在隔离 Spring 实例注册**，没有发现静态业务路由漏注册或 handler 不一致。运行时的 **194 行**为上述 188 行加 **6 行框架设施**，不是新增 6 个业务功能。按 method/path 去重为 **193 项**，因为 `/error` 有两个不同内容协商 handler。
 
@@ -9,7 +57,7 @@
 | 证据 | 本次核对值 |
 | --- | --- |
 | 仓库 | `D:\VB\JKXT-release-g0-g1` |
-| 实际 HEAD | `1d023c211cc222a8582e72f24b4c973d1199b086` |
+| r1 当时 HEAD | `1d023c211cc222a8582e72f24b4c973d1199b086` |
 | 实际隔离轮次 | `release_g1_20260924_r1` |
 | 测试源码摘要 | `d56b000dd51eb95c1d17f90dea3b59d6eb075b5b6f469700af143173030be17a` |
 | Runtime 文件 | `docs/release/evidence/release_g1_20260924_r1/spring-mappings.json` |
@@ -38,16 +86,16 @@
 
 目前 `SecurityConfig.java` 显式 permitAll `/v3/api-docs/**`、`/swagger-ui/**`，并对非 API 的剩余请求 `anyRequest().permitAll()`；`application.yml` 配置 Springdoc。没有将“测试 profile 注册这些框架路由”直接定性为生产泄露，必须在 G2 以正式候选配置复现后按批准暴露策略处理。不得为得到较少路由数而删除框架功能或弱化断言。
 
-## 194 行并不是所有 HTTP handler
+## r1 覆盖缺口与 r2 后仍保留的边界
 
-现 collector 使用 `context.getBeansOfType(RequestMappingHandlerMapping.class)`。因此以下项目不能从本文件推断已枚举或已通过：
+r1 collector 仅使用 `context.getBeansOfType(RequestMappingHandlerMapping.class)`；r2 已增加补充 RequestMappingInfoHandlerMapping 枚举和 HandlerMapping 类型记录（见首节）。以下列出原始缺口及当前状态，避免把旧问题机械当作未修复：
 
-- Actuator `WebMvcEndpointHandlerMapping`：`application.yml` 暴露 health、info，启用了 probes；独立的框架 endpoint mapping 不属于当前 collector 的类型范围。
+- Actuator `WebMvcEndpointHandlerMapping`：r1 未覆盖；r2 已真实收集上述 4 条注册。其授权、敏感响应和依赖故障语义仍未由注册证明。
 - 静态资源、欢迎页、Servlet、Filter、反向代理路由以及未实例化 profile 下的接口。
 - SSE 的 handler 注册已被采集，但连接鉴权、事件回放、终态和断线恢复还需订阅测试。
 - 定时工作、消息消费者、启动钩子和进程内异步任务不是普通 HTTP 路由。
 
-新增待验 `TRACE-EXT-07`（关联 OPS-04、ENV-01、RELEASE-05）：扩展独立运行时观测，列出 Actuator 实际注册的路径和暴露配置；分别执行匿名/授权访问、DB/Redis 故障就绪语义验证。不以本次未收集到 Actuator 推断它不存在或访问必然安全。状态：NOT_RUN。此项不改原始 84 条来源记录。
+原新增待验 `TRACE-EXT-07`（关联 OPS-04、ENV-01、RELEASE-05）：扩展独立运行时观测，列出 Actuator 实际注册的路径和暴露配置；分别执行匿名/授权访问、DB/Redis 故障就绪语义验证。r2 状态：PARTIAL（注册采集已完成，行为测试仍 NOT_RUN）。此项不改原始 84 条来源记录。
 
 ## 23 个异步发现点的真实构成
 
@@ -94,12 +142,14 @@
 - Node 再按 controller#handler 精确校对：matchedBusinessHandlerRows 188、mismatches `[]`；退出码 0。
 - Node 只读计数：runtime rows 194、unique method/path 193；async token 分布 3/17/2/1；退出码 0。
 - `rg` 搜索未注册后台消费者/定时/WS 关键字：未找到匹配（rg 自身退出码 1 表示无匹配，不是业务测试失败）。
-- 实際读取了 runtime JSON、静态 route/frontend/background 清单、`api.js`、相关页面函数、`SecurityConfig`、application 配置、下载 URL 生产函数。未全量深读所有 Controller/Service；已有“深读/扫描/未读”清单不因此整体升级。
+- 实际读取了 runtime JSON、静态 route/frontend/background 清单、`api.js`、相关页面函数、`SecurityConfig`、application 配置、下载 URL 生产函数。未全量深读所有 Controller/Service；已有“深读/扫描/未读”清单不因此整体升级。
 - 本文不新增业务测试运行计数；真实 suite 退出码和发现/执行/失败/错误/跳过数以同轮 `full-maven-suite.command.json` 和 JUnit 原始文件及主任务汇总为准。
+- r2 追加只读 Node 对比：194 主集合逐项与 r1 相同；supplemental 4、HandlerMapping bean 9、业务精确匹配 188；退出码 0。
+- r2 追加只读 Node 使用 `parseJUnit` 重数 73 个 XML：274/274，fail/error/skip 0；验证 frozen summary/gate 日志哈希与当前源码摘要；退出码 0。本操作没有重新运行业务测试，也没有访问任何数据库。
 
 ## 下一步
 
-1. 固定候选二轮完成后，复核新 run 的 188 业务匹配关系及框架 extra 是否保持一致。
+1. r2 冻结候选的 188 业务匹配关系及 6 个 MVC 框架 extra 已复核一致；后续代码变化继续按新 SHA 重跑，不沿用本表盖章。
 2. G2 明确并验证框架错误端点、OpenAPI/Swagger 的正式暴露策略；保留以上 TRACE-EXT 待验要求，不伪造通过。
-3. 补充 Actuator 等非 RequestMappingHandlerMapping 范围的真实枚举与就绪行为，解除“全部HTTP路由已枚举”的覆盖缺口。
+3. Actuator 注册和 HandlerMapping 类型已补齐；继续补实际授权/就绪行为，并对静态资源、RouterFunction、Filter/Servlet及代理边界建立独立追溯，不宣称“全部HTTP路由已枚举”。
 4. 在 G7 建立动态调用点对应的真实浏览器操作证据，在 G4/G5/G6 对 DB、通知、任务和导出作独立结果校验。
