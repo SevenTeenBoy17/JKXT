@@ -15,6 +15,16 @@ Use the repository root as Docker build context and `deploy/render-free/Dockerfi
 
 Create fresh dedicated PostgreSQL/Key Value resources; inject their credentials only through the hosting environment. No cloud credentials, business databases, uploads, cookies or old build output are included here. Initial operator provisioning remains an explicit, interactive maintenance operation, not a public bootstrap endpoint or default password.
 
-Free hosting sleeps, has no durable local disk, and its database expires. It is unsuitable for dependable commercial school operation. This branch does not authorize production release, promise continuity, or replace backup/restore and deployment acceptance.
+Free Render hosting sleeps and has no durable local disk. Render's free PostgreSQL expires; the current split-host candidate instead uses a dedicated Neon PostgreSQL database in Singapore. Neither choice removes the need for budget, durability, backup and business acceptance. This branch is not approved for dependable commercial school operation.
 
 `release-manifest.json` records the upstream source export files. Its `single-host` route describes the original packaging tool, not this Render topology. The original Caddy/Compose deployment files are retained for source completeness; do not mix their acceptance evidence with Render results.
+
+## Netlify frontend / API entrance
+
+The added [Netlify adapter](deploy/netlify/README.md) publishes only the existing production `dist` build, and proxies `/api/v1` to the existing Java application on Render. The Java backend is not a Netlify Function and has not been rewritten or mocked. PostgreSQL is Neon Singapore; session storage is dedicated Render Key Value Singapore.
+
+Set an explicitly verified `JKXT_API_ORIGIN` at build time, and set Render `APP_BASE_URL` to the Netlify HTTPS origin. Never put database credentials in Netlify frontend files. This is an app-only export: Netlify's base directory is the repository root, not `JKXT V2.0`.
+
+Local adapter/build/portal checks: 28 tests passed, zero failures or skipped tests on 2026-10-21. These checks do not prove CDN proxying, Cookie/CSRF behavior, cloud login, solver capacity or production acceptance. Cloud delivery remains incomplete until those separate checks pass.
+
+`release-manifest.json` remains the immutable original 646-file export inventory from commit `15992e4`. This update adds four Netlify files and revises `.gitignore` and this README; its Git commit identifies the updated snapshot. It does not overwrite the development checkout or merge any historical login-isolation branch.

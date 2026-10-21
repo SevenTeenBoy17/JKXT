@@ -24,3 +24,6 @@ logs/
 Thumbs.db
 
 .vercel
+
+# Netlify local account/site linking state is machine-specific.
+.netlify/

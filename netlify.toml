@@ -1,0 +1,16 @@
+# Full repository: set Netlify Base directory to "JKXT V2.0".
+# An exported app-only repository uses its repository root as the base instead.
+[build]
+  command = "npm run build && node scripts/deploy/prepare-netlify.mjs"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Preserve Dashboard.html and its query-based portal entry exactly.
+[build.processing]
+  skip_processing = true
+
+# JKXT_API_ORIGIN must be set explicitly in the site's build environment.
+# It is a public Render HTTPS origin, never a database URL or credential.
+# Routing and static headers are generated into dist after validating the build.
