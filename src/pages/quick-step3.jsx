@@ -1,8 +1,8 @@
-// Step 3 · 智能排班 (mock 引擎)
-//   - 顶部标题 + 总进度 (含模拟版本号 + mock 角标)
+// Step 3 · 智能排班（服务端事实 / 明确标注的本地预览）
+//   - 顶部标题 + 服务端进度（缺失值不估算）
 //   - 6 阶段焦点膨胀时间线 (waiting 32 / running 96 / done 48)
 //   - 折叠式引擎日志 (默认收起)
-//   - 当前生效策略 chips
+//   - 本次服务端策略快照 chips
 
 // ──────────────────────────────────────────────────────────────
 // 阶段元数据 — 6 阶段
@@ -46,24 +46,31 @@ const QK_STAGES = [
   },
 ];
 
-const QK_BACKEND_STAGES = QK_STAGES.map((stage) => ({ ...stage }));
-QK_BACKEND_STAGES[2] = {
-  ...QK_BACKEND_STAGES[2],
-  sub: 'CP-SAT 工作量均衡优化',
-  stat: '已计算 5 项公平性指标',
-};
-QK_BACKEND_STAGES[4] = {
-  ...QK_BACKEND_STAGES[4],
-  title: '持久化排班结果',
-  sub: '写入 schedule_assignment + 渲染结果预览',
-  stat: 'assignments 已写入数据库',
-};
-QK_BACKEND_STAGES[5] = {
-  ...QK_BACKEND_STAGES[5],
-  title: '准备后端导出文件',
-  sub: '生成 xlsx / pdf 下载链接',
-  stat: '已暴露任务导出端点',
-};
+// 对应 ScheduleJobService 发布的阶段；不从百分比推断已完成的步骤。
+const QK_BACKEND_STAGES = [
+  { id: 0, key: 'queued', title: '等待求解器', sub: '服务端排队中' },
+  { id: 1, key: 'CP-SAT 初始化', title: '初始化求解器', sub: '启动本次排班任务' },
+  { id: 2, key: '读取排班数据', title: '读取排班数据', sub: '读取本次求解使用的教师、考场与考试场次' },
+  { id: 3, key: '构建约束模型', title: '构建约束模型', sub: '构建 CP-SAT 决策变量与约束并求解' },
+  { id: 4, key: '求解完成，写入结果', title: '写入求解结果', sub: '保存求解器返回的结果，等待终态确认' },
+  { id: 5, key: '生成结果预览', title: '核对排班结果', sub: '读取完整任务快照，确认本次结果' },
+];
+
+function qkBackendStrategies(job) {
+  const policy = job?.stats?.policySnapshot;
+  if (!policy || typeof policy !== 'object') return [];
+  const strategies = [];
+  if (typeof policy.avoidHomeroomClass === 'boolean') strategies.push({
+    id: 'homeroom', label: '班主任避监本班', desc: policy.avoidHomeroomClass ? '严格回避' : '未启用',
+  });
+  const sameGrade = policy.sameGrade === 'HARD' ? '严格回避'
+    : policy.sameGrade === 'SOFT' ? '尽量满足' : policy.sameGrade === 'NONE' ? '未启用' : null;
+  if (sameGrade) strategies.push({ id: 'grade', label: '同年级回避', desc: sameGrade });
+  if (typeof policy.avoidSubjectClass === 'boolean') strategies.push({
+    id: 'subject', label: '任课教师避监本班', desc: policy.avoidSubjectClass ? '严格回避' : '未启用',
+  });
+  return strategies;
+}
 
 // ──────────────────────────────────────────────────────────────
 // 实时秒表 (仅 active stage 用)
@@ -90,10 +97,10 @@ function useQkActiveTimer(active) {
 // ──────────────────────────────────────────────────────────────
 // 阶段行 (3 态高度差异 = 焦点膨胀)
 // ──────────────────────────────────────────────────────────────
-function QkStageRow({ stage, idx, currentStage, complete, last, backendActive = false }) {
+function QkStageRow({ stage, idx, currentStage, complete, last, backendActive = false, running = true }) {
   const isDone    = complete || idx < currentStage;
-  const isActive  = !complete && idx === currentStage;
-  const isPending = !complete && idx > currentStage;
+  const isActive  = !complete && running && idx === currentStage;
+  const isPending = !isDone && !isActive;
 
   const elapsed = useQkActiveTimer(isActive);
 
@@ -212,7 +219,7 @@ function QkStageRow({ stage, idx, currentStage, complete, last, backendActive = 
                 className="w-1.5 h-1.5 rounded-full"
                 style={{ background: 'var(--brand)', animation: 'qkBlink 1s ease-in-out infinite' }}
               />
-              {stage.stat ? `本步骤将输出: ${stage.stat}` : backendActive ? '后端 Job 运行中…' : '模拟运行中…'}
+              {backendActive ? (stage.stat || '等待服务端返回本阶段详情…') : stage.stat ? `本步骤将输出: ${stage.stat}` : '模拟运行中…'}
             </div>
           </div>
         )}
@@ -221,7 +228,7 @@ function QkStageRow({ stage, idx, currentStage, complete, last, backendActive = 
         {isDone && (
           <div className="mt-1 flex items-center gap-1.5 text-[12px] font-mono" style={{ color: 'var(--text-soft)' }}>
             <IconCheck size={10} strokeWidth={2.5} style={{ color: '#10B981' }} />
-            <span>{stage.stat}</span>
+            <span>{stage.stat || (backendActive ? '服务端已进入后续阶段' : '')}</span>
           </div>
         )}
 
@@ -307,7 +314,7 @@ function QkCollapsibleLog({ logs, running, backendActive = false }) {
           <div className="text-[12px] mt-0.5" style={{ color: 'var(--text-soft)' }}>
             {open
               ? '点击折叠 · 时间线已含主要进度,日志仅供细节查阅'
-              : backendActive ? '展开查看后端 Job 进度日志 · 已写入 schedule_run' : '展开查看模拟引擎的逐行输出 · 仅本地模拟,不连服务端'}
+              : backendActive ? '展开查看当前页面收到的服务端进度日志' : '展开查看模拟引擎的逐行输出 · 仅本地模拟,不连服务端'}
           </div>
         </div>
         <IconChevron dir={open ? 'up' : 'down'} size={16} className="text-slate-400" />
@@ -342,7 +349,7 @@ function QkCollapsibleLog({ logs, running, backendActive = false }) {
             </span>
             <div className="flex-1" />
             <span className="font-mono text-[12px] tracking-wider" style={{ color: '#94A3B8' }}>
-              {backendActive ? 'schedule_run · 数据库持久化' : '本地前端模拟 · 不调用服务端'}
+              {backendActive ? '当前页面日志快照' : '本地前端模拟 · 不调用服务端'}
             </span>
           </div>
 
@@ -377,7 +384,7 @@ function QkCollapsibleLog({ logs, running, backendActive = false }) {
             className="px-3.5 py-1.5 flex items-center gap-3 text-[12px] font-mono"
             style={{ background: '#0B1220', borderTop: '1px solid #1E293B', color: '#94A3B8' }}
           >
-            <span>{backendActive ? '● 后端任务 · 已入库' : '● 仅前端模拟 · 不入库'}</span>
+            <span>{backendActive ? '● 服务端进度 · 以任务快照为准' : '● 仅前端模拟 · 不入库'}</span>
             <div className="flex-1" />
             <button
               disabled={logs.length === 0}
@@ -446,11 +453,12 @@ function QkCollapsibleLog({ logs, running, backendActive = false }) {
 // ──────────────────────────────────────────────────────────────
 // 当前生效策略 (chips)
 // ──────────────────────────────────────────────────────────────
-function QkStrategyChips({ strategies }) {
+function QkStrategyChips({ strategies, backendActive = false }) {
   const severityColor = {
     '严格回避': { bg: '#FEF2F2', fg: '#B91C1C', dot: '#EF4444' },
     '尽量满足': { bg: '#FFFBEB', fg: '#B45309', dot: '#F59E0B' },
     '加权优化': { bg: '#EEF2FF', fg: '#4F46E5', dot: '#6366F1' },
+    '未启用': { bg: '#F1F5F9', fg: '#64748B', dot: '#94A3B8' },
   };
   return (
     <div
@@ -474,10 +482,10 @@ function QkStrategyChips({ strategies }) {
         </span>
         <div className="flex-1 min-w-0">
           <div className="text-[13px] font-semibold" style={{ color: 'var(--text-strong)' }}>
-            当前生效策略 · {strategies.length} 条
+            {backendActive ? '本次策略快照' : '预览示例策略'}{strategies.length > 0 ? ` · ${strategies.length} 项` : ''}
           </div>
           <div className="text-[12px] mt-0.5" style={{ color: 'var(--text-soft)' }}>
-            来自「AI 策略排监考」预置规则集 · 支持添加个性化策略
+            {backendActive ? '仅展示本次服务返回的规则开关；未返回的规则不作生效声明' : '本地预览示例 · 不代表本次真实任务的生效策略'}
           </div>
         </div>
         <button
@@ -492,6 +500,7 @@ function QkStrategyChips({ strategies }) {
         </button>
       </div>
       <div className="flex flex-wrap gap-2">
+        {backendActive && strategies.length === 0 && <span className="text-[12px]" style={{ color: 'var(--text-soft)' }}>尚未收到本次策略快照</span>}
         {strategies.map((s) => {
           const c = severityColor[s.desc] || severityColor['加权优化'];
           return (
@@ -525,14 +534,29 @@ function QkStrategyChips({ strategies }) {
 // ──────────────────────────────────────────────────────────────
 // Step 3 主体
 // ──────────────────────────────────────────────────────────────
-function QkStep3({ running, stage, logs, strategies, onScrollToResult, backendActive = false }) {
-  const stages = backendActive ? QK_BACKEND_STAGES : QK_STAGES;
-  const ModeChip = backendActive && window.QkBackendChip ? window.QkBackendChip : QkMockChip;
-  const complete = stage >= stages.length;
-  // 总进度 = (完成阶段数 + 当前阶段的 0.5) / 总数
-  const progress = complete
-    ? 100
-    : Math.min(100, Math.max(0, ((stage + (running ? 0.5 : 0)) / stages.length) * 100));
+function QkStep3({ running, stage, logs, strategies = [], onScrollToResult, backendActive = false, backendJob = null }) {
+  const complete = stage >= QK_STAGES.length && (!backendActive || (!running && backendJob?.status === 'succeeded'));
+  const backendStage = ['pending', 'running', 'succeeded'].includes(backendJob?.status)
+    ? QK_BACKEND_STAGES.findIndex(item => item.key === backendJob?.stage) : -1;
+  const activeStage = backendActive ? (complete ? QK_BACKEND_STAGES.length : backendStage) : stage;
+  const backendRunning = running && ['pending', 'running', 'succeeded'].includes(backendJob?.status);
+  const counts = backendJob?.stats;
+  const hasCounts = ['teachers', 'rooms', 'exams'].every(key => Number.isInteger(counts?.[key]) && counts[key] >= 0);
+  const stages = backendActive ? QK_BACKEND_STAGES.map(item => ({ ...item,
+    stat: item.id === 2 && hasCounts
+      ? `教师 ${counts.teachers} 人 · 考场 ${counts.rooms} 间 · 考试场次 ${counts.exams} 场`
+      : item.id === 5 && complete && Array.isArray(backendJob?.fairness)
+        ? `${backendJob.fairness.length} 项公平性指标已返回`
+        : '',
+  })) : QK_STAGES;
+  const ModeChip = backendActive ? window.QkBackendChip : QkMockChip;
+  // 真实任务仅显示服务返回的比例；阶段动画不产生求解进度。
+  const progress = backendActive
+    ? (Number.isFinite(backendJob?.progress) && backendJob.progress >= 0 && backendJob.progress <= 100 ? backendJob.progress : null)
+    : complete ? 100 : Math.min(100, Math.max(0, ((stage + (running ? 0.5 : 0)) / stages.length) * 100));
+  const backendStatus = !backendJob ? '正在提交，等待服务端响应…'
+    : ({ pending: '等待求解器', running: '后端运行中', succeeded: '等待完整结果确认', failed: '求解失败', infeasible: '无可行方案', cancelled: '任务已取消' }[backendJob.status]
+      || '任务状态尚未确认');
 
   return (
     <section className="space-y-5">
@@ -556,7 +580,7 @@ function QkStep3({ running, stage, logs, strategies, onScrollToResult, backendAc
             >
               {backendActive ? '后端 Job v1' : '前端预览版 v0.1'}
             </span>
-            <ModeChip />
+            {ModeChip && <ModeChip />}
           </div>
           <div className="text-[12px] mt-1.5 flex items-center gap-2 flex-wrap sm:whitespace-nowrap" style={{ color: 'var(--text-soft)' }}>
             {complete
@@ -579,25 +603,27 @@ function QkStep3({ running, stage, logs, strategies, onScrollToResult, backendAc
                     </button>
                   )}
                 </>
+              : backendActive
+                ? <span>{backendStatus}{backendJob?.stage ? ` · ${backendJob.stage}` : ''}</span>
               : running
-                ? <span>{backendActive ? '后端运行中' : '模拟运行中'} · 第 <span className="font-mono font-semibold" style={{ color: 'var(--brand)' }}>{stage + 1} / {stages.length}</span> 步：<span style={{ color: 'var(--text-medium)' }}>{stages[stage]?.title}</span></span>
+                ? <span>模拟运行中 · 第 <span className="font-mono font-semibold" style={{ color: 'var(--brand)' }}>{stage + 1} / {stages.length}</span> 步：<span style={{ color: 'var(--text-medium)' }}>{stages[stage]?.title}</span></span>
                 : <span>准备启动 …</span>}
           </div>
         </div>
         <div className="w-full min-w-0 flex-1 max-w-md sm:min-w-[320px]">
           <div className="flex items-center justify-between text-[12px] mb-1.5">
             <span className="font-mono uppercase tracking-wider" style={{ color: 'var(--text-soft)' }}>
-              {complete ? (backendActive ? '后端完成' : '模拟完成') : backendActive ? '总进度 · 后端 Job' : '总进度 · 模拟'}
+              {complete ? (backendActive ? '后端完成' : '模拟完成') : backendActive ? '服务端上报进度' : '阶段进度 · 模拟'}
             </span>
             <span className="font-mono font-semibold" style={{ color: 'var(--text-strong)' }}>
-              {progress.toFixed(0)}%
+              {progress == null ? '待服务端返回进度' : `${backendActive ? progress : progress.toFixed(0)}%`}
             </span>
           </div>
           <div className="h-2 rounded-full overflow-hidden" style={{ background: '#E2E8F0' }}>
             <div
               className="h-full rounded-full transition-all duration-500"
               style={{
-                width: `${progress}%`,
+                width: `${progress ?? 0}%`,
                 background: complete
                   ? 'linear-gradient(90deg, #10B981, #34D399)'
                   : 'linear-gradient(90deg, var(--brand), #818CF8)',
@@ -626,10 +652,11 @@ function QkStep3({ running, stage, logs, strategies, onScrollToResult, backendAc
               key={s.id}
               stage={s}
               idx={i}
-              currentStage={stage}
+              currentStage={activeStage}
               complete={complete}
               last={i === stages.length - 1}
               backendActive={backendActive}
+              running={backendActive ? backendRunning : running}
             />
           ))}
         </div>
@@ -639,7 +666,7 @@ function QkStep3({ running, stage, logs, strategies, onScrollToResult, backendAc
       <QkCollapsibleLog logs={logs} running={running} backendActive={backendActive} />
 
       {/* 策略 chips */}
-      <QkStrategyChips strategies={strategies} />
+      <QkStrategyChips strategies={backendActive ? qkBackendStrategies(backendJob) : strategies} backendActive={backendActive} />
 
       <style>{`
         @keyframes qkPulseLarge {

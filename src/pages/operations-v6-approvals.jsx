@@ -1,6 +1,7 @@
 // Two existing routes, eight blueprint states. Never substitute fixture data here.
 const OPS6_STATUS={PENDING:'待审批',PENDING_APPROVAL:'待审批',APPROVED:'已批准',REJECTED:'已退回',PUBLISHED:'已发布',EXECUTING:'执行中',CLOSED:'已结束',ARCHIVED:'已归档',REVIEW_REQUIRED:'待重新提交',READY:'待提交',INVALID:'校验未通过',INFEASIBLE:'无可行安排'};
 const ops6List=value=>{if(!Array.isArray(value))throw new Error('返回格式不完整，请刷新核对。');return value;};
+const ops6UserId=value=>typeof value==='string'&&/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(value)?value.toLowerCase():'';
 const ops6Revision=(value,item)=>{if(!value || value.id!==item.revisionId || value.planId!==item.planId)throw new Error('版本关联不一致，已停止操作。');return value;};
 function ops6WriteResult(value,item,kind){
   const revision=ops6Revision(value,item);
@@ -158,11 +159,13 @@ function Ops6ApprovalReview({item,onBack}) {
   },[item.planId,item.revisionId]);
   const [state,reload]=useLiveResource(load,[load]);const revision=state.data?.revision;const history=state.data?.history||[];
   React.useEffect(()=>{if(message&&state.status==='ready'){headingRef.current?.focus({preventScroll:true});headingRef.current?.closest('.page-shell')?.scrollIntoView({block:'start',behavior:'instant'});}},[message,state.status]);
-  const request=history.find(x=>x.id===item.id);const user=window.__jkxtMe?.user;const self=Boolean(user?.id&&request?.requestedBy===user.id);
+  const request=history.find(x=>x.id===item.id);const user=window.__jkxtMe?.user;
+  const actorId=ops6UserId(user?.id),requesterId=ops6UserId(request?.requestedBy);const self=Boolean(actorId&&requesterId===actorId);
+  const canManageSchedule=Array.isArray(window.__jkxtMe?.permissions)&&window.__jkxtMe.permissions.includes('schedule:manage');
   const pending=request?.status==='PENDING'&&revision?.status==='PENDING_APPROVAL';const approved=request?.status==='APPROVED'&&revision?.status==='APPROVED';
   const cursorReady=Number.isInteger(revision?.revisionCursor)&&revision.revisionCursor>=0;
-  const canDecide=pending&&!self&&Boolean(user?.id)&&cursorReady&&reason.trim().length>0&&!busy&&!uncertain&&state.status==='ready';
-  const canPublish=approved&&Boolean(user?.id)&&cursorReady&&ops6Checked(revision)&&!busy&&!uncertain&&state.status==='ready';
+  const canDecide=pending&&!self&&Boolean(actorId&&requesterId)&&canManageSchedule&&cursorReady&&reason.trim().length>0&&!busy&&!uncertain&&state.status==='ready';
+  const canPublish=approved&&Boolean(actorId)&&canManageSchedule&&cursorReady&&ops6Checked(revision)&&!busy&&!uncertain&&state.status==='ready';
   const refresh=async()=>{setDecision('');setPublishOpen(false);setError('');await reload();if(mounted.current)setUncertain(false);};
   const execute=async(kind)=>{
     if(lock.current || (kind==='publish'?(!canPublish||!checked):!canDecide))return;
@@ -186,6 +189,8 @@ function Ops6ApprovalReview({item,onBack}) {
       {message&&<p className="ops6-success" role="status">{message}</p>}{error&&<p className="ops6-error" role="alert">{error}</p>}{uncertain&&<Button onClick={refresh} disabled={Boolean(busy)}>刷新并核对状态</Button>}
       {revision.publishedAt?<Ops6Deliveries revision={revision} item={item} onView={openSource}/>:<div className="ops6-review-grid"><div className="ops6-panel"><Ops6Changes revision={revision} item={item}/><Ops6Validation revision={revision}/><section className="ops6-section"><h2>提交说明</h2><p>{revision.changeReason||'当前版本未提供变更说明。'}</p><Button onClick={openSource}>查看此版本安排</Button></section></div>
       <aside className="ops6-panel ops6-decision"><h2><window.Ops6Asset name="approve" size={30}/>{approved?'发布准备':'审批决定'}</h2><div className="ops6-object"><small>当前操作对象</small><strong>{item.planName||'名称未提供'} / {ops6Version(revision.revisionNo)}</strong></div>
+      {!canManageSchedule&&<p className="ops6-warning">当前账号没有审批和发布权限，请由具备权限的人员处理。</p>}
+      {((pending&&!requesterId)||((pending||approved)&&!actorId))&&<p className="ops6-warning">当前操作人或提交人身份未能核实，不能提交审批决定或继续发布。</p>}
       {pending?<><label className="ops6-opinion"><span>审批意见（必填）</span><textarea value={reason} maxLength={2000} rows={6} disabled={Boolean(busy)||uncertain} onChange={e=>{setReason(e.target.value);setDecision('');}} placeholder="请填写核对依据或退回原因" required/></label><p className="ops6-note">提交人不能审批自己的申请，批准和退回均受此限制。</p>{self&&<p className="ops6-warning">这是您提交的申请，请由其他具备审批权限的人员处理。</p>}{!user?.id&&<p className="ops6-warning">当前操作人身份未提供，不能提交审批决定。</p>}
       {decision?<div className="ops6-confirm-inline" role="group" aria-label="确认审批决定"><strong>{decision==='approve'?'确认批准此版本？':'确认退回修改？'}</strong><p>对象：{ops6Version(revision.revisionNo)}。意见：{reason}</p><div className="ops6-actions"><Button disabled={Boolean(busy)} onClick={()=>setDecision('')}>取消</Button><Button variant="primary" disabled={!canDecide} loading={Boolean(busy)} onClick={()=>execute(decision)}>{decision==='approve'?'确认批准':'确认退回'}</Button></div></div>:<div className="ops6-actions"><Button disabled={!canDecide} onClick={()=>setDecision('reject')}>退回修改</Button><Button variant="primary" disabled={!canDecide} onClick={()=>setDecision('approve')}>批准此版本</Button></div>}<p className="ops6-note">批准后进入待发布，不会自动发布或发送通知。</p></>:approved?<><p>此版本已批准。请再次确认版次、校验结果和发布影响。</p><dl className="ops6-facts"><dt>版本审批</dt><dd>已批准</dd><dt>最近校验</dt><dd>{ops6Checked(revision)?'通过':'待核查'}</dd></dl>{!ops6Checked(revision)&&<p className="ops6-warning">完整校验结果尚未通过，不能确认发布。</p>}{!user?.id&&<p className="ops6-warning">当前操作人身份未提供，不能确认发布。</p>}<Button variant="primary" disabled={!canPublish} onClick={()=>{setChecked(false);setPublishOpen(true);}}>发布此版本</Button><p className="ops6-note">发布后为只读版本，后续调整须创建后继版本。</p></>:<><p>{request?.status==='PENDING'?'审批记录与版本状态不一致，请刷新核对。':'此记录当前不可提交审批或发布决定。'}</p><Button onClick={refresh}>刷新版本状态</Button><p className="ops6-note">所有操作固定到当前版次，不自动切换最新版。</p></>}
       </aside></div>}

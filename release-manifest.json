@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
   "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
-  "generatedAt": "2026-10-21T12:42:55.237Z",
+  "generatedAt": "2026-10-21T14:21:02.791Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 654,
-  "totalBytes": 50278167,
+  "fileCount": 659,
+  "totalBytes": 50361448,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -2761,6 +2761,11 @@
       "sha256": "6af498fde17a27327c5a67b23fda5dbf2b0c53b9e8a6f22a8821f353003fb0ea"
     },
     {
+      "path": "scripts/approval-self-review.test.cjs",
+      "bytes": 9952,
+      "sha256": "21f7ef14509c3886768f5e5c600379e3a728063c396b79a2f1a86bbb49fe5d7d"
+    },
+    {
       "path": "scripts/deploy/api-base-resolution.test.cjs",
       "bytes": 2589,
       "sha256": "4ed002f51b5825d7901047f18f6a1e5352bcd8651383ec53bb2ed7138b953159"
@@ -2926,6 +2931,11 @@
       "sha256": "a7b93ad33d6c6ca326dca1c960be6abc46b76263fed497493e10f885ea2029ec"
     },
     {
+      "path": "scripts/frontend-quality/check-operations-v6.mjs",
+      "bytes": 28592,
+      "sha256": "dbf2358ed65bed72567d98e4d8056690d6dc2c59e50514896bb651636f27c823"
+    },
+    {
       "path": "scripts/login-backend-availability.test.cjs",
       "bytes": 13998,
       "sha256": "7315e0e758444d830200d7434cfc904b6a0b4c7f1ff2dd0222be69fe5cb8f97a"
@@ -2936,9 +2946,24 @@
       "sha256": "e258a06ca5b67a8a2a21f70a93bbc2f67e466c7e9e42323e01ddcb4ece634627"
     },
     {
+      "path": "scripts/ops6-approval-permissions.test.cjs",
+      "bytes": 12234,
+      "sha256": "0578d9e0b66c191ca7f4dbe12b1a29e6ceb6b35c16eeb4099791cc32647d7455"
+    },
+    {
+      "path": "scripts/quick-progress-truth.test.cjs",
+      "bytes": 14224,
+      "sha256": "d6c0c9a870051d263fe6fe93ee7bad6574abd05f968b7b2c8fc17b1950419485"
+    },
+    {
       "path": "scripts/session-bootstrap-availability.test.cjs",
       "bytes": 14846,
       "sha256": "012140b14ee6c3942fdd9739cb709cd2982deb3e3975e2e70a4fd97fd87b1311"
+    },
+    {
+      "path": "scripts/test-duty-shell-permissions.mjs",
+      "bytes": 11880,
+      "sha256": "c4e431cb737e9f4411b355866adfc13073a2ee679acc2600c60108bee418a18e"
     },
     {
       "path": "src/ai-workflow.js",
@@ -3077,8 +3102,8 @@
     },
     {
       "path": "src/pages/exam-plans.jsx",
-      "bytes": 83635,
-      "sha256": "da38427ee1f5fa76bbb312792e583d34ec7ca1c51bc9969a7db738b3501f7b8d"
+      "bytes": 86097,
+      "sha256": "b12f46a0a8dea589e7163bc4ba8c82d83ef7743bb7cc82cb16e73deb3059dc51"
     },
     {
       "path": "src/pages/history.jsx",
@@ -3092,8 +3117,8 @@
     },
     {
       "path": "src/pages/operations-v6-approvals.jsx",
-      "bytes": 32065,
-      "sha256": "7afefc24c12a2dbdcfcc0b4ef8ea520435e19c3ca098c0ed12f9b83de7828c83"
+      "bytes": 32779,
+      "sha256": "ca4d4330a0e68f859b6a23efff63235251885d4da0ef451d67b38b03d8d9ff56"
     },
     {
       "path": "src/pages/operations-v6-emergency.jsx",
@@ -3127,8 +3152,8 @@
     },
     {
       "path": "src/pages/quick-step3.jsx",
-      "bytes": 29083,
-      "sha256": "91727432a586672746eb54f9039e74bab0ea3c619d19752104c525f7770e65de"
+      "bytes": 32503,
+      "sha256": "e439bb26d81031b4e9fb0c1ca25c9658d6aea08dc442a0f3201beb306075837e"
     },
     {
       "path": "src/pages/quick-step4.jsx",
@@ -3137,8 +3162,8 @@
     },
     {
       "path": "src/pages/quick.jsx",
-      "bytes": 50990,
-      "sha256": "937feaa36fa80fefbccc4c8417103672ab64e1135751f7e8e704c199a1dea67c"
+      "bytes": 50771,
+      "sha256": "59dc0a90c91dd5ccc36665ed62a4aea42c61652ae5a8af19cc7198c4ec1f5e4d"
     },
     {
       "path": "src/pages/settings.jsx",
@@ -3172,8 +3197,8 @@
     },
     {
       "path": "src/sidebar.jsx",
-      "bytes": 11471,
-      "sha256": "110d6d2e59553b2b156ee4cbe6ea9f1031bf72e446f2f93f67720b622610b7db"
+      "bytes": 11493,
+      "sha256": "e7633b0a400d7abcfe646f0a26e2480e16ff1884f25a555d185b5a00599c6b66"
     },
     {
       "path": "src/styles/blueprint-v5.css",
@@ -3316,6 +3341,6 @@
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
   ],
-  "baseCommit": "c08e7b4e8923da8f1c2497e1d98e25036f2c8d4b",
-  "scope": "Tracked source files excluding this generated manifest; not business acceptance"
+  "baseCommit": "8c1ced2ecd205f2a9522ed7c4675fb42f39cc44c",
+  "scope": "Source export only; frontend runtime matches tested candidate. This is not full production acceptance."
 }

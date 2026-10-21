@@ -474,6 +474,11 @@ function SolverDiagnostics({ diagnostics }) {
   return <div role="alert" className="mt-4 space-y-3" data-testid="solver-diagnostics"><div className="text-[12px] font-semibold" style={{ color: 'var(--danger)' }}>联合求解诊断（未返回部分成功）</div>{Object.entries(groups).map(([stage, issues]) => <section key={stage} className="rounded-xl px-4 py-3" style={{ background: 'var(--danger-soft)', border: '1px solid color-mix(in srgb, var(--danger) 25%, transparent)' }}><div className="font-mono text-[10.5px] font-semibold" style={{ color: 'var(--danger)' }}>{stage}</div><ul className="mt-2 space-y-3">{issues.map((issue, index) => { const affected = listOf(issue?.affectedResourceIds || issue?.affectedIds || issue?.affected_resources); const suggestions = listOf(issue?.suggestions || issue?.repairSuggestions || issue?.repair_suggestions); return <li key={valueOf(issue, ['code', 'id'], index)}><div className="text-[12px] font-semibold">{valueOf(issue, ['message', 'code'], '未命名冲突')}</div>{affected.length > 0 && <div className="mt-1 break-all font-mono text-[10px]" style={{ color: 'var(--text-medium)' }}>受影响：{affected.join('、')}</div>}{suggestions.length > 0 && <ul className="mt-1 list-disc pl-4 text-[11px]" style={{ color: 'var(--text-medium)' }}>{suggestions.map((suggestion) => <li key={String(suggestion)}>{typeof suggestion === 'string' ? suggestion : valueOf(suggestion, ['message', 'action'], JSON.stringify(suggestion))}</li>)}</ul>}</li>; })}</ul></section>)}</div>;
 }
 
+function planApprovalUserId(value) {
+  return typeof value === 'string' && /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(value)
+    ? value.toLowerCase() : '';
+}
+
 function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged }) {
   const revisionId = valueOf(revision, ['id', 'revisionId', 'revision_id'], '');
   const status = String(valueOf(revision, ['status'], 'DRAFT')).toUpperCase();
@@ -487,6 +492,7 @@ function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged })
   const [cancelling, setCancelling] = React.useState(false);
   const [cancelRequested, setCancelRequested] = React.useState(false);
   const [approvalReason, setApprovalReason] = React.useState('');
+  const [approvalState, setApprovalState] = React.useState({ key: '', status: 'loading', request: null });
   const [emergencyTeacher, setEmergencyTeacher] = React.useState('');
   const [publishOpen, setPublishOpen] = React.useState(false);
   const [publishNeedsRefresh, setPublishNeedsRefresh] = React.useState(false);
@@ -494,6 +500,32 @@ function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged })
   const planningRunRef = React.useRef(0);
   const headers = { 'If-Match': String(cursor) };
   React.useEffect(() => () => { planningRunRef.current += 1; }, []);
+  const actorId = planApprovalUserId(window.__jkxtMe?.user?.id);
+  const canManageSchedule = Array.isArray(window.__jkxtMe?.permissions) && window.__jkxtMe.permissions.includes('schedule:manage');
+  const approvalKey = `${planId}:${revisionId}:${cursor}:${status}:${actorId}`;
+  React.useEffect(() => {
+    if (status !== 'PENDING_APPROVAL') return;
+    let active = true;
+    setApprovalState({ key: approvalKey, status: 'loading', request: null });
+    (async () => {
+      try {
+        const rows = listOf(await window.api.operations.approvals());
+        const pending = rows.filter(row => row?.planId === planId && row?.revisionId === revisionId && row?.status === 'PENDING');
+        if (active) setApprovalState({ key: approvalKey, status: 'ready', request: pending.length === 1 ? pending[0] : null });
+      } catch (_) {
+        if (active) setApprovalState({ key: approvalKey, status: 'error', request: null });
+      }
+    })();
+    return () => { active = false; };
+  }, [approvalKey]);
+  const requesterId = planApprovalUserId(approvalState.request?.requestedBy);
+  const approvalBlock = !actorId ? '当前操作人身份未能确认，不能提交审批决定。'
+    : !canManageSchedule ? '当前账号没有审批权限，请由具备审批权限的人员处理。'
+    : approvalState.key !== approvalKey || approvalState.status === 'loading' ? '正在核对审批申请，核对完成前不能批准或驳回。'
+    : approvalState.status === 'error' ? '审批申请读取失败，请重新打开此版本后重试。'
+    : !requesterId ? '未能确认此版本的待审批申请及提交人，不能提交审批决定。'
+    : requesterId === actorId ? '这是您提交的申请，请由其他具备审批权限的人员批准或驳回。' : '';
+  const canDecideApproval = status === 'PENDING_APPROVAL' && !approvalBlock;
 
   const execute = async (key, label, operation) => {
     if (busy) return;
@@ -653,6 +685,7 @@ function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged })
   };
 
   const decideApproval = async (decision) => {
+    if (!canDecideApproval || busy) return;
     const reason = approvalReason.trim();
     if (!reason) { setError('请先填写审批意见'); return; }
     const approved = decision === 'approve';
@@ -705,7 +738,7 @@ function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged })
           {['DRAFT', 'INVALID', 'FAILED', 'INFEASIBLE'].includes(status) && <Button loading={busy === 'validate'} disabled={Boolean(busy)} onClick={() => execute('validate', '版本校验已完成', () => window.api.examPlans.validate(planId, revisionId, { headers }))}>校验版本</Button>}
           {['DRAFT', 'INVALID', 'READY', 'FAILED', 'INFEASIBLE'].includes(status) && <Button variant={status === 'READY' ? 'secondary' : 'primary'} loading={busy === 'planning'} disabled={Boolean(busy)} onClick={startPlanning}>生成联合排程</Button>}
           {['READY', 'REVIEW_REQUIRED'].includes(status) && <Button variant="primary" loading={busy === 'submit'} disabled={Boolean(busy)} onClick={() => execute('submit', '版本已提交审批', () => window.api.examPlans.submitApproval(planId, revisionId, { headers }))}>提交审批</Button>}
-          {status === 'PENDING_APPROVAL' && <><Button variant="primary" loading={busy === 'approve'} disabled={Boolean(busy)} onClick={() => decideApproval('approve')}>批准</Button><Button variant="danger" loading={busy === 'reject'} disabled={Boolean(busy)} onClick={() => decideApproval('reject')}>驳回</Button></>}
+          {status === 'PENDING_APPROVAL' && <><Button variant="primary" loading={busy === 'approve'} disabled={Boolean(busy) || !canDecideApproval} onClick={() => decideApproval('approve')}>批准</Button><Button variant="danger" loading={busy === 'reject'} disabled={Boolean(busy) || !canDecideApproval} onClick={() => decideApproval('reject')}>驳回</Button></>}
           {status === 'APPROVED' && <Button variant="primary" loading={busy === 'publish'} disabled={Boolean(busy) || publishNeedsRefresh} onClick={() => {setError('');setPublishOpen(true);}}>发布此版本</Button>}
           {publishNeedsRefresh && <Button disabled={Boolean(busy)} onClick={async () => { await onChanged?.();setPublishNeedsRefresh(false);setError(''); }}>刷新并核对状态</Button>}
           {['FAILED', 'INFEASIBLE', 'PUBLISHED', 'EXECUTING', 'CLOSED'].includes(status) && <Button loading={busy === 'successor'} disabled={Boolean(busy)} onClick={createSuccessor}>创建后继版本</Button>}
@@ -715,7 +748,7 @@ function PlanLifecycleActions({ planId, revision, planName, planNo, onChanged })
       </div>
       {['DRAFT', 'INVALID'].includes(status) && <p className="mt-3 text-[11.5px]" style={{ color: 'var(--text-soft)' }}>完成输入后可直接生成联合排程；“校验版本”检查的是已生成的场次、座位与监考安排。</p>}
       {['FAILED', 'INFEASIBLE'].includes(status) && <p className="mt-3 text-[11.5px]" style={{ color: 'var(--text-soft)' }}>可重试当前输入；如需修复输入，请创建后继版本并重新导入所需资源，原版本保留供核查。</p>}
-      {status === 'PENDING_APPROVAL' && <label className="mt-4 block"><span className="mb-1.5 block text-[11.5px] font-semibold">审批意见</span><textarea value={approvalReason} onChange={(event) => setApprovalReason(event.target.value)} rows="2" className="w-full rounded-xl px-3 py-2 text-[12.5px] outline-none" style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-strong)' }} placeholder="填写批准依据或驳回原因" /></label>}
+      {status === 'PENDING_APPROVAL' && <><p role="status" className="mt-3 text-[11.5px]" style={{ color: 'var(--text-medium)' }}>{approvalBlock || '请核对当前版本后填写审批意见，提交人不能审批自己的申请。'}</p><label className="mt-4 block"><span className="mb-1.5 block text-[11.5px] font-semibold">审批意见</span><textarea value={approvalReason} disabled={Boolean(busy) || !canDecideApproval} onChange={(event) => setApprovalReason(event.target.value)} rows="2" className="w-full rounded-xl px-3 py-2 text-[12.5px] outline-none" style={{ background: 'var(--surface-raised)', border: '1px solid var(--border-strong)' }} placeholder="填写批准依据或驳回原因" /></label></>}
       {job && activeJob && <div role="status" className="mt-4 rounded-xl px-4 py-3 text-[12px]" style={{ background: 'var(--surface-muted)' }}>{cancelRequested ? '等待后端确认取消' : `求解阶段 ${valueOf(job, ['stage'], 'QUEUED')} · ${Number(valueOf(job, ['progress'], 0))}%`}</div>}
       {job && !activeJob && <div role="status" data-testid={`solver-terminal-${jobStatus.toLowerCase()}`} className="mt-4 flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-[12px]" style={{ background: jobStatus === 'SUCCEEDED' ? 'var(--success-soft)' : ['CANCELLED', 'UNRESOLVED'].includes(jobDisplayStatus) ? 'var(--surface-muted)' : 'var(--danger-soft)' }}><span>联合求解终态</span><StatusBadge status={jobDisplayStatus} /></div>}
       <SolverDiagnostics diagnostics={solverDiagnostics} />

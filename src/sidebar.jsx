@@ -20,7 +20,7 @@ function Sidebar({ active, onChange, onLogout, mode = 'admin', asideRef, mobileO
   const [identityRevision, refreshIdentity] = useStateSb(0);
   const identity = sidebarCountIdentity();
   const observedIdentity = useRefSb({ key: identity.key, revision: 0 });
-  const countScope = JSON.stringify([mode, identity.key, identityRevision]);
+  const countScope = JSON.stringify([mode, identity.key, identityRevision, active]);
   // Hide another account's values immediately, including before the new effect runs.
   const counts = countResult.scope === countScope ? countResult.values : {};
   useEffectSb(() => {
@@ -60,7 +60,7 @@ function Sidebar({ active, onChange, onLogout, mode = 'admin', asideRef, mobileO
         .then((h) => { if (h) publish({ uptimeSeconds: h.uptimeSeconds }); })
         .catch(() => {});
     } else if (identity.canReadTenant) {
-      // footer「本学期排班进度」= 已完成任务占比（此前写死 68%）
+      // This endpoint is not term-filtered: report task completion, not current-term progress.
       window.api.get('/exam-tasks')
         .then((rows) => {
           if (!alive || !Array.isArray(rows)) return;
@@ -70,7 +70,7 @@ function Sidebar({ active, onChange, onLogout, mode = 'admin', asideRef, mobileO
         .catch(() => {});
     }
     return () => { alive = false; };
-  }, [mode, identity.key, identityRevision]);
+  }, [mode, identity.key, identityRevision, active]);
   const fmtUp = (sec) => sec == null ? null : sec >= 86400 ? `${Math.floor(sec/86400)} 天` : sec >= 3600 ? `${Math.floor(sec/3600)} 小时` : `${Math.floor(sec/60)} 分钟`;
   const navActive = window.JKXTNavigation?.resolveActive?.(active) || (active === 'task-detail' ? 'tasks' : active);
   // Auto-derive which parent groups should be expanded based on active child
@@ -216,7 +216,7 @@ function Sidebar({ active, onChange, onLogout, mode = 'admin', asideRef, mobileO
         <div className="sidebar-status-card rounded-lg p-3" data-mode={mode} style={{ background: mode === 'super' ? 'var(--accent-soft)' : 'var(--surface-muted)' }}>
           <div className="flex items-baseline justify-between mb-1.5">
             <span className="text-[11px] font-medium" style={{ color: 'var(--text-medium)' }}>
-              {mode === 'super' ? '平台运行状态' : '本学期排班进度'}
+              {mode === 'super' ? '平台运行状态' : '任务排班完成率'}
             </span>
             <span className="font-mono text-[11px] font-semibold" style={{ color: 'var(--brand)' }}>
               {mode === 'super' ? (counts.uptimeSeconds != null ? '运行中' : '—') : (counts.donePct != null ? counts.donePct + '%' : '—')}

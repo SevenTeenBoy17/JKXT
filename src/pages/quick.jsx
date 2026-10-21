@@ -318,12 +318,6 @@ function qkIssueFromReport(report) {
   };
 }
 
-function qkRunStageFromProgress(progress) {
-  const value = Math.max(0, Math.min(100, Number(progress || 0)));
-  if (value >= 100) return 6;
-  return Math.max(0, Math.min(5, Math.floor(value / 20)));
-}
-
 function qkTerminalJob(status) {
   return ['succeeded', 'failed', 'infeasible', 'cancelled'].includes(String(status || '').toLowerCase());
 }
@@ -432,7 +426,7 @@ function QuickSchedulePage() {
 
   // ── 排班进度 ──────────────────────────────────────────────────
   const [running, setRunning]         = React.useState(false);
-  const [runStage, setRunStage]       = React.useState(-1);        // -1 idle → 0..3 → 4 done
+  const [runStage, setRunStage]       = React.useState(-1);        // -1 idle → 0 waiting/running → 6 confirmed result
   const [runLogs, setRunLogs]         = React.useState([]);
   const [resultAt, setResultAt]       = React.useState(null);
 
@@ -546,11 +540,13 @@ function QuickSchedulePage() {
   // 此前是 500ms×80 轮询，一到 80 次就抛「排监考任务超时」——而后端任务仍在跑并会正常完成，
   // 大任务(200+ 考场)几乎必被误报。后端本就有 /schedule-jobs/{id}/events 进度流
   // (event: progress，data=ProgressEvent JSON)，nginx 已对 events 路径关闭缓冲。
-  const applyJobSnapshot = (latest) => {
-    setBackendResult(latest);
+  const applyJobSnapshot = (latest, isEvent = false) => {
+    setBackendResult(previous => isEvent ? { ...previous, ...latest } : latest);
     // 100% 进度不等于求解成功；只有确认状态和任务编号后的结果才能进入完成阶段。
-    setRunStage(Math.min(5, qkRunStageFromProgress(latest.progress)));
-    setRunLogs(qkLogsFromJob(latest));
+    setRunStage(0);
+    setRunLogs(previous => isEvent
+      ? [...previous, ...qkLogsFromJob({ logs: [latest] })]
+      : qkLogsFromJob(latest));
   };
 
   const waitBackendJob = async (jobId) => {
@@ -573,7 +569,7 @@ function QuickSchedulePage() {
         quiet = setTimeout(() => finish(reject, new Error('sse-quiet')), 120000); // 事件间隔哨兵
         try {
           const p = JSON.parse(ev.data);
-          applyJobSnapshot({ status: p.status, stage: p.stage, progress: p.progress, message: p.message });
+          applyJobSnapshot(p, true);
           if (qkTerminalJob(p.status)) finish(resolve, null);
         } catch { /* 单条坏事件不致命，等下一条或哨兵回退 */ }
       });
@@ -855,7 +851,7 @@ function QuickSchedulePage() {
       backendJobRef.current = started.jobId || started.runId;
       setBackendResult(started);
       setRunLogs(qkLogsFromJob(started));
-      setRunStage(Math.min(5, qkRunStageFromProgress(started.progress)));
+      setRunStage(0);
       const snapshot = await waitBackendJob(backendJobRef.current);
       if (snapshot?.status !== 'succeeded') {
         // 求解返回 infeasible / failed：如实呈现冲突，绝不伪造成功。
@@ -1059,9 +1055,9 @@ function QuickSchedulePage() {
             running={running}
             stage={runStage}
             logs={runLogs}
-            strategies={QK_STRATEGIES}
             onScrollToResult={() => scrollTo('step4')}
-            backendActive={!!backendResult}
+            backendActive={true}
+            backendJob={backendResult}
           />
         </div>
       )}
