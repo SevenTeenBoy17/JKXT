@@ -90,5 +90,5 @@ test('role correction preserves source session identity, teacher and honest room
   assert.ok(content.includes('30000000-0000-4000-8000-000000000001'));
   assert.ok(content.includes('合成教师甲') && content.includes('T001'));
   assert.match(content, /08:00.*10:00/);
-  assert.ok(content.includes('考场关联当前接口未提供'));
+  assert.ok(content.includes('考场信息未提供'));
 });

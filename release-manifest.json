@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
   "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
-  "generatedAt": "2026-10-21T14:31:57.185Z",
+  "generatedAt": "2026-10-21T15:40:36.469Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 660,
-  "totalBytes": 50367221,
+  "fileCount": 669,
+  "totalBytes": 50441559,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -1116,6 +1116,16 @@
       "sha256": "9bc04256dda70ffbe357d2c8b03f2da2bc5b62f0c5d86e27b1cfa1543c612213"
     },
     {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ExamPlanAuditController.java",
+      "bytes": 1214,
+      "sha256": "c3965b10f1cada83e4cb7344d2cf9b33b2231a254877e63f1ebdc4835abf831d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ExamPlanAuditDtos.java",
+      "bytes": 530,
+      "sha256": "b744924a660a2ded6629159ce94f883315f9483a856ba57664d2eff34cba0b25"
+    },
+    {
       "path": "backend/src/main/java/com/jkxt/examops/api/ExamPlanController.java",
       "bytes": 6520,
       "sha256": "b1cb4a9c36e87ae6844f3453e21c9f5d77a7f7c5b0437f77d9f4e859d0c5b1eb"
@@ -1221,6 +1231,11 @@
       "sha256": "16176b301860bd06a5384aa9013cce372e981636b2f105d10986cb4a9c6b836e"
     },
     {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanAuditQueryService.java",
+      "bytes": 4614,
+      "sha256": "0af8c4b510280d0330a7da640fc17feededb46f0df3124591d04d2b1ead23a21"
+    },
+    {
       "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanDiagnosticService.java",
       "bytes": 8487,
       "sha256": "8bf0840c9b4f6ef4a6d71d059977f39d2fa9ef81d36a8a0f7b722fe9252d975a"
@@ -1277,8 +1292,8 @@
     },
     {
       "path": "backend/src/main/java/com/jkxt/examops/service/PlanRevisionResourceService.java",
-      "bytes": 8275,
-      "sha256": "5c1b0a67487a2f67ba33c04dfe8b24805ffe0dcda2151b0a224b4173b8a79989"
+      "bytes": 8973,
+      "sha256": "8ed717318763eb7fa9c535263b537e8d1f3764bbfec5c3e300667b97f0da81c4"
     },
     {
       "path": "backend/src/main/java/com/jkxt/examops/service/PlanRevisionResourceWriteService.java",
@@ -2141,6 +2156,21 @@
       "sha256": "5bff298b8fabaa5b98f591ff7080f62808a463c519c1b514ebd321727ecc665a"
     },
     {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamPlanAuditReadIntegrationTest.java",
+      "bytes": 13625,
+      "sha256": "7754e7e721f2de5a5080d8c20ef249b11cb93530bbe0172a14756ed71af34de8"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamPlanAuditReadUnitTest.java",
+      "bytes": 8152,
+      "sha256": "883405510d23d6c42b7d6bf3c270de12b6a05b860b3f1b659bf3d9a8f20c02c1"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamPlanAuditStorageBoundary.java",
+      "bytes": 2081,
+      "sha256": "7577c1401288fb3f8714bd7c14041ef7f9ae34c15ddfd9be768f85373ff5f809"
+    },
+    {
       "path": "backend/src/test/java/com/jkxt/examops/ExamPlanJointPlanningIntegrationTest.java",
       "bytes": 16697,
       "sha256": "ca15ee70ca8790d4194c5bc1ae8e17c4095af1af7b9550f75972ad00e09d8932"
@@ -2164,6 +2194,11 @@
       "path": "backend/src/test/java/com/jkxt/examops/NotificationProofIsolationTest.java",
       "bytes": 5786,
       "sha256": "19a940f3fc307d1d6455b9786b49f71a3c1a0a4ab3eda12a0451eb3300441aee"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PlanRevisionDutyContextIntegrationTest.java",
+      "bytes": 15013,
+      "sha256": "ba936d52437d6619422960d7d120e0c3ea143dcb6da716a54fdfd491cdc9c5d6"
     },
     {
       "path": "backend/src/test/java/com/jkxt/examops/PlanningLeaseIntegrationTest.java",
@@ -2762,8 +2797,8 @@
     },
     {
       "path": "scripts/approval-duty-roles.test.cjs",
-      "bytes": 5578,
-      "sha256": "44ef4e4518a7f1a5628e15501122a4fe380416ca15dab68e268f5ca31197768d"
+      "bytes": 5566,
+      "sha256": "eb2941c13a20f9575fd6d69bc9432c12f5955d4debac60b0047bbed61bb6ee2e"
     },
     {
       "path": "scripts/approval-self-review.test.cjs",
@@ -2956,6 +2991,16 @@
       "sha256": "0578d9e0b66c191ca7f4dbe12b1a29e6ceb6b35c16eeb4099791cc32647d7455"
     },
     {
+      "path": "scripts/ops6-arrangement-projection.test.cjs",
+      "bytes": 5802,
+      "sha256": "88809075d0d4a6eb9f2bbfa3d8829615f13c131255eddb35421459c7c6c7415d"
+    },
+    {
+      "path": "scripts/ops6-audit-events.test.cjs",
+      "bytes": 15354,
+      "sha256": "2ecb1c45104a7c50a6c084c20588bc512cf6d8b45ccda16e35980a7ef83bf897"
+    },
+    {
       "path": "scripts/quick-progress-truth.test.cjs",
       "bytes": 14224,
       "sha256": "d6c0c9a870051d263fe6fe93ee7bad6574abd05f968b7b2c8fc17b1950419485"
@@ -2977,8 +3022,8 @@
     },
     {
       "path": "src/api.js",
-      "bytes": 19833,
-      "sha256": "cf78a4089b74920b9ed9db6ede3b2a752c1177d0e5df6c50483c2571eca6ac93"
+      "bytes": 20014,
+      "sha256": "491918f221b8da8faa0e136beb22cd6165f8f2569879d5e521e985603ba7fa28"
     },
     {
       "path": "src/app.jsx",
@@ -3122,8 +3167,8 @@
     },
     {
       "path": "src/pages/operations-v6-approvals.jsx",
-      "bytes": 32974,
-      "sha256": "1b1f121a59158ee6dc8eda1ae094f795e26238131f3e0ebb9fad367e3c9e5482"
+      "bytes": 40060,
+      "sha256": "aca3b04e2d105ced9a043b814dfeed6570d1295d93d982b35b5c9ab5d1f37b0c"
     },
     {
       "path": "src/pages/operations-v6-emergency.jsx",
@@ -3346,6 +3391,6 @@
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
   ],
-  "baseCommit": "d75f6273ae8a04ce830f2a17f6343783840bd7a3",
-  "scope": "Source export only; frontend runtime matches tested candidate. This is not full production acceptance."
+  "baseCommit": "c6cbf24b8e0cc1e5ad04e36c2357c332b547f0d2",
+  "scope": "Scoped source export; candidate runtime and backend tests byte-matched. Not full commercial release approval."
 }

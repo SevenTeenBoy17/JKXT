@@ -48,6 +48,9 @@ public class PlanRevisionResourceService {
           """,
       "duties", """
           select a.id, req.session_id, s.session_code as session_external_code,
+                 s.name as session_name, s.subject_name,
+                 req.room_assignment_id, room.classroom_id,
+                 classroom.name as room_name, classroom.code as room_code,
                  a.requirement_id, a.teacher_id,
                  coalesce(snap.teacher_no, t.teacher_no) as teacher_no,
                  coalesce(snap.teacher_name, t.name) as teacher_name,
@@ -57,8 +60,15 @@ public class PlanRevisionResourceService {
                  coalesce(current_snap.teacher_no, current_teacher.teacher_no) as current_teacher_no,
                  e.status as current_status, e.engagement_no as current_engagement_no
           from exam_plan_duty_assignment a
-          join exam_plan_duty_requirement req on req.id=a.requirement_id and req.org_id=a.org_id
-          join exam_plan_session s on s.id=req.session_id and s.org_id=a.org_id
+          join exam_plan_duty_requirement req
+            on req.id=a.requirement_id and req.org_id=a.org_id and req.revision_id=a.revision_id
+          join exam_plan_session s
+            on s.id=req.session_id and s.org_id=a.org_id and s.revision_id=a.revision_id
+          -- The session belongs to this revision; room labels are current master data, not a publication snapshot.
+          left join exam_plan_room_assignment room
+            on room.id=req.room_assignment_id and room.org_id=a.org_id
+              and room.revision_id=a.revision_id and room.session_id=req.session_id
+          left join classroom on classroom.id=room.classroom_id and classroom.org_id=a.org_id
           join teacher t on t.id=a.teacher_id and t.org_id=a.org_id
           join exam_plan_effective_duty e on e.org_id=a.org_id and e.id=a.id
           join teacher current_teacher on current_teacher.org_id=e.org_id and current_teacher.id=e.teacher_id

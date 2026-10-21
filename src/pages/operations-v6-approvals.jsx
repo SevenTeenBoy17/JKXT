@@ -78,6 +78,13 @@ function Ops6Validation({revision}) {
     <details><summary>查看完整校验记录</summary><pre>{JSON.stringify(s||{},null,2)}</pre></details>
   </section>;
 }
+function ops6SessionLabel(row) {
+  return [row.session_name,row.sessionName,row.subject_name,row.subjectName,row.session_external_code,row.sessionCode].find(x=>typeof x==='string'&&x.trim())?.trim()||'场次未提供';
+}
+function ops6RoomLabel(row) {
+  const name=String(row.room_name??row.roomName??'').trim(),code=String(row.room_code??row.roomCode??'').trim();
+  return name&&code&&name!==code?`${name}（${code}）`:name||code;
+}
 function ops6DutyDiff(before,after) {
   const groups=new Map();let uncomparable=0;
   const field=(x,a,b)=>x[a]??x[b];
@@ -89,7 +96,8 @@ function ops6DutyDiff(before,after) {
     if(!session||!role||!starts||!ends||!teacher){uncomparable++;continue;}
     const room=x.room_code||x.roomCode||'';
     const key=JSON.stringify([session,room,role,starts,ends]);
-    if(!groups.has(key))groups.set(key,{key,session,room,role,starts,ends,before:[],after:[]});
+    if(!groups.has(key))groups.set(key,{key,session,room,role,starts,ends,sessionLabel:ops6SessionLabel(x),roomLabel:ops6RoomLabel(x),before:[],after:[]});
+    if(side==='after'){groups.get(key).sessionLabel=ops6SessionLabel(x);groups.get(key).roomLabel=ops6RoomLabel(x);}
     const name=field(x,'teacher_name','teacherName');
     groups.get(key)[side].push({teacher,label:name?`${name}（${teacher}）`:teacher});
   }
@@ -100,7 +108,7 @@ function Ops6DutyComparison({data,revision}) {
   const {changed,uncomparable}=ops6DutyDiff(data.before,data.after);
   return <>
     {uncomparable>0&&<p className="ops6-warning">{uncomparable} 条安排缺少场次、时段、角色或教师工号，未纳入自动对比，请核对来源。</p>}
-    {changed.length?<table className="ops6-table ops6-diff-table"><thead><tr><th>变更范围</th><th>来源{ops6Version(data.source.revisionNo)}</th><th>当前{ops6Version(revision.revisionNo)}</th></tr></thead><tbody>{changed.map(g=><tr key={g.key}><td data-label="变更范围"><strong>{g.session} · {ops6DutyRoleLabel(g.role)}</strong><small>{ops6Date(g.starts)} 至 {ops6Date(g.ends)}</small><small>{g.room?`考场 ${g.room}`:'考场：当前接口未提供'}</small></td><td data-label="来源版本">{g.before.length?g.before.map(x=>x.label).join('、'):'该组无安排'}</td><td data-label="当前版本"><strong>{g.after.length?g.after.map(x=>x.label).join('、'):'该组无安排'}</strong></td></tr>)}</tbody></table>:<p>已返回的可比字段未发现人员变化；不代表完整安排完全相同。</p>}
+    {changed.length?<table className="ops6-table ops6-diff-table"><thead><tr><th>变更范围</th><th>来源{ops6Version(data.source.revisionNo)}</th><th>当前{ops6Version(revision.revisionNo)}</th></tr></thead><tbody>{changed.map(g=><tr key={g.key}><td data-label="变更范围"><strong>{g.sessionLabel} · {ops6DutyRoleLabel(g.role)}</strong><small>{ops6Date(g.starts)} 至 {ops6Date(g.ends)}</small><small>{g.roomLabel?`考场：${g.roomLabel}`:'考场信息未提供'}</small></td><td data-label="来源版本">{g.before.length?g.before.map(x=>x.label).join('、'):'该组无安排'}</td><td data-label="当前版本"><strong>{g.after.length?g.after.map(x=>x.label).join('、'):'该组无安排'}</strong></td></tr>)}</tbody></table>:<p>已返回的可比字段未发现人员变化；不代表完整安排完全相同。</p>}
     <p className="ops6-note">按场次、时段、角色及已提供的考场分组比较人员名单，不把同组人员逐一推断为替换关系。</p>
     <details><summary>展开两版原始安排</summary><div className="ops6-raw-compare"><section><h3>来源版本</h3><pre>{JSON.stringify(data.before,null,2)}</pre></section><section><h3>当前版本</h3><pre>{JSON.stringify(data.after,null,2)}</pre></section></div></details>
   </>;
@@ -150,9 +158,68 @@ function Ops6VersionArrangement({item,revision,onClose}) {
   const [state,reload]=useLiveResource(load,[load]);
   return <window.BlueprintDrawer className="ops6 ops6-version-drawer" title={`${ops6Version(revision.revisionNo)} · 监考安排`} description="只读核查此版本，不跳转或自动切换最新版。" onClose={onClose} footer={<Button onClick={onClose}>返回版本审阅</Button>}>
     <div className="ops6-object"><strong>{item.planName}</strong><p>{ops6Version(revision.revisionNo)} · {OPS6_STATUS[revision.status]||revision.status}</p></div>
-    {state.status!=='ready'?<Ops6State state={state} onRetry={reload} label="版本安排"/>:!state.data.length?<p className="ops6-empty">此版本未返回监考安排。</p>:<table className="ops6-table"><thead><tr><th>场次与时段</th><th>监考教师</th><th>岗位</th></tr></thead><tbody>{state.data.map((x,i)=><tr key={x.id||i}><td data-label="场次与时段"><strong>{x.session_external_code||x.sessionCode||'场次未提供'}</strong><small>{ops6Date(x.starts_at||x.startsAt)} 至 {ops6Date(x.ends_at||x.endsAt)}</small></td><td data-label="监考教师">{x.teacher_name||x.teacherName||'姓名未提供'}<small>{x.teacher_no||x.teacherNo||'工号未提供'}</small></td><td data-label="岗位">{ops6DutyRoleLabel(x.duty_role||x.dutyRole||x.role)}</td></tr>)}</tbody></table>}
-    <p className="ops6-note">考场关联当前接口未提供。安排仅为当前查询到的版本记录，不表示教师已接受岗位。</p>
+    {state.status!=='ready'?<Ops6State state={state} onRetry={reload} label="版本安排"/>:!state.data.length?<p className="ops6-empty">此版本未返回监考安排。</p>:<table className="ops6-table"><thead><tr><th>场次与时段</th><th>监考教师</th><th>岗位</th></tr></thead><tbody>{state.data.map((x,i)=><tr key={x.id||i}><td data-label="场次与时段"><strong>{ops6SessionLabel(x)}</strong><small>{ops6Date(x.starts_at||x.startsAt)} 至 {ops6Date(x.ends_at||x.endsAt)}</small><small>{ops6RoomLabel(x)?`考场：${ops6RoomLabel(x)}`:'考场信息未提供'}</small></td><td data-label="监考教师">{x.teacher_name||x.teacherName||'姓名未提供'}<small>{x.teacher_no||x.teacherNo||'工号未提供'}</small></td><td data-label="岗位">{ops6DutyRoleLabel(x.duty_role||x.dutyRole||x.role)}</td></tr>)}</tbody></table>}
+    <p className="ops6-note">考场名称与编码来自当前基础资料，不代表发布时的名称快照。未提供的关联不作推断。安排仅为当前查询到的版本记录，不表示教师已接受岗位。</p>
   </window.BlueprintDrawer>;
+}
+function ops6AuditPage(value,item,cursor) {
+  if(!value||value.planId!==item.planId||value.revisionId!==item.revisionId||value.source!=='EXAM_PLAN_AUDIT_EVENT'||!Array.isArray(value.items)||value.items.length>20||typeof value.hasMore!=='boolean')throw Error('审计响应范围或格式不完整');
+  if(value.hasMore?(typeof value.nextCursor!=='string'||!value.nextCursor||value.nextCursor.length>1024||value.nextCursor===cursor):value.nextCursor!==null)throw Error('审计分页信息不完整');
+  const ids=new Set();
+  for(const row of value.items){
+    if(!row||!ops6UserId(row.id)||ids.has(row.id)||typeof row.action!=='string'||!row.action.trim()||typeof row.occurredAt!=='string'||Number.isNaN(Date.parse(row.occurredAt))||(row.actorDisplayName!==null&&typeof row.actorDisplayName!=='string'))throw Error('审计记录格式不完整');
+    ids.add(row.id);
+  }
+  return value;
+}
+function ops6AuditAction(action) {
+  const labels={PLAN_CREATED:'创建计划',REVISION_CREATED:'创建版本',REVISION_VALIDATED:'校验版本',APPROVAL_SUBMITTED:'提交审批',APPROVAL_APPROVED:'批准版本',APPROVAL_REJECTED:'退回审批',REVISION_PUBLISHED:'发布版本',REVISION_EXECUTING:'开始执行',REVISION_CLOSED:'结束执行',REVISION_ARCHIVED:'归档版本',DUTY_ACCEPTED:'接受监考岗位',DUTY_REJECTED:'拒绝监考岗位',DUTY_CHECKED_IN:'监考签到',SUBSTITUTION_CASE_OPENED:'建立替补事项',SUBSTITUTION_RESOLVED:'处理替补事项',INCIDENT_RECORDED:'记录考务事件',INCIDENT_RESOLVED:'处理考务事件',CHECKLIST_ITEM_COMPLETED:'完成检查项',CHECKLIST_ITEM_WAIVED:'豁免检查项',EMERGENCY_SUCCESSOR_CREATED:'创建应急后继版本'};
+  return Object.prototype.hasOwnProperty.call(labels,action)?labels[action]:`未识别操作（${action}）`;
+}
+function Ops6AuditHistory({item}) {
+  const me=window.__jkxtMe;
+  const canRead=Boolean(ops6UserId(me?.user?.id)&&ops6UserId(me?.org?.id)&&ops6UserId(item.planId)&&ops6UserId(item.revisionId)&&['ADMIN','SUPER_ADMIN'].includes(me?.user?.role)&&Array.isArray(me?.permissions)&&me.permissions.includes('tenant:read'));
+  const scope=JSON.stringify([me?.org?.id,me?.user?.id,me?.user?.role,canRead,item.planId,item.revisionId]);
+  const empty={scope,open:false,phase:'idle',items:[],hasMore:false,nextCursor:null,error:'',failedMore:false};
+  const [state,setState]=React.useState(empty);
+  const request=React.useRef({scope,sequence:0,locked:false,mounted:true});
+  // Hide the previous identity's records in the very first render, before effects run.
+  if(request.current.scope!==scope){request.current.scope=scope;request.current.sequence++;request.current.locked=false;}
+  const view=state.scope===scope?state:empty;
+  React.useEffect(()=>{request.current.mounted=true;return()=>{request.current.mounted=false;request.current.sequence++;request.current.locked=false;};},[]);
+  const load=async(more=false)=>{
+    if(!canRead||request.current.locked||request.current.scope!==scope||(more&&!view.hasMore))return;
+    request.current.locked=true;const sequence=++request.current.sequence;const cursor=more?view.nextCursor:null;
+    const current=()=>request.current.mounted&&request.current.scope===scope&&request.current.sequence===sequence;
+    setState({...view,scope,open:true,phase:more?'more':'loading',items:more?view.items:[],error:'',failedMore:false});
+    try{
+      const result=ops6AuditPage(await window.api.examPlans.auditEvents(item.planId,item.revisionId,{limit:20,...(cursor?{cursor}:{})}),item,cursor);
+      if(!current())return;
+      const rows=new Map((more?view.items:[]).map(x=>[x.id,x]));for(const row of result.items)rows.set(row.id,row);
+      setState(latest=>({scope,open:latest.scope===scope&&latest.open,phase:'ready',items:[...rows.values()],hasMore:result.hasMore,nextCursor:result.nextCursor,error:'',failedMore:false}));
+    }catch(error){
+      if(!current())return;
+      const denied=error?.status===401||error?.status===403;
+      const unavailable=denied||error?.status===404;
+      const message=denied?'当前会话或权限不能读取操作记录，请核对登录身份。':error?.status===404?'此计划版本不可用，无法读取操作记录。':'操作记录读取失败或返回格式不完整，请重试。';
+      setState(latest=>({...view,scope,open:latest.scope===scope&&latest.open,phase:'error',items:unavailable?[]:more?view.items:[],hasMore:unavailable?false:view.hasMore,nextCursor:unavailable?null:view.nextCursor,error:message,failedMore:more&&!unavailable}));
+    }finally{if(current())request.current.locked=false;}
+  };
+  const toggle=event=>{const open=event.currentTarget.open;if(open&&view.phase==='idle')load();else setState({...view,scope,open});};
+  const busy=view.phase==='loading'||view.phase==='more';
+  return <details className="ops6-panel ops6-history" open={view.open} onToggle={toggle}><summary>本版本已记录操作</summary>
+    <p className="ops6-note">仅显示本版本已写入考务审计表的操作，不含全部数据变更或完整前后状态。无记录不代表未发生操作。较新的记录请刷新查看。</p>
+    {!canRead?<p className="ops6-warning">当前账号身份或读取权限未能核实，不能读取操作记录。</p>:view.open&&<>
+      <Button onClick={()=>load()} disabled={busy}>刷新操作记录</Button>
+      {busy&&<p role="status">{view.phase==='more'?'正在读取更多操作记录…':'正在读取操作记录…'}</p>}
+      {view.error&&<div role="alert"><p className="ops6-error">{view.error}</p><Button onClick={()=>load(view.failedMore)} disabled={busy}>{view.failedMore?'重试加载更多':'重试读取'}</Button></div>}
+      {view.items.length>0&&<table className="ops6-table"><thead><tr><th>记录时间（北京时间）</th><th>操作</th><th>操作人</th></tr></thead><tbody>{view.items.map(row=><tr key={row.id} data-event-id={row.id}><td data-label="记录时间">{ops6Date(row.occurredAt)}</td><td data-label="操作">{ops6AuditAction(row.action)}</td><td data-label="操作人">{row.actorDisplayName?.trim()||'操作人未提供'}</td></tr>)}</tbody></table>}
+      {view.phase==='ready'&&!view.items.length&&<p className="ops6-empty">当前来源未返回本版本的操作记录。</p>}
+      {view.hasMore&&!view.error&&<Button onClick={()=>load(true)} disabled={busy}>加载更多</Button>}
+      {view.phase==='ready'&&!view.hasMore&&view.items.length>0&&<p>已到当前返回记录末尾；不代表完整历史。</p>}
+      <p className="ops6-note">操作人名称为当前账户名称，未提供时不推断身份。此区域只读，不支持修改或撤销历史。</p>
+    </>}
+  </details>;
 }
 function Ops6ApprovalReview({item,onBack}) {
   const [busy,setBusy]=React.useState('');const lock=React.useRef(false);const mounted=React.useRef(true);const [reason,setReason]=React.useState('');const [error,setError]=React.useState('');const [message,setMessage]=React.useState('');const [uncertain,setUncertain]=React.useState(false);const [publishOpen,setPublishOpen]=React.useState(false);const [checked,setChecked]=React.useState(false);const [decision,setDecision]=React.useState('');
@@ -201,7 +268,7 @@ function Ops6ApprovalReview({item,onBack}) {
       </aside></div>}
       {revision.publishedAt&&<details className="ops6-panel ops6-history"><summary>查看版本信息与校验</summary><Ops6Changes revision={revision} item={item}/><Ops6Validation revision={revision}/></details>}
       <details className="ops6-panel ops6-history"><summary>审批记录与版本编号</summary>{history.map(x=><article key={x.id}><strong>{OPS6_STATUS[x.status]||x.status}</strong><p>提交：{x.requestedByName||'未提供'} · {ops6Date(x.createdAt)}</p>{x.decidedAt&&<p>决定：{x.decidedByName||'未提供'} · {ops6Date(x.decidedAt)}</p>}<p>{x.decisionReason||'未提供审批意见'}</p></article>)}<dl className="ops6-facts"><dt>计划标识</dt><dd>{item.planId}</dd><dt>版本标识</dt><dd>{item.revisionId}</dd><dt>版本游标</dt><dd>{revision.revisionCursor}</dd></dl></details>
-      <details className="ops6-panel ops6-history"><summary>完整操作追溯 · 待接入</summary><p>当前仅可读取上述审批记录、版本事实及通知投递。完整考务操作审计尚无查询链路，不能还原全部操作者与前后状态。</p><p>此区域不伪造时间线，不支持修改或撤销历史。</p></details>
+      <Ops6AuditHistory item={item}/>
     </>}
     {sourceOpen&&revision&&<Ops6VersionArrangement item={item} revision={revision} onClose={()=>setSourceOpen(false)}/>}
     {publishOpen&&revision&&<window.BlueprintDialog className="ops6 ops6-publish-dialog" title={`确认发布${ops6Version(revision.revisionNo)}`} description="发布仅影响此计划的此版本，请核对后再确认。" busy={Boolean(busy)} onClose={()=>setPublishOpen(false)} footer={<><Button disabled={Boolean(busy)} onClick={()=>setPublishOpen(false)}>取消</Button><Button variant="primary" disabled={!canPublish||!checked} loading={busy==='publish'} onClick={()=>execute('publish')}>确认发布</Button></>}><div className="ops6-object"><strong>{item.planName} / {ops6Version(revision.revisionNo)}</strong><p>本次操作日期：{ops6Day(new Date().toISOString())}（北京时间）</p></div><h3>发布前核对</h3><dl className="ops6-facts"><dt>审批状态</dt><dd>已批准</dd><dt>最近校验</dt><dd>{ops6Checked(revision)?'通过':'需核查'}</dd><dt>硬约束问题</dt><dd>{revision.validationSummary?.hardViolationCount ?? '未提供'}</dd></dl><h3>发布后的变化</h3><ul><li>此版监考安排在授权范围内生效。</li><li>版本只读，修改需要创建后继版本。</li><li>通知投递另行核对，不代表已读或接受岗位。</li></ul><label className="ops6-consent"><input type="checkbox" checked={checked} disabled={Boolean(busy)} onChange={e=>setChecked(e.target.checked)}/><span>我已核对计划、版次与上述影响，确认发布此版本。</span></label>{error&&<p role="alert" className="ops6-error">{error}</p>}{uncertain&&<Button disabled={Boolean(busy)} onClick={refresh}>刷新并核对状态</Button>}</window.BlueprintDialog>}

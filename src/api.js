@@ -348,6 +348,7 @@
     create: (body, options = {}) => api.post('/exam-plans', body, options),
     revisions: (id) => api.get('/exam-plans/' + encodeURIComponent(id) + '/revisions'),
     revision: (planId, revisionId) => api.get('/exam-plans/' + encodeURIComponent(planId) + '/revisions/' + encodeURIComponent(revisionId)),
+    auditEvents: (planId, revisionId, query = {}) => api.get('/exam-plans/' + encodeURIComponent(planId) + '/revisions/' + encodeURIComponent(revisionId) + '/audit-events', query),
     validate: (planId, revisionId, options = {}) => api.post('/exam-plans/' + encodeURIComponent(planId) + '/revisions/' + encodeURIComponent(revisionId) + '/validate', {}, options),
     createRevision: (planId, body, options = {}) => api.post('/exam-plans/' + encodeURIComponent(planId) + '/revisions', body, options),
     startPlanning: (planId, revisionId, body, options = {}) => api.post('/exam-plans/' + encodeURIComponent(planId) + '/revisions/' + encodeURIComponent(revisionId) + '/planning-jobs', body, options),
