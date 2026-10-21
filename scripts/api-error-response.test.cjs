@@ -39,9 +39,38 @@ test('valid JSON success remains unchanged', async () => {
   assert.equal((await client(200, '{"status":"UP"}').get('/health')).status,'UP');
 });
 
+for (const status of [502, 503, 504]) {
+  for (const [label, body] of [['empty', ''], ['object', '{}'], ['null', 'null'], ['JSON string', '"gateway error"']]) {
+    test(`gateway ${status} with ${label} body explains unavailability without changing the HTTP status`, async () => {
+      await assert.rejects(client(status, body).get('/auth/me'), error => {
+        assert.equal(error.status, status);
+        assert.equal(error.code, 'SERVICE_UNAVAILABLE');
+        assert.match(error.message, /稍后重试/);
+        assert.ok(error.message.length < 120);
+        return true;
+      });
+    });
+  }
+}
+
+test('structured gateway business errors retain their message and diagnostics', async () => {
+  await assert.rejects(client(503, JSON.stringify({code: 'AI_UNAVAILABLE', message: 'AI 配置不可用', details: {provider: 'fixture'}, traceId: 'gateway-trace'})).get('/fixture'), error => {
+    assert.equal(error.status, 503);
+    assert.equal(error.code, 'AI_UNAVAILABLE');
+    assert.equal(error.message, 'AI 配置不可用');
+    assert.equal(error.details.provider, 'fixture');
+    assert.equal(error.traceId, 'gateway-trace');
+    return true;
+  });
+});
+
+test('empty successful responses stay successful and empty', async () => {
+  assert.equal(await client(204, '').get('/fixture'), null);
+});
+
 // Exercise the real adapter with a bounded response sequence, not a mocked API.
 // These are local transport-contract tests, not browser authentication evidence.
-function sequencedClient(replies, {cookie = '', search = ''} = {}) {
+function sequencedClient(replies, {cookie = '', search = '', beforeText} = {}) {
   const queue = replies.slice();
   const calls = [], events = [];
   const storage = {getItem: () => null, setItem() {}};
@@ -55,7 +84,12 @@ function sequencedClient(replies, {cookie = '', search = ''} = {}) {
       assert.ok(queue.length, 'The adapter must not make an unexpected request or retry');
       const reply = queue.shift();
       if (reply.cookie !== undefined) document.cookie = reply.cookie;
-      return new Response(reply.body, {status: reply.status, headers: reply.headers});
+      const response = new Response(reply.body, {status: reply.status, headers: reply.headers});
+      if (beforeText) {
+        const readText = response.text.bind(response);
+        response.text = async () => { await beforeText(); return readText(); };
+      }
+      return response;
     }});
   return {api: window.api, calls, events};
 }
@@ -142,4 +176,26 @@ test('a CSRF error without a readable cookie never retries', async () => {
   });
   assert.equal(calls.length, 1);
   assert.equal(calls[0].options.headers['X-XSRF-TOKEN'], undefined);
+});
+
+test('gateway failure preserves cancellation and portal, without retries or unauthorized events', async () => {
+  const {api, calls, events} = sequencedClient([{status: 504, body: ''}], {search: '?portal=super'});
+  const controller = new AbortController();
+  await assert.rejects(api.get('/auth/me', undefined, {signal: controller.signal}), error => error.status === 504);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].options.signal, controller.signal);
+  assert.equal(calls[0].options.credentials, 'include');
+  assert.equal(calls[0].options.headers['X-JKXT-Portal'], 'platform');
+  assert.equal(events.length, 0);
+});
+
+for (const status of [200, 401, 403]) test(`cancelled request ignores late ${status} response and cannot invalidate a newer session`, async () => {
+  const controller = new AbortController();
+  const body = status === 403 ? '{"code":"CSRF_TOKEN_INVALID"}' : '{"user":{"role":"ADMIN"}}';
+  const {api, calls, events} = sequencedClient([{status, body}], {
+    cookie: 'XSRF-TOKEN=token', beforeText: () => controller.abort(),
+  });
+  await assert.rejects(api.get('/auth/me', undefined, {signal: controller.signal}), error => error.name === 'AbortError');
+  assert.equal(calls.length, 1, 'An obsolete request must not retry a write or CSRF flow');
+  assert.equal(events.length, 0, 'An obsolete 401 must not clear the current session');
 });

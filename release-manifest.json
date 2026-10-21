@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
   "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
-  "generatedAt": "2026-10-21T11:26:18.684Z",
+  "generatedAt": "2026-10-21T12:42:55.237Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 653,
-  "totalBytes": 50255763,
+  "fileCount": 654,
+  "totalBytes": 50278167,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -2757,8 +2757,8 @@
     },
     {
       "path": "scripts/api-error-response.test.cjs",
-      "bytes": 7039,
-      "sha256": "395cbd346fc0453c379b103f45d2d4a1d0f825eb9a97644b598e515fa28fa1ea"
+      "bytes": 9927,
+      "sha256": "6af498fde17a27327c5a67b23fda5dbf2b0c53b9e8a6f22a8821f353003fb0ea"
     },
     {
       "path": "scripts/deploy/api-base-resolution.test.cjs",
@@ -2936,19 +2936,24 @@
       "sha256": "e258a06ca5b67a8a2a21f70a93bbc2f67e466c7e9e42323e01ddcb4ece634627"
     },
     {
+      "path": "scripts/session-bootstrap-availability.test.cjs",
+      "bytes": 14846,
+      "sha256": "012140b14ee6c3942fdd9739cb709cd2982deb3e3975e2e70a4fd97fd87b1311"
+    },
+    {
       "path": "src/ai-workflow.js",
       "bytes": 3396,
       "sha256": "c888f0c4d5b96db450ff6b5bfecfe7e92ffdd9a9a34ccf8c0f2833a009b880ea"
     },
     {
       "path": "src/api.js",
-      "bytes": 19090,
-      "sha256": "e5e5d38f691dca3b17fb744396b43906f4069fbfc9646e64afb6830221937d35"
+      "bytes": 19833,
+      "sha256": "cf78a4089b74920b9ed9db6ede3b2a752c1177d0e5df6c50483c2571eca6ac93"
     },
     {
       "path": "src/app.jsx",
-      "bytes": 24360,
-      "sha256": "28b189501468a785840ed9ca84533a794aaa2db034878e8e2b434b7a1bceb7bd"
+      "bytes": 28287,
+      "sha256": "9f549f7b989797cb66051955de30ee197915bb464d016db6c723b014f324ab30"
     },
     {
       "path": "src/assets/ceramic-exam-v1/emergency-substitution-104.webp",
@@ -3311,6 +3316,6 @@
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
   ],
-  "baseCommit": "4b661968a6825daba2fb2b2f76732ae3fd588fc9",
+  "baseCommit": "c08e7b4e8923da8f1c2497e1d98e25036f2c8d4b",
   "scope": "Tracked source files excluding this generated manifest; not business acceptance"
 }

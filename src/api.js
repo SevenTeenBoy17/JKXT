@@ -59,10 +59,16 @@
 
   function normalizeError(response, payload) {
     const nested = payload?.error || {};
-    const message = payload?.message || nested.message || `请求失败（HTTP ${response.status}）`;
+    // Gateways may return an empty body (including Netlify's timeout), null or
+    // an empty JSON object. Apply the same fallback as an HTML gateway error
+    // without replacing structured business diagnostics or changing status.
+    const unavailable = [502, 503, 504].includes(response.status);
+    const message = payload?.message || nested.message || (unavailable
+      ? '服务暂未就绪或连接超时，请稍后重试。'
+      : `请求失败（HTTP ${response.status}）`);
     const error = new Error(message);
     error.status = response.status;
-    error.code = payload?.code || nested.code || 'API_ERROR';
+    error.code = payload?.code || nested.code || (unavailable ? 'SERVICE_UNAVAILABLE' : 'API_ERROR');
     error.details = payload?.details || nested.details || payload?.errors || payload;
     error.traceId = payload?.traceId || nested.traceId || response.headers.get('X-Trace-Id') || null;
     error.response = payload;
@@ -217,6 +223,14 @@
 
       const response = await fetch(resolveUrl(path, options.query), init);
       const payload = await parseBody(response);
+
+      // A cancelled bootstrap may finish while a manual retry is already using
+      // a new session. Never let that stale response clear auth or retry CSRF.
+      if (options.signal?.aborted) {
+        const error = new Error('请求已取消');
+        error.name = 'AbortError';
+        throw error;
+      }
 
       if (!response.ok) {
         // A missing/rotated CSRF cookie is re-rendered by the 403 response itself; retry once.

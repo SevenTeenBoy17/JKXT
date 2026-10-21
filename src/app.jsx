@@ -62,6 +62,9 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
   const [me, setMe] = useState(null);
   const [authError, setAuthError] = useState(null);
+  const [sessionUnavailable, setSessionUnavailable] = useState(null);
+  const [sessionAttempt, setSessionAttempt] = useState(0);
+  const sessionCheckRef = useRef({ busy: false, sequence: 0 });
 
   const [mode, setMode] = useState(() => {
     try { return localStorage.getItem('jkxt:mode') || 'admin'; } catch { return 'admin'; }
@@ -140,34 +143,81 @@ function App() {
     applySession(profile, { preservePage: false });
   };
 
+  const retrySession = () => {
+    // Protect against a second click before React paints the loading state.
+    if (sessionCheckRef.current.busy) return;
+    sessionCheckRef.current.busy = true;
+    setSessionUnavailable(null);
+    setAuthChecked(false);
+    setSessionAttempt(attempt => attempt + 1);
+  };
+
   useEffect(() => {
     let alive = true;
+    const controller = new AbortController();
+    const sequence = ++sessionCheckRef.current.sequence;
+    sessionCheckRef.current.busy = true;
+    let timer;
     const check = async () => {
-      if (!window.api?.get) {
-        setAuthError('接口尚未就绪，请刷新页面。');
-        setAuthChecked(true);
-        return;
-      }
       try {
-        const profile = await window.api.get('/auth/me');
+        if (!window.api?.get) {
+          throw Object.assign(new Error('接口尚未就绪，请刷新页面后重新连接。'), { code: 'SESSION_API_UNAVAILABLE' });
+        }
+        // Only this read-only bootstrap has a 15s deadline. Do not impose it on
+        // writes, exports or SSE. The race also bounds a transport ignoring abort.
+        const deadline = new Promise((_, reject) => {
+          timer = window.setTimeout(() => {
+            reject(Object.assign(new Error('会话连接超时。'), { code: 'SESSION_TIMEOUT' }));
+            controller.abort();
+          }, 15000);
+        });
+        const profile = await Promise.race([
+          window.api.get('/auth/me', undefined, { signal: controller.signal }), deadline,
+        ]);
         if (!alive) return;
+        // Match the backend UserView and persisted role contract, not merely a
+        // truthy proxy JSON object. Authorization remains enforced server-side.
+        if (typeof profile?.user?.id !== 'string' || !profile.user.id.trim()
+            || !['SUPER_ADMIN', 'ADMIN', 'VIEWER', 'TEACHER_QUERY'].includes(profile.user.role)) {
+          throw Object.assign(new Error('会话响应不完整，无法确认登录状态。请重新连接或联系管理员。'), { code: 'SESSION_INVALID_RESPONSE' });
+        }
         applySession(profile, { preservePage: true });
+        setSessionUnavailable(null);
+        setAuthChecked(true);
       } catch (error) {
         if (!alive) return;
-        window.__jkxtMe = null;
-        window.JKXTTheme?.clearIdentity?.();
-        setMe(null);
-        setLoggedIn(false);
-        const isExpectedLoggedOut = error?.status === 401 || error?.status === 404;
-        setAuthError(isExpectedLoggedOut ? null : (error?.message || '会话校验失败'));
-        try { localStorage.removeItem('jkxt:auth'); } catch {}
+        if (error?.status === 401) {
+          window.__jkxtMe = null;
+          window.JKXTTheme?.clearIdentity?.();
+          setMe(null);
+          setLoggedIn(false);
+          setAuthError(null);
+          setSessionUnavailable(null);
+          try { localStorage.removeItem('jkxt:auth'); } catch {}
+          setAuthChecked(true);
+        } else {
+          // A gateway outage is not evidence of an expired session. Keep the
+          // identity gate closed and preserve local hints until /auth/me answers.
+          const message = error?.status === 404
+            ? '会话接口不存在，请联系管理员核对服务部署与接口地址。'
+            : ['SESSION_API_UNAVAILABLE', 'SESSION_INVALID_RESPONSE'].includes(error?.code)
+              ? error.message
+              : '服务可能正在启动或暂时不可用。请稍后重新连接；这不代表密码错误或登录已过期。';
+          setSessionUnavailable(message);
+        }
       } finally {
-        if (alive) setAuthChecked(true);
+        window.clearTimeout(timer);
+        if (sessionCheckRef.current.sequence === sequence) sessionCheckRef.current.busy = false;
       }
     };
     check();
-    return () => { alive = false; };
-  }, []);
+    return () => {
+      alive = false;
+      window.clearTimeout(timer);
+      controller.abort();
+      if (sessionCheckRef.current.sequence === sequence) sessionCheckRef.current.busy = false;
+    };
+  }, [sessionAttempt]);
 
   // Refresh cached appearance from the authenticated source of truth. A failed
   // request never fabricates preferences; the settings page exposes the error.
@@ -354,12 +404,28 @@ function App() {
   if (!authChecked) {
     return (
       <>
-        <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg-base)', color: 'var(--text-muted)' }}>
-          <div className="inline-flex items-center gap-3 text-[13px] font-medium">
-            <span className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
-            正在加载会话…
-          </div>
-        </div>
+        <main className="min-h-screen flex items-center justify-center p-6" style={{ background: 'var(--bg-base)', color: 'var(--text-muted)' }}>
+          {sessionUnavailable ? (
+            <section className="w-full max-w-md space-y-4 rounded-xl border p-7" aria-labelledby="session-unavailable-title"
+              style={{ background: 'var(--surface-card, white)', borderColor: 'var(--border-subtle, #e2e8f0)' }}>
+              <h1 id="session-unavailable-title" className="text-lg font-semibold" style={{ color: 'var(--text-strong)' }}>暂时无法连接服务</h1>
+              <p role="alert" className="text-sm leading-6">{sessionUnavailable}</p>
+              <button type="button" onClick={retrySession} disabled={sessionCheckRef.current.busy}
+                className="w-full rounded-lg bg-indigo-700 px-4 py-3 text-sm font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-700">
+                重新连接
+              </button>
+              <p className="text-xs leading-5">尚未确认当前登录状态，业务页面不会提前打开。</p>
+            </section>
+          ) : (
+            <div role="status" aria-live="polite" className="text-center space-y-3">
+              <div className="inline-flex items-center gap-3 text-[13px] font-medium">
+                <span aria-hidden="true" className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                正在加载会话…
+              </div>
+              <p className="text-xs">正在连接服务，最长等待 15 秒；超时后可手动重试。</p>
+            </div>
+          )}
+        </main>
         <OverlayHost />
       </>
     );
