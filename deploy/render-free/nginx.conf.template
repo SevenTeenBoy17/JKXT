@@ -1,0 +1,74 @@
+# Full non-root configuration; never include a platform's default server block.
+worker_processes 1;
+pid /tmp/jkxt-render-nginx.pid;
+error_log /dev/stderr warn;
+events { worker_connections 256; }
+http {
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+  # Do not log query strings, credentials or request bodies.
+  log_format validation '$remote_addr $request_method $uri $status $body_bytes_sent';
+  access_log /dev/stdout validation;
+  server_tokens off;
+  sendfile on;
+  keepalive_timeout 30s;
+  client_body_temp_path /tmp/jkxt-client-body;
+  proxy_temp_path /tmp/jkxt-proxy;
+  fastcgi_temp_path /tmp/jkxt-fastcgi;
+  uwsgi_temp_path /tmp/jkxt-uwsgi;
+  scgi_temp_path /tmp/jkxt-scgi;
+  server {
+    listen ${PORT};
+    server_name _;
+    root /app/www;
+    index Dashboard.html;
+    client_max_body_size 30m;
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy strict-origin-when-cross-origin always;
+    # Unknown managed ingress CIDRs are not trusted. Audit records the ingress IP,
+    # not a guessed client IP. Never derive addresses or scheme from incoming XFF.
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Host '';
+    proxy_set_header X-Forwarded-Port '';
+    proxy_set_header Forwarded '';
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Connection '';
+    proxy_http_version 1.1;
+    proxy_connect_timeout 5s;
+
+    location ~ ^/api/v1/(schedule-jobs|scheduling/runs)/[0-9a-fA-F-]+/events$ {
+      proxy_pass http://127.0.0.1:8080;
+      proxy_buffering off;
+      proxy_cache off;
+      proxy_read_timeout 1h;
+    }
+    location /api/v1/ {
+      proxy_pass http://127.0.0.1:8080;
+      proxy_read_timeout 120s;
+    }
+    location = /actuator/health/readiness {
+      proxy_pass http://127.0.0.1:8080;
+      proxy_read_timeout 4s;
+    }
+    location = /actuator/health/liveness {
+      proxy_pass http://127.0.0.1:8080;
+      proxy_read_timeout 4s;
+    }
+    # Administrative tooling, metrics and repository files are never static fallbacks.
+    location /actuator/ { return 404; }
+    location /v3/ { return 404; }
+    location /swagger-ui { return 404; }
+    location /uploads/ { return 404; }
+    location ~ /\. { return 404; }
+    location ~* \.(?:js|css|png|jpg|jpeg|gif|svg|webp|mp4|woff2?)$ {
+      try_files $uri =404;
+      expires 5m;
+    }
+    location / {
+      try_files $uri $uri/ /Dashboard.html;
+      expires -1;
+    }
+  }
+}

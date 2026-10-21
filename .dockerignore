@@ -1,0 +1,14 @@
+# Frontend build context allowlist. Never send workstation secrets or database artifacts.
+*
+!package.json
+!package-lock.json
+!Dashboard.html
+!tailwind.config.cjs
+!assets/
+!assets/**
+!src/
+!src/**
+!scripts/
+!scripts/frontend-build.mjs
+!deploy/
+!deploy/frontend.Dockerfile

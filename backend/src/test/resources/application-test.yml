@@ -1,0 +1,35 @@
+# Random-port integration servers remain local to this machine.
+server:
+  address: 127.0.0.1
+spring:
+  datasource:
+    url: ${JKXT_TEST_DATASOURCE_URL:}
+    username: ${JKXT_TEST_DATASOURCE_USERNAME:}
+    password: ${JKXT_TEST_DATASOURCE_PASSWORD:}
+  flyway:
+    enabled: true
+    clean-disabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  data:
+    redis:
+      host: ${JKXT_TEST_REDIS_HOST:}
+      port: ${JKXT_TEST_REDIS_PORT:0}
+
+# Isolation guard registration lives in test-only META-INF/spring.factories,
+# before context refresh; no business DataSource, Flyway or Redis may initialize.
+
+jkxt:
+  # Round 9 (PB-16): failDeliveryIds fault injection is test-only; production default is false.
+  notify:
+    fault-injection-enabled: true
+  # Round 9 (PB-17): fixtures use far-future/past synthetic duties; the production default window
+  # (60 min before start .. end) is exercised by DutyAssignmentSelfServiceIntegrationTest explicitly.
+  duty:
+    check-in:
+      opens-before-minutes: 100000000
+      closes-after-end-minutes: 100000000
+  auth:
+    captcha-debug: true

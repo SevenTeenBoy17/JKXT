@@ -1,0 +1,3279 @@
+{
+  "releaseName": "jkxt-public-render-free-verify-20261021",
+  "deploymentRoute": "single-host",
+  "generatedAt": "2026-10-21T01:51:22-07:00",
+  "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
+  "includesUploads": false,
+  "fileCount": 646,
+  "totalBytes": 50203475.0,
+  "forbiddenChecked": [
+    ".env",
+    ".env.private",
+    ".env.public",
+    ".env.saas",
+    "backend\\target"
+  ],
+  "forbiddenDirNames": [
+    ".git",
+    "node_modules",
+    "target",
+    "dist",
+    ".m2",
+    "evidence",
+    ".codex-supervisor",
+    ".vercel",
+    "backups"
+  ],
+  "forbiddenFilePatterns": [
+    ".env",
+    ".env.*",
+    "*.pem",
+    "*.key",
+    "*.p12",
+    "*.pfx",
+    "*.jks",
+    "*.keystore",
+    "id_rsa*",
+    "id_ed25519*",
+    "*.sql",
+    "*.dump",
+    "*.backup",
+    "*.bak",
+    "*.log",
+    "cookies*.txt",
+    "*.har",
+    "*.jar"
+  ],
+  "files": [
+    {
+      "path": ".dockerignore",
+      "bytes": 271,
+      "sha256": "58e2825744bf821ba08a6f98da129163b7c69be3ee7c6fcc6e262bb2d7edef85"
+    },
+    {
+      "path": ".env.public.example",
+      "bytes": 1928,
+      "sha256": "2e24113a5ac6f0324197fe3301bc8b0209625416832827d9d30c44a377aac4ea"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 279,
+      "sha256": "4f6bb8a2b9dc075028dd547007a79e862618d05ddbec72cc856a03bf402d1dcb"
+    },
+    {
+      "path": "assets/blueprint-v5/controls-green.png",
+      "bytes": 1227091,
+      "sha256": "242973679c3786a67fd5348444d040355122d77ad5a7251d41f42d636a3b535a"
+    },
+    {
+      "path": "assets/blueprint-v5/empty-green.png",
+      "bytes": 1202553,
+      "sha256": "b3b9b5aff80eb84b49d03ca320a445430b55375a789be90bbbb40eb05b4bd974"
+    },
+    {
+      "path": "assets/blueprint-v5/empty-transparent.png",
+      "bytes": 281885,
+      "sha256": "1db72cd53b79423e2dc10116b5e054710cc2755376c5d7ea13580aa00b2f7095"
+    },
+    {
+      "path": "assets/blueprint-v5/prompts.json",
+      "bytes": 3936,
+      "sha256": "9b2e16080ef35b8c37719c826f66675ed6a7a28d2a15ba7aed3b78b14d321408"
+    },
+    {
+      "path": "assets/blueprint-v5/README.md",
+      "bytes": 1415,
+      "sha256": "6d84763318ad5af4bc44527ad6bd3544e514b9ddad9d52731750fe8f91480dcf"
+    },
+    {
+      "path": "assets/blueprint-v5/symbols-clean-transparent.png",
+      "bytes": 259440,
+      "sha256": "679ad8fea38104137d64a64a85593ffda48a8d839c6f3629c2d60aefb7bf07c5"
+    },
+    {
+      "path": "assets/blueprint-v5/symbols-cutout-refined.png",
+      "bytes": 284362,
+      "sha256": "702b054cbe4d63b90270abc586ad474dbb720256d045a1d563bd4afa3979938d"
+    },
+    {
+      "path": "assets/blueprint-v5/symbols-green.png",
+      "bytes": 1271601,
+      "sha256": "16befe493b5fbacc370ab4177577bcd82687ad8e7b34b055138dbca715be8196"
+    },
+    {
+      "path": "assets/blueprint-v5/symbols-transparent.png",
+      "bytes": 285449,
+      "sha256": "169da3f1387f87f2a8ffb57fc06e7891dff6c1f9ab4d7c6493cd38bd352c5ad1"
+    },
+    {
+      "path": "assets/brand/jkxt-q-seats-imagegen-v4.png",
+      "bytes": 83331,
+      "sha256": "ecb080fe8b1802f4a5ca6b8ba91a5bf9266a13febe4bfac2ec044243cec98a91"
+    },
+    {
+      "path": "assets/brand/jkxt-seat-matrix-q.svg",
+      "bytes": 473,
+      "sha256": "a380557843ea240bee72b26b45588e64a43d72a8e9e7b99b376b4c7ae8ff5c42"
+    },
+    {
+      "path": "assets/brand/jkxt-topbar-logo-user-v1.png",
+      "bytes": 236203,
+      "sha256": "cf5285a09c9520b7ac07435b4f578a7834d09374f976cbe7e44dc0aec973b60f"
+    },
+    {
+      "path": "assets/brand/source/jkxt-q-seats-imagegen-v4-source.png",
+      "bytes": 381801,
+      "sha256": "b7602a985ebdb7fdd857ce0c38837b14425cff237f7fd128ce71a658260575ff"
+    },
+    {
+      "path": "assets/brand/source/seat-matrix-q-imagegen-concept.png",
+      "bytes": 842640,
+      "sha256": "d9033df693782126c923acf06ccf9926675b47cadf8ea4e363a08ca5b4df1b5d"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-cyrillic-ext-wght-italic.woff2",
+      "bytes": 7800,
+      "sha256": "7ae5a4ec8cf9da15fd436da33f69143f49843553df5a286c0836d0fdb6e01a77"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-cyrillic-ext-wght-normal.woff2",
+      "bytes": 7420,
+      "sha256": "2317fa4bb293c9c0b110e18315d529235c47a0ddd3338cea3d8c7955e927899e"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-cyrillic-wght-italic.woff2",
+      "bytes": 15960,
+      "sha256": "a7684bfc9a77331f2a59560c61b2a6ecf11482570b3a6d61bf869dca1c91c530"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-cyrillic-wght-normal.woff2",
+      "bytes": 15084,
+      "sha256": "6894439694946a589d157ece003086960a6a4013d74a813dab7602efdb3d8c09"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-latin-ext-wght-italic.woff2",
+      "bytes": 17892,
+      "sha256": "56dc9ac98e3fc45e7ee487d03ee205b35858c672f2e15053eabbb119c0bc1e74"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-latin-ext-wght-normal.woff2",
+      "bytes": 16512,
+      "sha256": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-latin-wght-italic.woff2",
+      "bytes": 31008,
+      "sha256": "9b10496762af92659f3b05d2b084b0c8f962c3ecdf637aa764e3b7fd17f5acaf"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-latin-wght-normal.woff2",
+      "bytes": 29400,
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-vietnamese-wght-italic.woff2",
+      "bytes": 8696,
+      "sha256": "99ee2cf053a2cc9d13dfc95f0d0c8607a783aa3a8bed701ea7a48b6fb1a554ba"
+    },
+    {
+      "path": "assets/fonts/geist/files/geist-vietnamese-wght-normal.woff2",
+      "bytes": 8004,
+      "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
+    },
+    {
+      "path": "assets/fonts/geist/LICENSE",
+      "bytes": 4486,
+      "sha256": "71609cbb5c78b5870d712eab73a31d76622635c6ed034ab5cee3b9ecbda8685f"
+    },
+    {
+      "path": "assets/fonts/geist/metadata.json",
+      "bytes": 833,
+      "sha256": "9c7e431f953ddc391b63d3e4c76f1c0ba6c61cc10ec601f9d65970cb7feb44a1"
+    },
+    {
+      "path": "assets/fonts/geist/wght.css",
+      "bytes": 1841,
+      "sha256": "97fe28a6688629d5a016347a47282efabffc85e5dd49bd953217d048e47c6872"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-100-wght-normal.woff2",
+      "bytes": 64548,
+      "sha256": "ad5f29028d5699a59688d807fda531f23cb2c1ecd7815495853bbae8e75b8646"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-101-wght-normal.woff2",
+      "bytes": 58204,
+      "sha256": "e189b81fc22ca6afcf03a1fcbf8fad93e8272a502d4b23241900113d9ddbe51a"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-102-wght-normal.woff2",
+      "bytes": 60708,
+      "sha256": "941c0c2971fc1d6d1e36c3d40d74e6a133ad02f58f0bc3a9cb265d8a60f3eb31"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-103-wght-normal.woff2",
+      "bytes": 63864,
+      "sha256": "bafbd591af6493fface8ee91ca8701cd227f18b1636c5a380c1dbd84cd79b92d"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-104-wght-normal.woff2",
+      "bytes": 61588,
+      "sha256": "b0bf80ced89dd61bc3c1427c23203b44413dfef6aafb50da905ab28a7937a923"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-105-wght-normal.woff2",
+      "bytes": 61828,
+      "sha256": "8d8b4e6f4a00621d2be4279e9ba4b07cded89ab6d4018d9b87d2116867ead335"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-106-wght-normal.woff2",
+      "bytes": 62636,
+      "sha256": "bae74acc629d2e7484c66fd9bb0614df5bf3e98c39811d9e7e9222845a1c4b62"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-107-wght-normal.woff2",
+      "bytes": 61076,
+      "sha256": "a42eff5010de7b0d6922a14734dd06c9b495655ac6e4397506f44c8e3eaee10c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-108-wght-normal.woff2",
+      "bytes": 64552,
+      "sha256": "91882203459867be07157e9c8d433372b65cd4ce484fda26b97b05ed2cf6290d"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-109-wght-normal.woff2",
+      "bytes": 60372,
+      "sha256": "a91f8b038e5ce10805a173a293484c8c49552c275cf901cdf21324d6dca3ed17"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-110-wght-normal.woff2",
+      "bytes": 61472,
+      "sha256": "bbca9081655c45233a25c4cca030c47ebcf2e156eeedd48110836658adb31fa0"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-111-wght-normal.woff2",
+      "bytes": 62664,
+      "sha256": "372be010ac0e87cb12065a861da39821104a43d68345a62ca95d3d3e2fb2c269"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-112-wght-normal.woff2",
+      "bytes": 57648,
+      "sha256": "34a4580239eae8dc54b726a1e1e9fec266e74225b112063ed93b412d54b97ccd"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-113-wght-normal.woff2",
+      "bytes": 58648,
+      "sha256": "614ab8f616352583f92cc2130fe8812c5aaaa8560b3828de45eefb318be7b503"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-114-wght-normal.woff2",
+      "bytes": 57964,
+      "sha256": "cf7b8344807a316e8db054500a2b44ad9346ffa00763fec203ab5aa1c99ff602"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-115-wght-normal.woff2",
+      "bytes": 56508,
+      "sha256": "fb29957c7adccb9a89e34fb28d3d1c7d12bd7401f80c0dba6e1c9e5259cb3262"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-116-wght-normal.woff2",
+      "bytes": 52984,
+      "sha256": "a98dc5a726f82141f74a827c443e120709a12fe737fabacf2530927a275fce0d"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-117-wght-normal.woff2",
+      "bytes": 52464,
+      "sha256": "d94b5af0c14838af99bf9855f91e851878726558531ddef5bd2100b70dfbe90c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-118-wght-normal.woff2",
+      "bytes": 46192,
+      "sha256": "76c9ddb85ae4578cccd35ae4f6e6bbffaa2c8c2aec0fea17d3c17c84a3c6f7d1"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-119-wght-normal.woff2",
+      "bytes": 76800,
+      "sha256": "b3b2374881f4cd93f239820dfd91f0fde8d52f8f92ba2888f7ab9cba21e4d7eb"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-21-wght-normal.woff2",
+      "bytes": 11356,
+      "sha256": "c1409c43e55ecff21bd7eee9327e71a6f4c66449842861b368dcdfe14445aab3"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-22-wght-normal.woff2",
+      "bytes": 65384,
+      "sha256": "77037ed42ff4e7b0e5cc296cabe4f0580d1d518239a4a067c00ff8097f60819f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-23-wght-normal.woff2",
+      "bytes": 56792,
+      "sha256": "38d0df21ac374e938a5c885f50a80b7be2dbab9a34803462a4f2c6c6fa777128"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-24-wght-normal.woff2",
+      "bytes": 62580,
+      "sha256": "8fa21e7e457acf3e8ca2e0561d5df4dd26cf0824a27a721c2b831b202e88e195"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-25-wght-normal.woff2",
+      "bytes": 58320,
+      "sha256": "f760b7a3871d214d421b378faa2e27a763bc632000f983964a837f2323665f1d"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-26-wght-normal.woff2",
+      "bytes": 50888,
+      "sha256": "be8386e7bd7facfe78886db838ece2fac15056ef9ea6c48d631054460cd37c6f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-27-wght-normal.woff2",
+      "bytes": 47488,
+      "sha256": "4895abcaddbd162e48a212dd75c270d3ba1706519f527dff5fd7ec47dfa64dfd"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-28-wght-normal.woff2",
+      "bytes": 50200,
+      "sha256": "82540b6201a9b9ade19206b3e6e9ba65038e6ab5d8b61952352d87b92978f967"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-29-wght-normal.woff2",
+      "bytes": 54008,
+      "sha256": "ff21d8fcc60ce39145c09da40c66f190dbb52b4b5ae6de1861dcaf15f87ef497"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-30-wght-normal.woff2",
+      "bytes": 54656,
+      "sha256": "1f76f6ffded00b9ead063038ebfd5019ad334ffeb7035dda3aa33f4dd1bb7adc"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-31-wght-normal.woff2",
+      "bytes": 47220,
+      "sha256": "e6c25be1bb08a63a0f4cd0cea425fc90b65df538be8505e3cf4010bec2853b64"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-32-wght-normal.woff2",
+      "bytes": 52548,
+      "sha256": "0cda750d7d04a4e12e4b2ea1d78c0a3ec430b5c07e02b87064e809ff75d76998"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-33-wght-normal.woff2",
+      "bytes": 47452,
+      "sha256": "b9732b5606bd87c51942e5f56270d26495f2bc22a157493725417af2c70c265e"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-34-wght-normal.woff2",
+      "bytes": 46888,
+      "sha256": "38aa326b4c84902a342b4225a452a7ca3ac32ebf40792663d7db2013c22bee9d"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-35-wght-normal.woff2",
+      "bytes": 50688,
+      "sha256": "bd98226c8e0aa80876366386a23e909087df5d6b570f48b2366a8849a3ca137b"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-36-wght-normal.woff2",
+      "bytes": 41832,
+      "sha256": "0db1ca695a491d372060eba39ae66b1816457e8992698fbaacd35cc0f7786658"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-37-wght-normal.woff2",
+      "bytes": 53528,
+      "sha256": "8df409a4e0a237c21db73608de96e2ae49c53de50826098d050a0e2cca867836"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-38-wght-normal.woff2",
+      "bytes": 54592,
+      "sha256": "672d2d994994a3c39072fbbc4a40f0e25424ab2ff36ec63f3b55849d1ab8a650"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-39-wght-normal.woff2",
+      "bytes": 51784,
+      "sha256": "272d6d0e153f56e8ab7d9412ca1e8581c06ce371641cf863859a0ab01751c1ea"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-4-wght-normal.woff2",
+      "bytes": 3796,
+      "sha256": "9fafd93ac77b81ffdeeb30c31e7d5911eb5b6a0a976b54c6e418eec8701a97e2"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-40-wght-normal.woff2",
+      "bytes": 46628,
+      "sha256": "5b9ef1ed48420aa7b9da1fbc18c4a4dfd3d4edf1c6b8aab89cf12b40913335a3"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-41-wght-normal.woff2",
+      "bytes": 36416,
+      "sha256": "30aee47f660fd88a68fee63052ce8f3746e78e606813de686b710692d7610529"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-42-wght-normal.woff2",
+      "bytes": 45540,
+      "sha256": "ec0014830db682b682120085e07476df857d016fa7bb1b4bb3dfe82113819a10"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-43-wght-normal.woff2",
+      "bytes": 46624,
+      "sha256": "43df2b5dad9bb8353549d68023297605443f251f1f846a9cb2e5363b84aacd0b"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-44-wght-normal.woff2",
+      "bytes": 54244,
+      "sha256": "acaa6195041b1a928d35c7e80365a4e653ffc5cba556c0a1443ee3a561228eb8"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-45-wght-normal.woff2",
+      "bytes": 67620,
+      "sha256": "8cdb9903f770db21bd3d17eab6a1dd7d302b47f7eab059b2ff814d9593ce2526"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-46-wght-normal.woff2",
+      "bytes": 57668,
+      "sha256": "6590d0a6fe94571cfb84a6d9536e0f58b6a6164643ffa339d3c1788835c96147"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-47-wght-normal.woff2",
+      "bytes": 56156,
+      "sha256": "b05afdd32b3bf722adac4b2c936a3c3390fb4b6b8adc20a132a0b42cb9c23e83"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-48-wght-normal.woff2",
+      "bytes": 50764,
+      "sha256": "c9585f7d070700be0435c1014761af37cd512faa68ffc33341d1e4634abed682"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-49-wght-normal.woff2",
+      "bytes": 52844,
+      "sha256": "4943895a4dfa5dcf427429a13e1c56bb3fd344c1dd7b1ad927b9d6743e358ac0"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-5-wght-normal.woff2",
+      "bytes": 20176,
+      "sha256": "e64f57937e3ae4feb9dd073d6a5257a74fda82575060718a162c95c8c09ef2ae"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-50-wght-normal.woff2",
+      "bytes": 45876,
+      "sha256": "13e51063d7743cfe2d533620860719890426ef12f6fe036d50b3c1a8f41508e7"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-51-wght-normal.woff2",
+      "bytes": 41616,
+      "sha256": "fd4df1f02c2cb4d7db99d2d35225561f9695483f5f829e0f6667adac4bbe7ff6"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-52-wght-normal.woff2",
+      "bytes": 51840,
+      "sha256": "06999a39c4c3a7ea279822ec42aeaf7e2f99d4047e4f8b7c48254158b7e293fa"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-53-wght-normal.woff2",
+      "bytes": 43528,
+      "sha256": "767b7b9864658d91d81787ebeac555cb9d67ec920002845061516dd87fa1b95f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-54-wght-normal.woff2",
+      "bytes": 52000,
+      "sha256": "4cd00537a46f6f1acaf2762a59176e059062d7259217a8a85a589df775531ea6"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-55-wght-normal.woff2",
+      "bytes": 48132,
+      "sha256": "0118ec5d8c30b1971a59ec5982f3eeee3e687a40ef5b79108e99e5d82fa67aa9"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-56-wght-normal.woff2",
+      "bytes": 53500,
+      "sha256": "a3e4a78929826930956ef1e3b3c1c329815d75c88f67296c4ffeac203e2cb544"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-57-wght-normal.woff2",
+      "bytes": 55496,
+      "sha256": "7623501009e4a6db7c2d5a635f57099da3e78de33fa85cccdf8d3c1596064ccb"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-58-wght-normal.woff2",
+      "bytes": 57648,
+      "sha256": "56ae1a59a32e4a258336c6d100d5288f3d1ece6f9e4f2bb3ec0548c289ede761"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-59-wght-normal.woff2",
+      "bytes": 47676,
+      "sha256": "7a377a40e99fd9bc3b1eb38517f08c4ac09520437bed24c3d3a39e2b64ff0ee9"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-6-wght-normal.woff2",
+      "bytes": 11464,
+      "sha256": "17e15c4f0a5bfd92e65a65d285833633f2cc8d4a51a8ba6a2080663989123d7e"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-60-wght-normal.woff2",
+      "bytes": 41432,
+      "sha256": "3657f66babdf6aff2d2ca3cbadf7bcdce820bda6be7c765d909afee8e74dad5c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-61-wght-normal.woff2",
+      "bytes": 45276,
+      "sha256": "23919a2eb11d25dd3a78c020ecc337c9c72b8ca760412f5b4cd567cc43b776ba"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-62-wght-normal.woff2",
+      "bytes": 59112,
+      "sha256": "a901edf25bc1cfae0fc4c474fce9f8783e93a46b9e88a1cb1cb1301feb1cbdb2"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-63-wght-normal.woff2",
+      "bytes": 49180,
+      "sha256": "92f56f713cc0b62f1cbbbc3533b957cff5d2db2abdb4b45a173564011d217ddc"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-64-wght-normal.woff2",
+      "bytes": 41540,
+      "sha256": "4929c9f39a5a4bd941050c7358e1556e57cef901b8c75503453e62c23ede281c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-65-wght-normal.woff2",
+      "bytes": 41608,
+      "sha256": "8daa61282fb62a111c17f896b12429a43a3d60bd5f2eceb8c5a4f7d57a26d83c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-66-wght-normal.woff2",
+      "bytes": 52868,
+      "sha256": "6479166925eb462be1a74ad446099719e8021949abf5c3eafefd9ad290836b9c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-67-wght-normal.woff2",
+      "bytes": 52584,
+      "sha256": "a6b0e11c4c761ffda2e693d037f1384af67b6a338f81a8c0fcd7aa4eea9a177c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-68-wght-normal.woff2",
+      "bytes": 41568,
+      "sha256": "65b77f1fe9d68dae692578370f64b50ace8469fcf737b34d8b4cdfabed344f23"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-69-wght-normal.woff2",
+      "bytes": 55604,
+      "sha256": "b34f765cbbf4d02e71cc0d3ea9d488ad4a9da2bcea08f4c84a74e6ec82877f06"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-70-wght-normal.woff2",
+      "bytes": 42236,
+      "sha256": "a99d55c00e4f95b79ccc545fcd5464428edb7127670eaed421003473fd4ede7f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-71-wght-normal.woff2",
+      "bytes": 47904,
+      "sha256": "3298bed30dc8d23323c0ba9cab32aa4088d39f5316d126b5cbdabd56884a5f01"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-72-wght-normal.woff2",
+      "bytes": 47032,
+      "sha256": "6597209ca97077267b65fc072819325eb5a6d3787791d193cc481b3a71fb1b76"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-73-wght-normal.woff2",
+      "bytes": 39312,
+      "sha256": "e7ac1d4930eabd781b541d961576a89b49580cdf336ca2413e0eb7709b41e72a"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-74-wght-normal.woff2",
+      "bytes": 56424,
+      "sha256": "1f0287be83a28e7ac104beb7f1b12ea6c0f327dd2dcd50033fb11c4aba123734"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-75-wght-normal.woff2",
+      "bytes": 43940,
+      "sha256": "d9a4bb7bcc2be578e52835906301f04f6caf285ffcd299065521830529532fd6"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-76-wght-normal.woff2",
+      "bytes": 48420,
+      "sha256": "5a019946bcadcec6e510d2786b1a490a8ca4442c849e3fbf6251bdc06a7e1f47"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-77-wght-normal.woff2",
+      "bytes": 36788,
+      "sha256": "7c445e85d04f5319eda4b07329a71f5e468fb7906547d34150b819916d2f6d31"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-78-wght-normal.woff2",
+      "bytes": 49156,
+      "sha256": "7d4afb70f641781cfe859e18b81b5b641fb76872fb44760e9314e76fa6b42e3f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-79-wght-normal.woff2",
+      "bytes": 41232,
+      "sha256": "5798753a721bb4eccbf7d9ca923d2496524009a6c27c4bfc36e2b27f0251ee59"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-80-wght-normal.woff2",
+      "bytes": 32632,
+      "sha256": "db887159ca6e46f3f2787f7a1037940805bb7db727fd3a7ee2bdf9fb47f74469"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-81-wght-normal.woff2",
+      "bytes": 47548,
+      "sha256": "71e5743bbd225b3d80426f1b9e1d45c61fa7265aa453e2d22181944ec52569ff"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-82-wght-normal.woff2",
+      "bytes": 46176,
+      "sha256": "8c5094c3785fd04f84142ebc0362d835cce48e56b13e90d9900ddce5f9fe060f"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-83-wght-normal.woff2",
+      "bytes": 43504,
+      "sha256": "4a60a1ccba9052841d6f22a1d8d84a553184689b1de4c3dc6bcaa654c2c91ef6"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-84-wght-normal.woff2",
+      "bytes": 32612,
+      "sha256": "3ed54e59ef4758e3cf1f81d9dd5ac9197ba8a7071ec8c0d69e2d52b2a2826be6"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-85-wght-normal.woff2",
+      "bytes": 26900,
+      "sha256": "e87e0a1342e1778c69040e768b5ad1d615068cec94579ba0176a875cb4170bde"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-86-wght-normal.woff2",
+      "bytes": 33576,
+      "sha256": "6d3ac3e20959dbcb9c0f4fbe786a2fc4040f565577b35a13275959eec27a9ae0"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-87-wght-normal.woff2",
+      "bytes": 8012,
+      "sha256": "0eeffd5daad5c17bba306e06e89e93ac563a497c806c0fa1d4c3a53a8ffa4225"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-88-wght-normal.woff2",
+      "bytes": 7336,
+      "sha256": "b1d9582dfa2684636af41b19f0e2b397f8200337e0302dcaac3638ad431b7000"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-89-wght-normal.woff2",
+      "bytes": 10984,
+      "sha256": "8b437aeb9e9fcb5aa31bd8565986f92cb7c43dbf1ac3763531b8b384fcda7290"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-90-wght-normal.woff2",
+      "bytes": 9344,
+      "sha256": "83b0a59e0a5e045a44b1819d98795bee83684f746844f6fc4ebf448db3d53d39"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-91-wght-normal.woff2",
+      "bytes": 8704,
+      "sha256": "382f72b98d4bb9d7006109efa128aedf846904490b52a5d4f1db151a73718faf"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-97-wght-normal.woff2",
+      "bytes": 2080,
+      "sha256": "5e52856457c5cdaba991d72419e6f419f6627a5231b674275b8152f691328a33"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-98-wght-normal.woff2",
+      "bytes": 3416,
+      "sha256": "ffded4e7fd560d935f847ddd084187a049bbaca55d1deea9d2e6daf153cdea5b"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-99-wght-normal.woff2",
+      "bytes": 9704,
+      "sha256": "54e302c23f11a8fd518f0948183800ac954315067f0990eed41b9c91e55761ef"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-cyrillic-wght-normal.woff2",
+      "bytes": 10008,
+      "sha256": "5932d441e7126669016ce303fb19247ff258622291f13069124eb9b91304bbf9"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-latin-ext-wght-normal.woff2",
+      "bytes": 8244,
+      "sha256": "e316201f3fc493d191136a3ea728d184227b9651aea2bb38e279c45ef58646a7"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-latin-wght-normal.woff2",
+      "bytes": 25240,
+      "sha256": "c1d919c8701a86ed7f33a8044f7c4e5675db2fce8b754091e97b2c0792f9782c"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-vietnamese-wght-normal.woff2",
+      "bytes": 9096,
+      "sha256": "cba3d00c8db989f0f0c3c7c48b1672468d9cb3c8c06514fc5cf1bb82ddccae7e"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/LICENSE",
+      "bytes": 4314,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/metadata.json",
+      "bytes": 628,
+      "sha256": "893dbc7ecfa9a8a469457b521507bb090a7fb46299264165b156c2e2883147a9"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/wght.css",
+      "bytes": 101698,
+      "sha256": "5cb273ad9fdbf39e6043d7f3523e5796b126a7db072c398a8709cefe9d3818a1"
+    },
+    {
+      "path": "assets/fonts/README.md",
+      "bytes": 1109,
+      "sha256": "25cac0910f11c85a8792ba7fb2376824a8fbed0f0a05fdca6da22bfd048d1fcc"
+    },
+    {
+      "path": "assets/login-bg.mp4",
+      "bytes": 4250923,
+      "sha256": "f03fbfe85fabb9992ac8f9c6098c950b8b585b120c4d431719d7b0907dc5fd48"
+    },
+    {
+      "path": "assets/login-button.mp4",
+      "bytes": 2912588,
+      "sha256": "6b1c8fd8a37a16d2bea0275fcba017dcae903b5a17301ca5555f6517b7c06e22"
+    },
+    {
+      "path": "assets/login-plane-06x.gif",
+      "bytes": 1643242,
+      "sha256": "7987e6ae420c671d24775e6ec916a8b4a409972dfd153d46aec83e82f6c9a51c"
+    },
+    {
+      "path": "assets/login-plane-frames.png",
+      "bytes": 1083132,
+      "sha256": "ff8ccdd3226d277f92215f59d4c306a5511a8a0d6807b56de58b3a0778ea4ef5"
+    },
+    {
+      "path": "assets/login-plane.gif",
+      "bytes": 1643242,
+      "sha256": "1e121a186b4ce571dc79b0220fb2bbcb15c76bc47a09592aa9983bf1ad4a2b83"
+    },
+    {
+      "path": "assets/logo-mark.png",
+      "bytes": 449807,
+      "sha256": "811a17f404bd0ef6cd03c82c49ccee3e89dbafc2d067dfa4a96e0f06c4d06117"
+    },
+    {
+      "path": "assets/operations-v6/icons-green-master.png",
+      "bytes": 1076433,
+      "sha256": "91ae3c6aa029e871f2a896b866000fa1e8387aa8b80ea187b12814fa3408a7f9"
+    },
+    {
+      "path": "assets/operations-v6/icons-transparent.png",
+      "bytes": 655898,
+      "sha256": "80f6470eed77e30bf4bc0d5ca07472b89fcf1eac9484457f5dc86d19bd78b158"
+    },
+    {
+      "path": "assets/panda-cover.mp4",
+      "bytes": 1723902,
+      "sha256": "5ae2ca9de7b5e12a0c683939f750c55983838e70e3aa09c9a2f3dcc853a1a560"
+    },
+    {
+      "path": "assets/panda-idle.mp4",
+      "bytes": 5631284,
+      "sha256": "b41046e35e3d8ee770c38d9e93837b12bfd3657d46c60e3b4f973efed98f96a9"
+    },
+    {
+      "path": "assets/quick-logo.png",
+      "bytes": 378515,
+      "sha256": "d96c0784c287c3efdad1d72240142ae24645f05813f632b56e8e2e835fe05c66"
+    },
+    {
+      "path": "assets/ui/ceramic-exam-v1/emergency-substitution.png",
+      "bytes": 742244,
+      "sha256": "aa6b666bb3466d9b10b9e34cb19bb66ee2541e5ed39c927b204607f9fdb7acda"
+    },
+    {
+      "path": "assets/ui/ceramic-exam-v1/exam-plan-calendar.png",
+      "bytes": 960611,
+      "sha256": "e3b366122131217dbdb2f81bdcb3febbe1ec87ca237e369e125978179eae7644"
+    },
+    {
+      "path": "assets/ui/ceramic-exam-v1/exam-room-building.png",
+      "bytes": 896055,
+      "sha256": "0ebe8b91228646b88a2f180bde5c31fbaec6d873b4b8a4a014e5f50dc6b872cb"
+    },
+    {
+      "path": "assets/ui/ceramic-exam-v1/invigilator-badge.png",
+      "bytes": 792114,
+      "sha256": "ef18c7eed6f3225284d60592f6adfcd0060b1aa360a30e63ab9c9a0dd20e675a"
+    },
+    {
+      "path": "assets/ui/ceramic-exam-v1/prompts.md",
+      "bytes": 3042,
+      "sha256": "751c95647327c78cd67dbaa3ba45156e1fb00e8835c5c801b9bb4d9e5341f08c"
+    },
+    {
+      "path": "assets/ui/internal-icons-v10/education-pictogram-reference-v10.png",
+      "bytes": 1273077,
+      "sha256": "971388cdaec97277c12cc32fd8a8b973ef8cd7256df100de7050442ab6043fa9"
+    },
+    {
+      "path": "assets/ui/onboarding-v8/school-scheduling-tour-hero.png",
+      "bytes": 1254963,
+      "sha256": "ffd108ff061024e440113a7545d4d53ae36d4b28f42093b61a6761120cad4e2a"
+    },
+    {
+      "path": "assets/ui/onboarding-v8/school-scheduling-tour-hero.svg",
+      "bytes": 3612,
+      "sha256": "0d5fe1351f8d289e88a9c249a64cac92f73bb36a6ba2f60c4e5165eaccefb27d"
+    },
+    {
+      "path": "assets/vendor/anime.4.5.0.LICENSE.md",
+      "bytes": 1075,
+      "sha256": "3f3e835a9952cfc2a6ca836fb95b3257c981f24fa3ef51249055acb09931897b"
+    },
+    {
+      "path": "assets/vendor/anime.4.5.0.umd.min.js",
+      "bytes": 118043,
+      "sha256": "8d5b3a58a1f64023a04a4cedeef135a2263b18da04b35177ac13438a0bad033b"
+    },
+    {
+      "path": "assets/vendor/babel-standalone.7.29.0.min.js",
+      "bytes": 3137752,
+      "sha256": "2623a9e22809915ce789b4461154e277ddce520d5a4320c14d44332a5d0dcea0"
+    },
+    {
+      "path": "assets/vendor/chart.umd.4.4.1.min.js",
+      "bytes": 205399,
+      "sha256": "d2af8974e95271638772e9e9524db5b9a6f58d6ec2d5d781400447b4a31c681e"
+    },
+    {
+      "path": "assets/vendor/gsap-scrolltrigger.3.13.0.min.js",
+      "bytes": 44157,
+      "sha256": "308219390e5e3b84cda0c481e70caa9820883ae10bda44e6e9a149a81aac4b3f"
+    },
+    {
+      "path": "assets/vendor/gsap.3.13.0.min.js",
+      "bytes": 72435,
+      "sha256": "96c01b81f44a3290e2b4532f55e2c9534b2adc43273a19f3756b2cb41f0fd0b6"
+    },
+    {
+      "path": "assets/vendor/react-dom.18.3.1.development.js",
+      "bytes": 1080227,
+      "sha256": "f9044a5e9c39db8bb1a204dff924e526ec0a621e695bb69de1035811be8709e4"
+    },
+    {
+      "path": "assets/vendor/react.18.3.1.development.js",
+      "bytes": 109931,
+      "sha256": "28348fef6cb0ed8b2ceeb22deaf824428fd13875d84c73d38f77dd216fc24e7f"
+    },
+    {
+      "path": "assets/vendor/SHEETJS-LICENSE.txt",
+      "bytes": 11355,
+      "sha256": "4d2a38ac35cda06a555c84074a819d413339cd3691b822cae50f8f322fe01f64"
+    },
+    {
+      "path": "assets/vendor/SHEETJS-PROVENANCE.md",
+      "bytes": 1611,
+      "sha256": "1b2f4352d3d27c151b1da66a7a475cf7a1f6b17f2a67ce095bf5914009de4a24"
+    },
+    {
+      "path": "assets/vendor/tailwindcss-cdn.js",
+      "bytes": 407279,
+      "sha256": "176e894661aa9cdc9a5cba6c720044cbbf7b8bd80d1c9a142a7c24b1b6c50d15"
+    },
+    {
+      "path": "assets/vendor/xlsx.full.0.18.5.min.js",
+      "bytes": 881727,
+      "sha256": "c9506197caf809a075b6dee1da0d36fb19da7158ffe8a88e7b0c96c5d8623c99"
+    },
+    {
+      "path": "assets/vendor/xlsx.full.0.20.3.min.js",
+      "bytes": 951904,
+      "sha256": "cc015130aa8521e7f088f88898eba949ccdcbfb38df0bd129b44b7273c3a6f41"
+    },
+    {
+      "path": "backend/.dockerignore",
+      "bytes": 110,
+      "sha256": "9b0b40ca64e93e62588cce05ba0a3477954880d60374524367b03ec264d90738"
+    },
+    {
+      "path": "backend/Dockerfile",
+      "bytes": 1179,
+      "sha256": "45e47747e48c786cd0c1e86a04682c66d2bbfe55b9c6f188bc7412654fcb4208"
+    },
+    {
+      "path": "backend/mvnw",
+      "bytes": 199,
+      "sha256": "4f39fde46a84ad0f247e12fc5d9a2279feb1c254fb55e9612d49d16f48e1ae18"
+    },
+    {
+      "path": "backend/mvnw.cmd",
+      "bytes": 219,
+      "sha256": "0fd121f1a13927b6d36aceeb06fd173529aef30062ea94bf011e0246e8724306"
+    },
+    {
+      "path": "backend/pom.xml",
+      "bytes": 6463,
+      "sha256": "efe3f5cd554baeff25bf7b2837d80c52f5ddf38f920351887882534ffefff31a"
+    },
+    {
+      "path": "backend/README.md",
+      "bytes": 2106,
+      "sha256": "1e287e7c1cfcee28b0bc51e38e1da745598d4f4d42713f845cbb9b7925d09cca"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/api/AiDtos.java",
+      "bytes": 2620,
+      "sha256": "9d5a93fba174fabc3042ace4ddd5b253194b41c0491ef6d17a206892c28e70f5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/api/AiPolicyController.java",
+      "bytes": 1525,
+      "sha256": "41e2f284cfd1177b4b94046dcdd29861197159367117c9f51e57f863b7abc0b4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/client/LlmClient.java",
+      "bytes": 602,
+      "sha256": "22187d84ec257e4a290f14b2569d99691e1e64764025ecd23298f86c7af6d5e3"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/client/OpenAiCompatibleLlmClient.java",
+      "bytes": 18075,
+      "sha256": "ecc88277ef6a5d74dc87bd5572e8f1c2e249ddbb3700d00fe25b57a663bfd325"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/config/AiModelCatalog.java",
+      "bytes": 1833,
+      "sha256": "a841017922c61e38f70a0ee9eb195a2450538ec4f81dd3bb920404471d58ec0a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/config/LlmProperties.java",
+      "bytes": 3515,
+      "sha256": "c4576e3a696d43f90c9cef11372bbd99c59f6395269b09290d624c5bffe48ba3"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/config/LlmTestModeGuard.java",
+      "bytes": 828,
+      "sha256": "a782f764bc88fbeccf3f0a1ba5967aefbebcf4998033453ba91797ea3b0e9c2e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/domain/AiCallLog.java",
+      "bytes": 4806,
+      "sha256": "3274f08c4d5445f7c9795e98fcd14ee40e693393700da0024320943e2be57fa4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/repo/AiCallLogRepository.java",
+      "bytes": 948,
+      "sha256": "be65db7169b62656bae9e28e36f909480736ea1b10a52fc5c66516d7413e9144"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/service/AiCallAuditService.java",
+      "bytes": 940,
+      "sha256": "f03d335f01a5550aafd8c11cc02853486f1624b9b09ad2b3f073d7dec5d6efa1"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/service/AiPolicyService.java",
+      "bytes": 42181,
+      "sha256": "44224d94c53c640cff909d6dbd948b98070002ff5d7dadeb5aab6ac9cf16d6d4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/service/PiiMasker.java",
+      "bytes": 1330,
+      "sha256": "8eec8b5133bcbf3f35f5818a4655b181906360c3ff15d5af287412f4f0db0d17"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/ai/service/PolicyDslValidator.java",
+      "bytes": 5720,
+      "sha256": "02a4bc2480adb09e0754c0d5e233149e0d1a82b20b140c8ecd21f72e5a90755a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/audit/domain/AuditLog.java",
+      "bytes": 1902,
+      "sha256": "2ef79e3bb79e9dcea11c5e05835baf7142920b5a349a1206ae23b3650df3242d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/audit/repo/AuditLogRepository.java",
+      "bytes": 299,
+      "sha256": "a04a04d5cada09cb252eff206b8c9d3d2bd7b4ae2065ee99fe93a8fb6ead595d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/api/HealthController.java",
+      "bytes": 840,
+      "sha256": "155e9d2f98cdeb48c4226f6a6c2da9e8cce540b20c74d63522c2b8f8fa82da40"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/api/VersionController.java",
+      "bytes": 1253,
+      "sha256": "b172205faca1d9135db62ca9f8d2b953ec4512c3347cc113b34e14aed518a38e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/config/DatabaseReadinessIndicator.java",
+      "bytes": 2479,
+      "sha256": "692d92167d7ef72c7caf9d2cfcc6d7a3d368b831ecb677f3a6146810bca357ff"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/config/DeployProperties.java",
+      "bytes": 1724,
+      "sha256": "4d32fc265d9d0dc075c605ad0167e25f9150f65dc431cf247b9b34d84d2575bc"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/config/OpenApiConfig.java",
+      "bytes": 452,
+      "sha256": "f74f5b8aff187a7cbf455c826ffeed881fe679449b540e1e351b8a781ad70352"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/domain/BaseEntity.java",
+      "bytes": 985,
+      "sha256": "35c0f2a66066d999d773111bd90c1c8913be3928de98854da13e6b2bcd0e1a0d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/domain/TenantEntity.java",
+      "bytes": 397,
+      "sha256": "b7007325c803a560a6c787d0ab1afc64a3db7aef20f344b0e7b9fe3ef9c9777e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/jobs/AsyncJobLeaseService.java",
+      "bytes": 17075,
+      "sha256": "c08eb9a612242db8c6224a1b88ebb4aca713bbda6df4d55b2988c4058beea8c6"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/jobs/JobLeaseConfig.java",
+      "bytes": 661,
+      "sha256": "995347bcf1e6fd730057a425330c1ebfa7ba40ab8bef022c64d3563e8911ed78"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/tenant/TenantContext.java",
+      "bytes": 654,
+      "sha256": "e8b090c657c47a5100db928a0e71a9ea9bf363cac364fd6bb065dd50b9e43ed4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/web/ApiErrorResponse.java",
+      "bytes": 742,
+      "sha256": "0576c903883fcae6e2d17f1fe524dd7392fe7a7487165e95c3545a9c591b026f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/web/ApiException.java",
+      "bytes": 1213,
+      "sha256": "2581448ab36c2cfcf1379339be81d384d39457b625ccc3ac45f8ac21ae488c3f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/web/RestExceptionHandler.java",
+      "bytes": 13502,
+      "sha256": "47fe10831a4ec39a03e8af4516d07e983143bd8d32d898a32053ce3ebe618605"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/web/TraceId.java",
+      "bytes": 342,
+      "sha256": "e40b2b4d2a9de39c03d141b043afb7817a4ac71d2bb1aa866ed708186afdaf4b"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/common/web/TraceIdFilter.java",
+      "bytes": 1643,
+      "sha256": "7632ebc3025f7ae127e64db603783f01daf158eacc946a3ecfcc7789d3e57021"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ClosedLoopController.java",
+      "bytes": 6484,
+      "sha256": "ba635de322617142774c6af41f7e92135cf75f95ba1b01e493218840c6db1a1d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ClosedLoopDtos.java",
+      "bytes": 2935,
+      "sha256": "8b1a29572fd70ff6d8f78b07c5999adbe9c94e7492a35380945ed5778f41e7eb"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/DiagnosticCaseController.java",
+      "bytes": 2186,
+      "sha256": "a9b9a4fa9c2484776e32f8ce48cdb8fe24dba2fc0202aab736ec4de4b8014d6a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/DiagnosticCaseDtos.java",
+      "bytes": 295,
+      "sha256": "fac9b4c7ca233340c068519e750ceb9e065b005a876f8712c5539e995b1c6fd6"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/DutyAssignmentSelfServiceController.java",
+      "bytes": 2798,
+      "sha256": "7911d832c7e9db735c03f2efb4e412d24869929854483284b7e063e20921b3c5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/DutyAssignmentSelfServiceDtos.java",
+      "bytes": 740,
+      "sha256": "6a34ed02497c6b5e1fd348a0114554a08ccc211249d000a9c6629dae16da55b5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/EmergencyChangeController.java",
+      "bytes": 2079,
+      "sha256": "00a5609d788f640056b73938652fbf42d37cb85dcce40bdb5e116520c896d2d7"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/EmergencyChangeDtos.java",
+      "bytes": 455,
+      "sha256": "9bc04256dda70ffbe357d2c8b03f2da2bc5b62f0c5d86e27b1cfa1543c612213"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ExamPlanController.java",
+      "bytes": 6520,
+      "sha256": "b1cb4a9c36e87ae6844f3453e21c9f5d77a7f7c5b0437f77d9f4e859d0c5b1eb"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/ExamPlanDtos.java",
+      "bytes": 1839,
+      "sha256": "76dfbad9c130abc2962298b86e47869b5eb7e86438577f126aed124bf03d6889"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/JointInputController.java",
+      "bytes": 12043,
+      "sha256": "390e4ec9c58d2338d52983c52922d6adadc0b18bf16aa2880d204f855c72216f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/JointInputDtos.java",
+      "bytes": 6370,
+      "sha256": "67d734c3b7c317333dfed8468ff375d25c8fef8d7a7123bd883877b52d5cf331"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/LeaveRequestController.java",
+      "bytes": 3036,
+      "sha256": "a3d520f3eafa64126dbb7e9af8b8e88223da54b0f0946e91348719e1f3896c3a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/LeaveRequestDtos.java",
+      "bytes": 1048,
+      "sha256": "ca8cc549c8ceed334e595234996df372d8d19904d22c7dd28525b61d3fa6f977"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/MyDutyAssignmentController.java",
+      "bytes": 1541,
+      "sha256": "ceffcd3b5b02fe6af8065d0d857503ff156ee0a39d84b8f6eb1555a12ad929f3"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/NotificationDeliveryController.java",
+      "bytes": 2989,
+      "sha256": "70d2f080c32f0c5194b5bd62baf0dc4b55c9c145404739a0447f55c7f37446e8"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/NotificationDeliveryDtos.java",
+      "bytes": 1203,
+      "sha256": "af0f9abcdbd0eefb7d2fe0ce591df5cffac21d5cd4f5aedd78e54b2b42266404"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/OperationsController.java",
+      "bytes": 1317,
+      "sha256": "89ab273c0ec8b1dcd1a3102f7feb7112ebb43a3913e15f9d519d24f8460d7e2f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/OperationsDtos.java",
+      "bytes": 1168,
+      "sha256": "8651405987aa7a7e1a8b17fd9d77fe6479c58c095a642540302c49dc87341a6a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/PlanningJobController.java",
+      "bytes": 2599,
+      "sha256": "0ccbb8a4508978d6d7c03616e5a8929515934e9638a001be8641a93b44d5d19c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/PlanningJobDtos.java",
+      "bytes": 812,
+      "sha256": "1e9cd0a98865e256e83b78b87ef9ce08bc7f174656759ee0f50ede74c501a46d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/PlanRevisionResourceController.java",
+      "bytes": 5140,
+      "sha256": "363699f336428fe321e272b896fbf6c368992e54ff4601959b02968ac240a8b2"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/api/RevisionResourceWriteDtos.java",
+      "bytes": 597,
+      "sha256": "01c164028760fc4d979c51005ee2dbbee9eb196e72442c0067e11747815556c2"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/joint/DeterministicJointPlanner.java",
+      "bytes": 77818,
+      "sha256": "96ca38c688815dc40973c0fc7419627642060197be63dc0b10ff6b95ee409782"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/joint/JointPlanningModel.java",
+      "bytes": 14722,
+      "sha256": "66309b72b309d47fbc6a3a4148fc3d03bc08676c7cf1fd7e84ceba9370c13aec"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ClosedLoopOperationsService.java",
+      "bytes": 35615,
+      "sha256": "ab91765ef94038456e1786cb0e5e32412538d6581f7441771193e3a8319c53d2"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/DeterministicInvigilatorAllocator.java",
+      "bytes": 13028,
+      "sha256": "e40aa30e1190e900aa4c3760fddcdf6c127931c6ed2c05f6fcd6149f3d4a8b82"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/DutyAssignmentSelfService.java",
+      "bytes": 20191,
+      "sha256": "8300640c54e14b0815a7efd6e75a2be1202a03600576340062400a67b3c9253e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamOperationsHardConstraints.java",
+      "bytes": 10277,
+      "sha256": "16176b301860bd06a5384aa9013cce372e981636b2f105d10986cb4a9c6b836e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanDiagnosticService.java",
+      "bytes": 8487,
+      "sha256": "8bf0840c9b4f6ef4a6d71d059977f39d2fa9ef81d36a8a0f7b722fe9252d975a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanEmergencyService.java",
+      "bytes": 37030,
+      "sha256": "a9117e6c084d4cf620ab170d54e181cdcbe1fc10dd807e232e21cb707336c537"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanPlanningService.java",
+      "bytes": 69160,
+      "sha256": "665a02bdb0dbe8fbf679c00c68bd3f6f1c4cff62f62b9228fbc28d5e2df79bd3"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/ExamPlanService.java",
+      "bytes": 48646,
+      "sha256": "47b84264d0ba3fdfba732a41492f509257d9503596a8c13ed33eb2e64b0605ba"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/JointInputReadService.java",
+      "bytes": 14217,
+      "sha256": "fc0d0cda99fa11ca530cbddde7c1d8e8596b1236380b867cbdb567806f435700"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/JointInputWriteService.java",
+      "bytes": 35340,
+      "sha256": "925a5920409327e4edb0137a387d7118b58e2869e76766d2eb0d64c44f26d270"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/JointPlanningSnapshotLoader.java",
+      "bytes": 33511,
+      "sha256": "4513068c17d288284936587a23d9afa677b149af959604492d6e4721fc0ee2df"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/LeaveRequestService.java",
+      "bytes": 15430,
+      "sha256": "5236f334adddd78b1102d02df995def4f6877f9eb77d475a74cd5ae2156c3f15"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/LegacyPublicationIntegrity.java",
+      "bytes": 7114,
+      "sha256": "079caebea54c5d45e96fde2e5897f87e4f99eadec416bebb323bfff1e44942d1"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/NotificationDeliveryService.java",
+      "bytes": 13545,
+      "sha256": "38d054d5f1512f689466d817359d2e801b08c4a3365786861476ba60db9ad688"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/OperationsQueryService.java",
+      "bytes": 11706,
+      "sha256": "fb1a2a2e1b2fafb45d657de77104f5db0480eee0fcb223eb1d1df55fca984abf"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/PlanRevisionResourceService.java",
+      "bytes": 8275,
+      "sha256": "5c1b0a67487a2f67ba33c04dfe8b24805ffe0dcda2151b0a224b4173b8a79989"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/PlanRevisionResourceWriteService.java",
+      "bytes": 17782,
+      "sha256": "fb946422ef6a9f024aba1f61f9f241147594c88c36fc9fb2b00546001b83723c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/examops/service/PublishedResourceBaseline.java",
+      "bytes": 9955,
+      "sha256": "b057acb57e744b08f9b1109c1efddbbccf717f75a34649e4f042d750a8b80bfa"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/api/ImportController.java",
+      "bytes": 3583,
+      "sha256": "04d48ed7ef2dd9cc1843cb7f6675cc826092f8fcafdc50e12fb4516aed5bb8e4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/api/ImportDtos.java",
+      "bytes": 1125,
+      "sha256": "6bb55fe150f5b1a878bba7b71e6d82d02ee16d148c8dd1c06ade339e84b9f329"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/domain/ImportBatch.java",
+      "bytes": 1777,
+      "sha256": "36ad7931a59573a0e46e5d0c3ffa866d0103803e3718a5e02cab8fc1e03f745b"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/domain/UploadedFile.java",
+      "bytes": 1545,
+      "sha256": "058defd648aabb45467820e0fcfb4e748195d825a4e27c5674d48c7efadec462"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/repo/ImportBatchRepository.java",
+      "bytes": 443,
+      "sha256": "3c11bbe4b13c1a26d7de01581d2c384c0252a8eb3d10d41eb2c39ef13be577cb"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/repo/UploadedFileRepository.java",
+      "bytes": 502,
+      "sha256": "59c1414e1494b2aba45445c4395fe3646447237b9e43e45d0e545c612aeb293f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/service/ImportCommitService.java",
+      "bytes": 37385,
+      "sha256": "7c75eb4f6e590055dd40ad8f40323156191a25f1cf238eb37db9ac10ae177d84"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/importer/service/ImportValidationService.java",
+      "bytes": 38338,
+      "sha256": "da334136b64549a34d2e6ea6d70dd9b87c6670ea5c4da5a194bd80223c8d3844"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/JkxtBackendApplication.java",
+      "bytes": 314,
+      "sha256": "6dba639617f70d2dee7cdf832e7a550bb129827bfd2b0dd9dedf4d1014929352"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/api/ClassroomController.java",
+      "bytes": 2153,
+      "sha256": "b7429d90c1be6519c49b1d08b63b73802f257477b3c5fa8e62f52f84aa250d3a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/api/MasterDataDtos.java",
+      "bytes": 4098,
+      "sha256": "2153a07c707b7ccf4e1f295f2a272bee07f709821573266860cb44ae890df344"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/api/SchoolClassController.java",
+      "bytes": 2145,
+      "sha256": "33a4aadc7ea68a035854e40f700a44a18326246762e531e45039e104d869fc9a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/api/SubjectController.java",
+      "bytes": 2121,
+      "sha256": "e90ac19ecbec36295c266b05804dfd79e501d9f21e3b28f002274a73581f233d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/api/TeacherController.java",
+      "bytes": 4161,
+      "sha256": "87dc2400c7e697c32a86550e2147716854f381c7a9ad685e87c85f9774ff8d2d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/domain/Classroom.java",
+      "bytes": 2215,
+      "sha256": "a5ea37b9d35d89091cbc7ace25a22749dfed629567cad7a0b8e5b06b75a9914d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/domain/SchoolClass.java",
+      "bytes": 1939,
+      "sha256": "b8fc08a8b89a0d5234bcc58a317bbacd7fcfbf185016c0774ae7fc7802252a0c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/domain/Subject.java",
+      "bytes": 1546,
+      "sha256": "4b096cc794b07ef71483d8408e0efcd2b3a67e2eb2c8f48e103bfc0b301533af"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/domain/Teacher.java",
+      "bytes": 5977,
+      "sha256": "5b4c40553ff255f1f6d4278e285a508db7681f55c52756c350880b86817c2776"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/repo/ClassroomRepository.java",
+      "bytes": 518,
+      "sha256": "aa79fce8a41b08fe12f862aa9634c42bb1434947b356f2eaf3d67378cd9cb10b"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/repo/SchoolClassRepository.java",
+      "bytes": 735,
+      "sha256": "ed773d0ae9ac2b32124b8bede4ea2ea4f3e9fe369adfe07f4a7ce8245fe21545"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/repo/SubjectRepository.java",
+      "bytes": 545,
+      "sha256": "8dd00bb6bfea28d943b859c73c6e030499244fe4d907ba476f0bcbe701d93b6f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/repo/TeacherRepository.java",
+      "bytes": 995,
+      "sha256": "9bf86f020532500e9914f99f6bb09fdf377b42baed0e9b71bd8ecf976d49c810"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/masterdata/service/MasterDataService.java",
+      "bytes": 49396,
+      "sha256": "67fbfd3dc45f76541c5020a3ec0c4a2e224f03eddbb0b38005ed18a93012d919"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/api/NotificationController.java",
+      "bytes": 2971,
+      "sha256": "5b644696deda476518a5fa61f8b0aab4fb816e4b20c779f565038f878bc8db55"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/api/NotificationDtos.java",
+      "bytes": 558,
+      "sha256": "e1db1c6ce9ca6104fd8a46b02d1a15f18edff1a0aa27945396fff1274eb4097a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/channel/LoggingEmailSender.java",
+      "bytes": 1405,
+      "sha256": "5fa1cd5f8979a045fae3bd4f22be1d9a519d860123d8c62e19af12362cb1d52a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/channel/LoggingSmsSender.java",
+      "bytes": 1371,
+      "sha256": "cf0b5e217018c69eea43f04fa59d10eaf0e3a57a17c90dbb372e5c2cc366d70a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/channel/NotificationRecipient.java",
+      "bytes": 233,
+      "sha256": "0562295a4fa722d8c44d2b09893793e9bfc5b2ec3b21f94f7f13632ea3851aaa"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/channel/NotificationSender.java",
+      "bytes": 1293,
+      "sha256": "44a701beb7b238abf3b4fe4384169e8f622ad220af3c45d513e5a9a414505d68"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/config/NotifyProperties.java",
+      "bytes": 1153,
+      "sha256": "bde428afd0cec9fcd649c7b37d747e088639f978b91f46de4eb67faba6fc1827"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/domain/Notification.java",
+      "bytes": 2082,
+      "sha256": "ad292e99994cb1d976077b29eeed53dec7fa617464697753922ff71b7386b176"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/repo/NotificationRepository.java",
+      "bytes": 419,
+      "sha256": "d0eeefb922413a542221baff74024c40241e68ced7b009a74444ad42c197a26f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/service/NotificationDispatcher.java",
+      "bytes": 3502,
+      "sha256": "b50930efb8d94e6d5314888e076540a829f34d6ca3b74f57772ec069989a51ef"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/notify/service/NotificationService.java",
+      "bytes": 4563,
+      "sha256": "d2c86e36fb01ba564ea76f350b93b55e87274d78e6024285d3f8a69c74e12e7b"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/AcademicTermController.java",
+      "bytes": 3298,
+      "sha256": "33e7c5007eaca80b89b513068d2dbfe41c0fd1c8d892382c7d433df230de7d25"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/AcademicTermDtos.java",
+      "bytes": 1084,
+      "sha256": "ca295701a71288db3cef9f6a3fc7989755f3ff8df2cb9ce8f4a5a1f860935916"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/AppearanceController.java",
+      "bytes": 1019,
+      "sha256": "6355eb6fd3dd5b885bf27b12a49b06c3cc17048a9321e45d9ea00facb2ecd433"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/AppearanceDtos.java",
+      "bytes": 416,
+      "sha256": "2f718ba6deb412f97701169bc4f00b51ef16bf6c3d9511f6645cdc69a74be2cd"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/OrgSettingsController.java",
+      "bytes": 1439,
+      "sha256": "7f23421a4949fe8d0a1b29083d341c1136f6edf08a1dbd756c13765f3054fc33"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/api/OrgSettingsDtos.java",
+      "bytes": 850,
+      "sha256": "4bfb1d861c2704dbf47c464b48a05c4cae7507eb4442f8569055c2152c543ccc"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/domain/AcademicTerm.java",
+      "bytes": 1538,
+      "sha256": "7a793947610d30fd5534faac2fd8a826a94ed1b1645cad40827c90babdfd1cda"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/domain/Organization.java",
+      "bytes": 822,
+      "sha256": "96db830ca47ff1c41d9030c9d0ef654211d9957915e755bc2f01900d769c844f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/repo/AcademicTermRepository.java",
+      "bytes": 483,
+      "sha256": "106a6f1156dc947040e08f77b6f862aba1d0ea7fdead683415979e59aa2e9c11"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/repo/OrganizationRepository.java",
+      "bytes": 319,
+      "sha256": "0b9df3db11a3a0cae99cb010bfa738962906e538658a41331cd26cf3544533ee"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/service/AcademicTermService.java",
+      "bytes": 6974,
+      "sha256": "a9e2132da2ac9cc42daca9641bb4b0618624896598c24484c72fd7eebc2c8625"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/service/AppearanceService.java",
+      "bytes": 3300,
+      "sha256": "b8e180a7525072d0bc8bdd09999f3372aafcf88343229d4e734c331dcd2f6f93"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/org/service/OrgSettingsService.java",
+      "bytes": 2848,
+      "sha256": "51547f97d30613234ae6d887391c1470ce2572160d49ed142914b92b013e6e7e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/platform/api/AdminPlatformController.java",
+      "bytes": 6466,
+      "sha256": "621322627db5d3980b13ab2d3dd301ccc64c38a59549b90e4bf007fbc4a8d0a9"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/platform/service/AdminPlatformService.java",
+      "bytes": 58085,
+      "sha256": "4ea75be5b19d55e0af7c732f4edb4f0e849348be2a921007ff07eae8aa75027b"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/reporting/api/ReportingController.java",
+      "bytes": 1907,
+      "sha256": "63dce0ee9242bdb504b33e3f69bfabf6491967f8c49580efeadcbfd14597da6c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/reporting/service/ReportingService.java",
+      "bytes": 25138,
+      "sha256": "6d8801dabb2ac1851b777dac6ade18b6e91706999613f9d81b20626b203efd35"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/LegacyPublicationController.java",
+      "bytes": 1954,
+      "sha256": "e7757310ea854dea6783257be6fdd24e32d182fa538cefc39292d6c8bc54c135"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/LegacyPublicationDtos.java",
+      "bytes": 551,
+      "sha256": "3c4cc8cc051543a4d8d2ece9e5d75fe246dbe1d123dca19fa0cebd77e8e661de"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/ScheduleDtos.java",
+      "bytes": 1194,
+      "sha256": "53bed8f4fc6f4110d02f991ee4f1c95c7e00c070e534b1ddfacadc80674f6dc2"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/ScheduleEditController.java",
+      "bytes": 2226,
+      "sha256": "d539f58af83135ff3fdc84e1ce3a0864fccc94a3399cffac6cfe044828f00d79"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/ScheduleEditDtos.java",
+      "bytes": 1815,
+      "sha256": "bd608755679e40a6e5503d3d2847582dc47aad83edf6737b2886d48ac9487f4c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/api/SchedulingController.java",
+      "bytes": 3670,
+      "sha256": "5a2b0a441969bb02080da37964fc37833a9b8e989a3bf382ef0807586aded119"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/domain/ScheduleAssignment.java",
+      "bytes": 2759,
+      "sha256": "f5d9a71a3aea658fdddff9905326c1fb96373f03d3ccc939692383de3520b603"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/domain/ScheduleRevision.java",
+      "bytes": 2709,
+      "sha256": "6ebb9ed37ec074565b5be801c3113282f89c2f8fd9d03866a3ef4c14955320a0"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/domain/ScheduleRun.java",
+      "bytes": 3526,
+      "sha256": "acdb61fa16855c9706ae7deb8eae3f107cf880f1988c0cddc2f9f8f56eceabb0"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/repo/ScheduleAssignmentRepository.java",
+      "bytes": 623,
+      "sha256": "390d520355d454d4becd621d3f0395005cdb0635f8588799ef31c9c0ee9e8167"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/repo/ScheduleRevisionRepository.java",
+      "bytes": 655,
+      "sha256": "aac9e0c19c9a81d7508d54042c7300bd4e8e1fb3538b3d901e4b3232926fefd4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/repo/ScheduleRunRepository.java",
+      "bytes": 2213,
+      "sha256": "16d6d4460b8432946571cefdca3c4529d57083e58e55a16ee5e84cac68d01bfd"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/service/LegacyPublicationService.java",
+      "bytes": 17421,
+      "sha256": "77c375a4b10a32c25c9cc8ba56538dba61b3c72933a3e00bb555e13ba1743011"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/service/ScheduleAsyncConfig.java",
+      "bytes": 986,
+      "sha256": "1c47419d6442d44ed394f7acd283f581b0fffee5c0bca91a0a7648bb785d36ee"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/service/ScheduleEditService.java",
+      "bytes": 29694,
+      "sha256": "fd690c35cc66119e9568ac869a1b30c2ef2395b6a6c9a891b2a08305a58ebb35"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/service/ScheduleJobService.java",
+      "bytes": 47694,
+      "sha256": "607774d102fa2a1d9eeedc91153e4fa8f4d24755566c9f8b5e9cb840c2462ebf"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/service/ScheduleProgressSink.java",
+      "bytes": 3780,
+      "sha256": "9634a8c7356ad985f7c0e9657dd76e158294b480d79dd9de69a082e72dd1d75f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/solver/CpSatScheduleSolver.java",
+      "bytes": 31815,
+      "sha256": "09cc488c263c7c6bea86ef013d6c442b0e47c5c401fe924ad514099be4987277"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/solver/ScheduleFixture.java",
+      "bytes": 4154,
+      "sha256": "43abb942c6ea10b378fa81136f8896bae403b27fba9c0a61e6821b1d8895ae1d"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/solver/ScheduleFixtureFactory.java",
+      "bytes": 6879,
+      "sha256": "bd83c22a6adde907c1dbb1dde7bd43b771daf7a5bc1b749806843dcdd26fb021"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/solver/SchedulePolicy.java",
+      "bytes": 2378,
+      "sha256": "73d43d583b3f9e9babdd4f0b70fc998a6cb70e5ec5f4fe78d2d3b5a997e60673"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/scheduling/solver/ScheduleSolverResult.java",
+      "bytes": 1124,
+      "sha256": "85a47e058fba0965eee0499e25983bdc4c5c7687ad4bdfd0097514be5c85e1e5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/api/AuthController.java",
+      "bytes": 5104,
+      "sha256": "d8eb7867dbd954bd3e9f50a1b13209eb75e7a071dce4ba9543ade9d82d89e172"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/api/AuthDtos.java",
+      "bytes": 1492,
+      "sha256": "2cc0da729665f9d4de3cafbba5ac5cffb352823a3581510e7ba198e02a21e40f"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/api/UserPreferencesController.java",
+      "bytes": 1918,
+      "sha256": "bf29c6b987b0fa0082df9b0b82be25c1fe257b3d0b4f4b081490ae60a189d4e7"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/api/UserPreferencesDtos.java",
+      "bytes": 613,
+      "sha256": "fc492fb0259e82e37c10ba0246b64c082eaac4fbc6a1f44e287a8729824b1d48"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/AuthException.java",
+      "bytes": 453,
+      "sha256": "2bc6769b43c5997e804067dec152398d752270617b9ea6b9f1487340d54fae56"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/AuthPortal.java",
+      "bytes": 1422,
+      "sha256": "bc7100d8ff92dbe92a20f1f924cc423562bfc71d80288acf6ae5628dc22259db"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/AuthRequestAttributes.java",
+      "bytes": 345,
+      "sha256": "05cfc340d7747874db2d64a9375f6bd938b6432842306296b7e40bfc80217bf4"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/AuthService.java",
+      "bytes": 19778,
+      "sha256": "34e4a11982bbbe6ff18c6687d5ace937b66a370ee21e2560ac584824cd3fed84"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/CaptchaService.java",
+      "bytes": 4230,
+      "sha256": "6d84d63680918f524e64717183585d65a7d3c2c5b488ea075795e8f46eaad7a7"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/ClientIpResolver.java",
+      "bytes": 6998,
+      "sha256": "52372e1778209e35accde5172ba6754a84b8e4e3a0c3f6eee83cb32ab1d9d044"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/LoginIpThrottle.java",
+      "bytes": 4219,
+      "sha256": "f64bff042fe90abe765697362aa27a992d835e341de9961a23239b43022c89bc"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/SessionAuthenticationFilter.java",
+      "bytes": 9558,
+      "sha256": "bfdbad4aeff9754c7c0a1a84cb36d453d3e763938192522fbbb97259185d6a6c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/SessionPrincipal.java",
+      "bytes": 1642,
+      "sha256": "50baec6e5572aed5c3d5705ed5d942d7ff59f5159d06353171e7fffe2a4f2c69"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/auth/SessionService.java",
+      "bytes": 12409,
+      "sha256": "7ba9a039f710f03751f1a45255cd68882864846b7cdaf90f85762813a242684e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/DemoAccountSecurityGuard.java",
+      "bytes": 3059,
+      "sha256": "b3afd02d3d23040c2248bd72b4314597689ed23b989b05262d0fc8246e22596a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/DemoRosterSecurityGuard.java",
+      "bytes": 3460,
+      "sha256": "a4109bdf41f5deec9f8ed30ce223514660fa5f5e72a3868d84c41e4cf43af5d0"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/domain/UserAccount.java",
+      "bytes": 3355,
+      "sha256": "5f9b6ff4a76f1f9a8fb5d4afe35ea9eb4664e655c76163fb3f6276bf9ea8c394"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorCli.java",
+      "bytes": 6530,
+      "sha256": "5951266c7d179b283e714f37dc01d73f1b3b25ddaf54b7b3623080178fd639f5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorProvisioner.java",
+      "bytes": 6886,
+      "sha256": "4cbeea885bac0a5aa52ddea0360c27d67d1ece47e86338569610b247f12e925c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/ProductionSecurityGate.java",
+      "bytes": 5586,
+      "sha256": "c24ca57f3fd0384b369af29ca4509f3e2cfae4effd1989fde37700e9489b055e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/repo/UserAccountRepository.java",
+      "bytes": 814,
+      "sha256": "9a1698a7d2a57685e8bce6dc5cea6ba8438756c35272be3324c223751e023d01"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/SecurityConfig.java",
+      "bytes": 9801,
+      "sha256": "d7223ddc6742b5f07bfa7b3d517a9c5991c6b70b0e6261daf98f7afd262bdb6a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/service/UserPreferencesService.java",
+      "bytes": 4799,
+      "sha256": "9773d264a48306c6a3cab685cf964e05dc3c86a9ca6611a294c8d16c7ada1bee"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/SpaCsrfTokenRequestHandler.java",
+      "bytes": 1734,
+      "sha256": "d88658ffb6e0b1fd9cc5771eae88f34119cb2dfe9c76754b2a9509d79e970fc9"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/api/ExamTaskController.java",
+      "bytes": 5261,
+      "sha256": "9509a02912b6889849def3940f9ca7f3c6a4f0e7a9d0ee246dbb40e69744e75c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/api/ExamTaskDtos.java",
+      "bytes": 2874,
+      "sha256": "76a566346f3da2d68731c4e11c0636767811333fe6ef88dc7ee5493f6317ae33"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/domain/Exam.java",
+      "bytes": 2348,
+      "sha256": "cb89e40ed72c311cd16c1186bab3239b876988961cb078ad6c1757cecc5573d3"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/domain/ExamTask.java",
+      "bytes": 2085,
+      "sha256": "789d701cf21329d416beb409151bc8e3cda86082640d495088844e418d37c236"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/repo/ExamRepository.java",
+      "bytes": 397,
+      "sha256": "b3d30da9240bdc8da23e1cb744f025082690726af35dd77d057032961963d4d7"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/repo/ExamTaskRepository.java",
+      "bytes": 1296,
+      "sha256": "18aebff5330c893802f8c142d931dabd17533070b7db10d36ca01f4c0d7ea231"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/tasks/service/ExamTaskService.java",
+      "bytes": 39599,
+      "sha256": "3b7753928826b6ac4cc29afd2771c76095c53fb317f04605407a265f7352730f"
+    },
+    {
+      "path": "backend/src/main/resources/ai-models.json",
+      "bytes": 9360,
+      "sha256": "e377368cdcde293ffac8c04801c5e721abb04b06483eddd8e5e9e1ec6b170810"
+    },
+    {
+      "path": "backend/src/main/resources/application-private.yml",
+      "bytes": 3905,
+      "sha256": "c3f9b1388308ffdbf8635521aebbdfa16ca868bc4198cbb7fddc61f632cb4bee"
+    },
+    {
+      "path": "backend/src/main/resources/application-saas.yml",
+      "bytes": 2389,
+      "sha256": "75f6e00dfcb6653a81d2b5fb78b5f59627afd134b5194c7b9ad9036dc54361ca"
+    },
+    {
+      "path": "backend/src/main/resources/application.yml",
+      "bytes": 5408,
+      "sha256": "257eee3a6fb9f4885595f24b6d9dcca59cc82064328a043cc9a68e0b7ae802ee"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V1__p1_baseline.sql",
+      "bytes": 330,
+      "sha256": "928c9a18b0638cf79e49d6e632df94f592c1d0cb1c2f9ca5dfaa0066e2887bea"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V10__p13_demo_login_accounts.sql",
+      "bytes": 3012,
+      "sha256": "87d39b8c5dd1e7b1f4f65bd81a6c8744af79aa4174c09c9db2f75a1103a52bbe"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V11__p14_notification_inbox.sql",
+      "bytes": 778,
+      "sha256": "3968f331716b2f22ae4a62151395af9e40c5ab226053ac8b0c322e503ab1d466"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V12__p14_teacher_homeroom_class_code.sql",
+      "bytes": 711,
+      "sha256": "67e87151e57087e01e6e6fb41866607f40f51ad85f615ba5dc2aae1f10b96240"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V13__p15_account_soft_delete.sql",
+      "bytes": 1042,
+      "sha256": "1eacf5e8d85d2b6ed2e82e5f91f95898f0006007580cb47053e84af954e7be9b"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V14__p16_masterdata_reverse_indexes.sql",
+      "bytes": 755,
+      "sha256": "57f0d549362b3cbe1e69366a349e06c46872c6c9afd09cafebfe8eca3478484d"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V15__p17_rbac_permission_seed.sql",
+      "bytes": 2332,
+      "sha256": "4dfec64c1de9a733005a724ab0e087554a8184e112535bdcf60e37536a4f1323"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V16__p18_platform_setting.sql",
+      "bytes": 1140,
+      "sha256": "c3d151f4ff2f30a990378a3b89e2919bfc0be0cddfccb3baf51c81f0c30c7722"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V17__p18_academic_term_current_unique.sql",
+      "bytes": 1141,
+      "sha256": "02500d872333e6ca09713894cea488b0229bc2905c34830a29e714fa4c09c040"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V18__teacher_scheduling_profile.sql",
+      "bytes": 890,
+      "sha256": "f99dbdffdfbf880a4bc76405c9b94e2315f7ece88393ca7687bb579bf939bab3"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V19__exam_operations_foundation.sql",
+      "bytes": 24907,
+      "sha256": "a415376103274859357c4399cb8c5003cd8ff645938c2ff599d26e5ea46fbb06"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V2__p2_core_schema.sql",
+      "bytes": 16774,
+      "sha256": "1e21c22099c9d1453f7ab649f002ae139a1746e202c24c7ce3886760d963e600"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V20__exam_operations_execution.sql",
+      "bytes": 5430,
+      "sha256": "b40502133c3a4125aaef8f4d09e704c1e12e51069e678a90992ff32ed605d848"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V21__published_status_monotonic.sql",
+      "bytes": 2249,
+      "sha256": "80df2c64dcc5cfeff35bc78c844121ee860c3e5fc30104351922debd2949a78f"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V22__exam_operations_security_and_hard_constraints.sql",
+      "bytes": 3682,
+      "sha256": "0a367c31a52d7b11c48bb507d8c8694bab66b4524326f229eaec365736dac1ef"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V23__teacher_invigilation_qualifications.sql",
+      "bytes": 1051,
+      "sha256": "4816d72f4d6797f476b6b826a387d6096d2818111c57bbd1bc52ad7535485448"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V24__deprivilege_unproven_legacy_chief_eligibility.sql",
+      "bytes": 1591,
+      "sha256": "dc9fbf129908575f14b7863a6ae04481022ecf5fd03d75df4ed4c34f3b66a4bd"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V25__duty_assignment_self_service.sql",
+      "bytes": 2687,
+      "sha256": "dcee284accda5b6a4cd09e47064da89d8fe00faf89d43558c1affcddce5514b0"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V26__joint_planning_inputs.sql",
+      "bytes": 18810,
+      "sha256": "b69c3caa3e60081c673a32f977420241506d72728df3ff7e7ec80eebd50e8feb"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V27__joint_output_integrity.sql",
+      "bytes": 8382,
+      "sha256": "c9a68273ff757d7d294efdaafbfb0b6b8657bd179ed5b1fbb9519b99cfe4e6e3"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V28__joint_audit_and_locking.sql",
+      "bytes": 4758,
+      "sha256": "45e8bb82b79e118284f52e96ef51c2fdc278aa2614a82fd515aa91dfe741417d"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V29__exam_operations_closed_loop.sql",
+      "bytes": 5478,
+      "sha256": "bf88e58cb2a1d447d1f541655dc1ca92e6ea5715192fd85e757eac3516ca3293"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V3__p2_demo_seed.sql",
+      "bytes": 2300,
+      "sha256": "ee0fead5dd20ef43af53f44282e812a803bd8ba20a5461d5f8b14714cd13dc1f"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V30__legacy_task_plan_adapter.sql",
+      "bytes": 2502,
+      "sha256": "4d27b30f9c67e435781cb641381ba3eca647a1eeeacd21f85654f0b3cb0d56c9"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V31__auth_session_version.sql",
+      "bytes": 2499,
+      "sha256": "b62464c98288158b6ddb4b105dcaa713328aa5966656c18a1a953467c5e2ce0d"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V32__async_job_leases.sql",
+      "bytes": 1691,
+      "sha256": "27d6e735736434739f9e151f0346cdb9d755582dd9c50a50dc6ee32077256b61"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V33__runtime_duty_engagements.sql",
+      "bytes": 11143,
+      "sha256": "2c69c2b916d1d707a21b75077e40ed26af852f7221455aed3e9d4a2e3d7e5650"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V34__restore_synthetic_demo_seed_chief.sql",
+      "bytes": 1839,
+      "sha256": "bb9dad23b36686ebbcd735d6dfb47dda718a3355ba0ed8ed47ec7589101d1198"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V35__retire_fabricated_seed_backup_record.sql",
+      "bytes": 826,
+      "sha256": "0e188ab6f40fd3cbbfc85320b61b52fcd626a9437c7ca38a71c23461e31318c4"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V36__published_duty_teacher_snapshot.sql",
+      "bytes": 3975,
+      "sha256": "615c68ef4fd40cc0fc4779eeb3c0e20d19d26b8dc236f8bee4c7fe6cfd987459"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V4__p3_auth_seed.sql",
+      "bytes": 2713,
+      "sha256": "7fc5dac6a13f5435597d25d2d75d808b8ffb02bae77dd54b9df2990db63ea427"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V5__p5_masterdata_seed.sql",
+      "bytes": 8036,
+      "sha256": "aec8c71de8e81af66ba8cbd35449d3106680d433aeb655a01810a8c901a80b9c"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V6__p6_schedule_run_state.sql",
+      "bytes": 395,
+      "sha256": "534a15f874f1dd87ed1ec23f9c511fe1f203d7121be22e0a2b48446e0f0e057c"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V7__p8_llm_policy_support.sql",
+      "bytes": 652,
+      "sha256": "6d47140dfa5a5877c495178b2ad1cfd5d031aab1d07ca997d0e2036d29da6165"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V8__p9_schedule_edit_publish.sql",
+      "bytes": 2120,
+      "sha256": "1c322b674daa1c4b2fb7cf312a23f00133232081512da781a6534949587d6aff"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V9__p10_reports_platform_admin.sql",
+      "bytes": 18631,
+      "sha256": "5e492b7a2653738db04b0eafde59660090fba285f1acf582c5705a9f96bda5b9"
+    },
+    {
+      "path": "backend/src/main/resources/logback-spring.xml",
+      "bytes": 519,
+      "sha256": "f96b3d525f02c50b034ca5dd06966e7c33abd4aa5e94f9a2788140d16a533b13"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/AiPolicyAcceptanceAuditIntegrationTest.java",
+      "bytes": 14062,
+      "sha256": "a66f15b8a67c6fe9016d1737d65163097c6cb6d64b15de6e366c81f0732bc6b1"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/AiPolicyApiIntegrationTest.java",
+      "bytes": 12463,
+      "sha256": "9c4ac1be25f5c4a5263e00ae3cc93d67dda948439bab8096b6592eb2b2d587c1"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/client/OpenAiCompatibleLlmClientTest.java",
+      "bytes": 21481,
+      "sha256": "4456c5e63c34f1d78f85661894f5946d3695851a0f990530e3f7a6bfbe716f44"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/config/AiModelCatalogTest.java",
+      "bytes": 1174,
+      "sha256": "d991d04accef496a26901733d9ba380b7aba42f3dd8130cea2328f022096cd2f"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/config/LlmProfileConfigurationTest.java",
+      "bytes": 1526,
+      "sha256": "8b2ff3b903f3ed56fea1a7a284fc485aa1939d7d301cc622dbb5c1f737519f64"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/config/LlmTestModeGuardTest.java",
+      "bytes": 771,
+      "sha256": "a3d60c6a70042acd1182e4b0912d7557b598e83ad46129483d31c0c8a3841a02"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/service/AiPolicyOperationalFailureTest.java",
+      "bytes": 3494,
+      "sha256": "550637d8800305e0c724dbd09b1391b4d28e7cb03837349c4fb079725f2948c9"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/service/PiiMaskerTest.java",
+      "bytes": 858,
+      "sha256": "24a06f7c5ee074dcd083151ea65698d4f9cd128c4932d9246c89a33658f1c341"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/ai/service/PolicyDslValidatorTest.java",
+      "bytes": 3498,
+      "sha256": "edb3f0003a3db67739b4f8e17ac9123e65a3cc2e2418aad43ae4a6dc0e519c05"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/audit/AuditPersistenceProbeTest.java",
+      "bytes": 1820,
+      "sha256": "f332057e642b53a79f5d256e124c8ecc2ee21fb9b736bf48122880eb7ad1fef7"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/api/HealthAndVersionControllerTest.java",
+      "bytes": 2316,
+      "sha256": "95b8e2b9f2dada92bcae1cf9cb0b8cc29f56914bea26bbbdfc91065cfe64b168"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/api/P11ObservabilityIntegrationTest.java",
+      "bytes": 1945,
+      "sha256": "4947d8c8737195bb51821e158470ec0a9e9a16bd37b9dd2cd7842330ae1d8d83"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/config/DatabaseReadinessIndicatorTest.java",
+      "bytes": 3276,
+      "sha256": "97fa9946e339ee2629af8b3b6eb3c6bdbc32f4939386fd1eaa682449ac77dcb4"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/jobs/AsyncJobLeaseServiceTest.java",
+      "bytes": 2064,
+      "sha256": "42c7ea3471807b670f7e862fa674bc5392e5a283da7891ff61c02a613adee9d9"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/jobs/HeartbeatLockIsolationIntegrationTest.java",
+      "bytes": 6453,
+      "sha256": "fc92ac2346819d5289e85e98e3f8811ae6855daf9e1f59fc4c216807ac4f25df"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/jobs/LeaseClockRollbackIntegrationTest.java",
+      "bytes": 7450,
+      "sha256": "ae4a2ba7064e9200ba7ea8ecdc84a8c57c292c2959d67584cfd4232ee1788675"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/jobs/LeaseFenceRenewalRaceIntegrationTest.java",
+      "bytes": 14059,
+      "sha256": "d7bd03cf511a6e4809d9d55049d6f2fae2495a45659ab811e8b0f2cfe970d89b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/web/ExceptionContractAcceptanceTest.java",
+      "bytes": 3633,
+      "sha256": "fcb9923d6869c705406dfbdcbe86e39932dba59d58570cba1d7122f604eccebd"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/web/RestExceptionHandlerAcceptanceTest.java",
+      "bytes": 4091,
+      "sha256": "c843c55868655af19e8457df18143c7a598133eff674e508802ca23fa206a3c5"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/common/web/RestExceptionHandlerDependencyMappingTest.java",
+      "bytes": 3146,
+      "sha256": "2972ad9f9ef0c333740597ab8d1a9f71979d99d841605949cc77720769496205"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/DutyAssignmentEligibilityIntegrationTest.java",
+      "bytes": 17658,
+      "sha256": "fa96b5931af885b5d9e8a7c595fc6b5014dda35e324b2608643918daec0c292b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/DutyAssignmentSelfServiceIntegrationTest.java",
+      "bytes": 13600,
+      "sha256": "17c0907e1def9416e5de00eb6a8543c6e14456249bc8020eaf7d9d22c03ba84a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/DutyWorkflowProjectionIntegrationTest.java",
+      "bytes": 16423,
+      "sha256": "a9c31abf19250033178504222bc5ae8060cd4a3f496090e5c00e66d0d23eaacf"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamOperationsClosedLoopIntegrationTest.java",
+      "bytes": 21133,
+      "sha256": "6781e10704177bf0c9611a242287b0cf1075d0736c4f67d0ab203fbd5e232256"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamOperationsExecutionIntegrationTest.java",
+      "bytes": 24931,
+      "sha256": "c510c01d588cf093453daa79cce8444f725ae830ef166737dabc0631ccd0a1d6"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamPlanApiIntegrationTest.java",
+      "bytes": 31342,
+      "sha256": "5bff298b8fabaa5b98f591ff7080f62808a463c519c1b514ebd321727ecc665a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/ExamPlanJointPlanningIntegrationTest.java",
+      "bytes": 16697,
+      "sha256": "ca15ee70ca8790d4194c5bc1ae8e17c4095af1af7b9550f75972ad00e09d8932"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/joint/DeterministicJointPlannerTest.java",
+      "bytes": 35759,
+      "sha256": "ecc19ed72d64e27e802a0565f99ed771a4b0d6ed3b481ce779a1a001f6cd2462"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/JointInputApiIntegrationTest.java",
+      "bytes": 11237,
+      "sha256": "8e0c97d06ddc5ee0b471f422e0eac94b0075c1f0eca6c90f3e716e01d820cd7b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/JointPlanningMigrationIntegrationTest.java",
+      "bytes": 20652,
+      "sha256": "d78f3e90868b230d61b1b25f0eb38b8040c52e718030b3e85a1cfe3dc5852ac3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/NotificationDeliveryTruthfulnessTest.java",
+      "bytes": 3839,
+      "sha256": "7c7ee9e2f59f2d447c9b04bc78ed08f368e44ec88a3be459a29eb857a1786b58"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/NotificationProofIsolationTest.java",
+      "bytes": 5786,
+      "sha256": "19a940f3fc307d1d6455b9786b49f71a3c1a0a4ab3eda12a0451eb3300441aee"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PlanningLeaseIntegrationTest.java",
+      "bytes": 15964,
+      "sha256": "221cb5d5eb136bf62c0ccc7b93e2580afcdfe6c94426d0c374e1ab65256123bf"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PlanningQueueSaturationIntegrationTest.java",
+      "bytes": 5398,
+      "sha256": "0dfd0dfe3027c36aee1cabe3db86602342fdfd65aa6143a6a8018d1e414aca42"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PublicationIntegrityIntegrationTest.java",
+      "bytes": 24710,
+      "sha256": "10245c930029cafa0076c1323ae24304c1c7a2bf4b088dce478e9f0eb619f1c0"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PublishedDutySnapshotMigrationIntegrationTest.java",
+      "bytes": 21420,
+      "sha256": "ebe4cd9e0503a49dadddf0f65c7f553ae8607d8b1943abaaa2683e176bec1b57"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PublishedDutyTeacherSnapshotTest.java",
+      "bytes": 6483,
+      "sha256": "b2e3c15a7b3676d69a17aedf4da88e64c4e6dab86a039d326036321a5f563971"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/PublishedPlanningBaselineIntegrationTest.java",
+      "bytes": 25439,
+      "sha256": "e20fdd08b3cfae04332676980c212135922c720fac6b8ce813db5e484ff3d057"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/DeterministicInvigilatorAllocatorTest.java",
+      "bytes": 13793,
+      "sha256": "3b14f59d0ff16a64b57e163c07182d713479d4ffff8518c77b300b9d0eebfcb3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/ExamOperationsHardConstraintsTest.java",
+      "bytes": 5208,
+      "sha256": "ade0d8f1f4dc15ff2a96666725dedbd507c94fb38ab8e987e0e3072bc22fd1db"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/ExamPlanPlanningServiceJointStatusTest.java",
+      "bytes": 7521,
+      "sha256": "446283374353019696d8dd39b2fbfad4b9a64b81a4c3ef2f22aa63a287c69fb1"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/SubstitutionConcurrencyIntegrationTest.java",
+      "bytes": 14659,
+      "sha256": "c83e562055d2105fd0b56a012daba5cd58905a8ada3ce17037106ad05ec0688e"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/SubstitutionConsumersIntegrationTest.java",
+      "bytes": 32417,
+      "sha256": "2db1ea3e73f6b029760fdf313147478082dc52fc3179d82862ba3af09231c9c5"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/SubstitutionMigrationIntegrationTest.java",
+      "bytes": 29720,
+      "sha256": "02dac5b2de028383f21e9da5a9b0f1d2119124ab10586ab73a35837e746432ea"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/SubstitutionOwnershipIntegrationTest.java",
+      "bytes": 32442,
+      "sha256": "dc02ba825acb8d2577b7fa5650fb4c280f201916a36ed86fc6ca3d3030edc165"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ExamRoomOccupancyValidationTest.java",
+      "bytes": 6252,
+      "sha256": "f794f24aadcf1e2062ffb43b5b6d37a418c824310f599fa02fca08d0cdad8c4f"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/HostileWorkbookRefusalTest.java",
+      "bytes": 3175,
+      "sha256": "e6db3805ffefb11564460b76dd6995632b61ce84fcba8ce8eae730224d5c09d3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportCommitAcceptanceTest.java",
+      "bytes": 17438,
+      "sha256": "43285efd5172aaf51f55919d66b71b40326bd2a6f2cd9d6d8aea71e92583165a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportCommitApiTest.java",
+      "bytes": 9599,
+      "sha256": "6a5c7759a1d394fad52ae00f34db79c682d28bf10eddf0f89b2e24046e69049a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportSubjectIdentityValidationIntegrationTest.java",
+      "bytes": 5595,
+      "sha256": "15e5fa32dd683b2742e27784060cfa16839a4f4c251b4d70cccb89bb1220024b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportTemplateSampleConsistencyTest.java",
+      "bytes": 2479,
+      "sha256": "57ae5c7c57847e1802c9305dcc54aab8e2c41c0e63bdcfd59a4fc92269abd09e"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportValidationAcceptanceTest.java",
+      "bytes": 8789,
+      "sha256": "000504ac2065dfca6368814c7c9b337175d845afbaf1075ae66069c08fec460e"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/ImportValidationApiTest.java",
+      "bytes": 5230,
+      "sha256": "22e950c32f54a05487bca2480e8c88d84d6737fa13d61ca64c92af85d547a5af"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/SchoolScaleImportIntegrationTest.java",
+      "bytes": 23705,
+      "sha256": "8cc1db75bdba8b56797d0da2474445c90851b26994fcc9746450f414c52ea22b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/importer/TeacherEligibilityImportIntegrationTest.java",
+      "bytes": 7080,
+      "sha256": "946f24292d41e4133677add174e0c10bf70a58202fd38a3cb2dc2c07abde34fb"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/masterdata/DemoSeedChiefMigrationIntegrationTest.java",
+      "bytes": 5598,
+      "sha256": "415c230ca057ca0cd391016efc03ecaf3b09008d53c3c55fbea60769b6c4ea7a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/masterdata/MasterDataApiIntegrationTest.java",
+      "bytes": 29250,
+      "sha256": "3a4dec8bb786307347ce3fe6bd13d5a47ed8e14c6a07c598f9a0072862305e92"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/masterdata/service/ClassroomUsageTruthTest.java",
+      "bytes": 1109,
+      "sha256": "db39622af1478730d79a61666c2e590b96270fdbe052d3a318a83f75f7d83e10"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/notify/NotificationApiIntegrationTest.java",
+      "bytes": 5113,
+      "sha256": "7cba220b9740fc0237586d00507a3c450c5314c186b603de1632b4e01d72480b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/notify/NotificationDispatcherTest.java",
+      "bytes": 2778,
+      "sha256": "466e2dd98c850d581aadd2fac9bd18dbb84d79ce76962a47a0d9f62ae4dd8a51"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/notify/NotificationProducersAcceptanceTest.java",
+      "bytes": 6683,
+      "sha256": "cd67eff4876f6455ad9e668021c929538041024581a1d9cd6b931b578e6d2466"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/org/AcademicTermApiIntegrationTest.java",
+      "bytes": 8309,
+      "sha256": "e148540d2d6e03328e176ff179211d04b4eacbd2339f582b8239361c957f1378"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/org/OrgSettingsApiIntegrationTest.java",
+      "bytes": 6394,
+      "sha256": "d62a5cc0f2057cd92c691bbaf623622ec5ba83ce8b614e2e2378b4f9ef03f43a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/p11/P11TestcontainersInfrastructureTest.java",
+      "bytes": 2233,
+      "sha256": "58ccc08b4031a3c51f58a7adc91c9b06e39a9c5e7f04a86dc1a6a9fd193826bd"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/p2/P2DatabaseIntegrationTest.java",
+      "bytes": 4751,
+      "sha256": "4db27fd5d35cc0d11c1ac4028c4a16b06ece50171cff18c060f70eea981cefae"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/AnnouncementTruthIntegrationTest.java",
+      "bytes": 11390,
+      "sha256": "23eace5a3c83d263bf12e059b1881807ebdd2e6ed813026955d7aaeda5baacea"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/FabricatedSeedBackupRetirementTest.java",
+      "bytes": 2799,
+      "sha256": "dde58e0ea51f46ccee48674ecec602cb0ed7398b6cfeed17d3c73298a316a83b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/P10ReportAdminApiIntegrationTest.java",
+      "bytes": 29419,
+      "sha256": "7f2554553e17363ac652ab76046fe99f7634d65c86c72d2854e4f09808326dc7"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/P12DeployModeIntegrationTest.java",
+      "bytes": 6244,
+      "sha256": "6d249161377d5410e648730736043fb1266551581cee01f5755b6c4eb8abe88d"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/P12SaasTenantHeaderIntegrationTest.java",
+      "bytes": 5044,
+      "sha256": "3552c70fe544c93c4b3fcf88ca3ab8c1e170d95d453e35154f0dbeaef4782e47"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/PlatformHonestyAcceptanceTest.java",
+      "bytes": 8896,
+      "sha256": "05a15da3ed5e8424b8a5f74a4424146cfb2c3d56ec4a15527890fa7e99fe4be3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/AdminAccountSecurityProjectionTest.java",
+      "bytes": 3238,
+      "sha256": "04ed8e1eecffc27fac36321fc99ed56bdbb795ef6ab07aa2a67fa41319a32849"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/BackupArtifactValidationTest.java",
+      "bytes": 2725,
+      "sha256": "856d0729547a38328c0bf942bf7d93006a0ff1cbedbfdefdcc4d078ce829b032"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/SystemMetricValueTest.java",
+      "bytes": 1113,
+      "sha256": "be972f2ef60c198ed0e8136b0d2c02faa231fe0ea14fceaf53b688dc6d0ffef7"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/SystemHealthAndAuditWindowTest.java",
+      "bytes": 7253,
+      "sha256": "1cd4899d29e7f9d47506f38288aee12e75202250c3824df2c48b7edcd526b57d"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/TeacherAccountRoleBindingIntegrationTest.java",
+      "bytes": 8625,
+      "sha256": "119b953b3bd4d2c05344c6fac92a915459b352938275d8ce46bdf72bec7b2d24"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/TenantBusinessIsolationTest.java",
+      "bytes": 4310,
+      "sha256": "f3bcc484f21355f65dfff0c9d8cf9315a3f9c66b9078a47e2fa1d8cb0eeff124"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/TenantInitialTermSeedTest.java",
+      "bytes": 5630,
+      "sha256": "a9e5198beab4a0b2f234efc3fdeff326e5d6c49a361fdbcf861ea29446ac0b5b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/release/RegisteredApiInventoryTest.java",
+      "bytes": 7750,
+      "sha256": "ff7e8c539ceaa7982a75983e1559d5e45dfced958027e2a6466d5f9d2c89e3f6"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/release/TestContextCacheBudgetTest.java",
+      "bytes": 468,
+      "sha256": "097a1905373a43638480abf862b111cb56c02240ee615a17ffc15b86faf401b4"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/AiPolicySolverTest.java",
+      "bytes": 4729,
+      "sha256": "4155ae1136c5830402c6404fc45adabf2b51491af781c6b7715eba6de0ac8818"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/CpSatScheduleSolverTest.java",
+      "bytes": 7864,
+      "sha256": "bba0b18182db34bff2e06a592eb2e700c02a05c30de5c4b42e76ad2d6f67a905"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/FixtureScaffoldingProductionGuardTest.java",
+      "bytes": 6334,
+      "sha256": "672825575bf0f4e08a7750cde8a22a12925af15aa9e47d681db2b46d55d6c070"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/LegacyConstraintMappingIntegrationTest.java",
+      "bytes": 9146,
+      "sha256": "8922af8596a084bde02c8e09ceff310cb19e4db43666f9e1e72763b7b2490e3f"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/LegacyPublicationProjectionIntegrationTest.java",
+      "bytes": 23175,
+      "sha256": "69c91cd4538231eeb92973ffec73acd99193a9c371d3c4c4ec7b0dbefae23bbb"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/LegacyRevisionEligibilityIntegrationTest.java",
+      "bytes": 9183,
+      "sha256": "8ae9e8ea15f9bb846d29c6992271fca37a856ccfedb016b197e0e23eaf6d0af2"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/LegacySolverEligibilityTest.java",
+      "bytes": 4768,
+      "sha256": "1a8159cf43af1b1d6223a2e515b31f4f443645fdba2f7f6ecaf2d00fe6612ae8"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/RealDataScheduleFlowIntegrationTest.java",
+      "bytes": 23065,
+      "sha256": "1ac10365caf31a85bc0a69e78a71e9c26c4bb6652c0d04496fdc9b8c9b19276e"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/ScheduleEditApiIntegrationTest.java",
+      "bytes": 29844,
+      "sha256": "4bb1843d9505a41135cab3ed1ae4e25b3c21544277a871581ed17559f27a25fd"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/ScheduleJobApiIntegrationTest.java",
+      "bytes": 5892,
+      "sha256": "c59bb31b5ceeb2b859d39efe25b053a58fa587e6a0a1949f95f754e685f00074"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/ScheduleRunLeaseIntegrationTest.java",
+      "bytes": 22945,
+      "sha256": "2d0f6acbea0ea0348dbfd2fcf45d6805d6947bf6ad2a59fb32ec37e2a3fe15f3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/service/ScheduleExecutorSaturationTest.java",
+      "bytes": 1948,
+      "sha256": "3b5e048f774d58c1d0dfa6c5f6da16d69454fbbf0c2dfa7ecf1bd34a6b24b2d9"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/service/ScheduleJobPolicyResolutionTest.java",
+      "bytes": 7227,
+      "sha256": "48391d518470438f1cbe7bb73c1cdc6a70f17ba88fde2801cb6bd9c1127fb9da"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/service/SchedulePolicyBindingIntegrationTest.java",
+      "bytes": 7300,
+      "sha256": "c48f44f09bfc538566bab1ec64c5a75e6cd6e3cf2498b91049398ce464d3bb62"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/scheduling/SolverDiagnosticsAcceptanceTest.java",
+      "bytes": 4396,
+      "sha256": "61f698983969509c5f37df3ba6b9324c8f5b45f493895b225dba0b82ef1d2498"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/CaptchaImageSecurityTest.java",
+      "bytes": 3519,
+      "sha256": "a2b2c2ac372c83564d108ae7962f9e92bd2128b2f1d408b41226d4914d7befe3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/PortalSessionIsolationIntegrationTest.java",
+      "bytes": 9716,
+      "sha256": "0eadf51f84eb151f1f5d9228c4bf6a8cd9d3534a3fa1a251672687c7c6b2a205"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/SessionAbsoluteExpiryIntegrationTest.java",
+      "bytes": 2604,
+      "sha256": "4b490bfc756256ba0930a3b8205423f604566c89506d2e4e6dbc9b2542abe568"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/SessionBoundaryRegressionTest.java",
+      "bytes": 6680,
+      "sha256": "168db0770f5384dfa7f7141da6180fa48c4d4ef9cf192bcbb35804387f4c0dfc"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/AuthHardeningIntegrationTest.java",
+      "bytes": 14997,
+      "sha256": "6246343d406770011d9070f57ff649ded9789c4d5a77510760ccea3c11d044b4"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/AuthIntegrationTest.java",
+      "bytes": 14432,
+      "sha256": "25ff163989469a28c039258a549a94ae89eeb22b33b5b94ec5eefc6f06b34284"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/AuthIpThrottleAcceptanceTest.java",
+      "bytes": 3565,
+      "sha256": "cd2a7c22cc428c78c13e33f2a252b16606a4c3aa24dbb2204ef9bb4efc89b3c4"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/AuthLockoutAcceptanceTest.java",
+      "bytes": 6243,
+      "sha256": "c6c097f208fdf065d5e39a607faabd7b41263a6751594c10265c29f4ccce136c"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/BusinessRbacAcceptanceTest.java",
+      "bytes": 4431,
+      "sha256": "cc846c2ac6474fe38420a93a9d690681ce52fba135e42687a745ac3cbf4822c0"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/CsrfCookieSecureFlagIntegrationTest.java",
+      "bytes": 1761,
+      "sha256": "731b59a140a0237f025194253e400a84206a2d9454ce6dd4ed4201a12f68929d"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/CsrfProtectionIntegrationTest.java",
+      "bytes": 6742,
+      "sha256": "5ae536bb08f43d2aaaac90978b92d7b395af0baee937f0098c010581e0b678c5"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/DemoAccountSecurityGuardTest.java",
+      "bytes": 2475,
+      "sha256": "70f7a686d4073ce49f8c2474137f36621b5f02d141dbe89e1610b82786abc1ca"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/DemoRosterSecurityGuardTest.java",
+      "bytes": 8548,
+      "sha256": "821727871b2394b375cc27e5083250083535eeab533b9957f9b84b8f5df27b0d"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/InitialOperatorCliTest.java",
+      "bytes": 4257,
+      "sha256": "4a74015b72d53848f40da95b0a6db262e63149e998b282b00e2e5fc8d079380f"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/InitialOperatorProvisioningIntegrationTest.java",
+      "bytes": 11186,
+      "sha256": "5a708ca774e0fa41601c16818d5cef0f28399a2a9a13dac2f025302b34d9e617"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/PrivateOperatorLoginIntegrationTest.java",
+      "bytes": 3074,
+      "sha256": "4d598917084e1d69e00ff671d4bf0949ad1723c2b968e5ee488ac838000ba583"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/ProductionModeSecurityGateTest.java",
+      "bytes": 2352,
+      "sha256": "5d32903b4b10728ea02ca10dba4ec4781bf59d009569ff188549ce3bf35da2f6"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/ProductionSecurityGateTest.java",
+      "bytes": 2092,
+      "sha256": "08ba11e20b1a5ed979e3ec5232f50528c768fe30f8f5b91f07c021c2ccce2c63"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/RbacPermissionMatrixAcceptanceTest.java",
+      "bytes": 9510,
+      "sha256": "d9e79d563d07a98a6599e22741d96af1c9b93647516c56248116b9cd41659cea"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/SessionIndexExpiryIntegrationTest.java",
+      "bytes": 12307,
+      "sha256": "11cf060f0cee3a9b500c0b32292d9d755faf3e16bdf70791583d5b226b3b91d4"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/SettingsIsolationAcceptanceTest.java",
+      "bytes": 7754,
+      "sha256": "a9d337c519513284d3e7cf75e471284532a60e78c735ec55c331e5487b3f9719"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/TestDatabaseIsolationGuard.java",
+      "bytes": 4115,
+      "sha256": "1164a74a9b6e0d09792d1d5918143872bac96d27fd6856a82fa10a6f922805f6"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/TestDatabaseIsolationGuardTest.java",
+      "bytes": 7938,
+      "sha256": "de668cf180ebb758d20c147d2bd2da09e030bc833355b28f4ef287bc9cbdc596"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/TestNetworkBindingTest.java",
+      "bytes": 1074,
+      "sha256": "ec1406ec69d66577855c34d75cd4772ba10da2a6ee9d8200db4455f802c5cc0a"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/UserPreferencesAndAppearanceIntegrationTest.java",
+      "bytes": 6321,
+      "sha256": "910e3ee534e4fdfb09ccfbec0228e542541ca106f00c32df9a0f33124f489031"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/support/CsrfMockMvcTestDefaults.java",
+      "bytes": 2133,
+      "sha256": "4ed88a1f87e7fc93f4cf9df192d49898edd4d20dc06cbf379261bbd82fbc8daf"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/support/TestPortal.java",
+      "bytes": 1714,
+      "sha256": "94d3ae00ac13fc42f1bcb08bc0a8432f2f8cf7785efd9c774743c5991eaaf1fe"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/tasks/ExamTaskAssignmentsRunSelectionIntegrationTest.java",
+      "bytes": 6210,
+      "sha256": "da1693299b53c7abc3eee5cbe0f6eacd782ee9f0e14b38ab98c5b4e3c1966244"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/tasks/ExamTaskPdfScopeTest.java",
+      "bytes": 6223,
+      "sha256": "4d322195928023f287e6c48ba7eb5ac8d2e67c6382a1131ecb24f8b829d2518f"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/tasks/ExamTaskQuickFlowIntegrationTest.java",
+      "bytes": 9886,
+      "sha256": "d819840fcfe35031b0cc7cafc589f6b5861a70d6748618b1dd3e30c93dabd180"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/tasks/service/ExamTaskMutationGuardTest.java",
+      "bytes": 3053,
+      "sha256": "caa183b80bc06635fde0ecaeff09f762178bcc9f8bdcff36028b1db935cc5c42"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/tasks/service/UploadTruthfulnessTest.java",
+      "bytes": 4922,
+      "sha256": "528bf06d3f508b22ba043fe7ea54557503f0b11814884ecb699e3615aff6ab6c"
+    },
+    {
+      "path": "backend/src/test/resources/application-test.yml",
+      "bytes": 1104,
+      "sha256": "90b3305d2167f32c7f4449364a78bfef49031f52b46012b1be30d43215726744"
+    },
+    {
+      "path": "backend/src/test/resources/META-INF/spring.factories",
+      "bytes": 260,
+      "sha256": "23636960449febf1dfde984ea81180a57dc0c9a357e59fcfc00e491664645022"
+    },
+    {
+      "path": "Dashboard.html",
+      "bytes": 17459,
+      "sha256": "78651508539c301d98dbb2dbcd9185053cd747516f610cfdd6c0ccb75c3a352e"
+    },
+    {
+      "path": "deploy/caddy/Caddyfile",
+      "bytes": 141,
+      "sha256": "fdc3ebd0cdbd46ed78984c455dfe4c8a25f33da2785f781a912355d070be112c"
+    },
+    {
+      "path": "deploy/frontend.Dockerfile",
+      "bytes": 649,
+      "sha256": "051f0f62a82699110f6a86a4eab91b2e8b6a27e6dc39e2831ac3b3b87cbd9278"
+    },
+    {
+      "path": "deploy/nginx/private-tls.conf",
+      "bytes": 3214,
+      "sha256": "56f55a4dcf4d085f15b958122e56c89cd78407c61a82e82ba028bc0b66564dcf"
+    },
+    {
+      "path": "deploy/nginx/private.conf",
+      "bytes": 2237,
+      "sha256": "d64f964d86b4d5fa267e2f620a0026bfbe45060a0d8d8370043589f26a89c1cb"
+    },
+    {
+      "path": "deploy/nginx/public.conf",
+      "bytes": 1602,
+      "sha256": "ed23d293c6bd9ea586a6ed28a1f220e2ace3c9969961abc50e5ac5c1235ac098"
+    },
+    {
+      "path": "deploy/production/monitor/jkxt-health-alert.sh",
+      "bytes": 6627,
+      "sha256": "a98ec121adcc23407283abca58f407627433d753fda20933febf633b2f4e6fd9"
+    },
+    {
+      "path": "deploy/render-free/Dockerfile",
+      "bytes": 1983,
+      "sha256": "81f3679c8f7d7539574a92855daac4c0ea3ed2f9407b401ef4e9625845d0959d"
+    },
+    {
+      "path": "deploy/render-free/Dockerfile.dockerignore",
+      "bytes": 867,
+      "sha256": "85e77a50d8f98a73ae494f0c7567bd98251e853af3db04ffbd03b0554c416f1a"
+    },
+    {
+      "path": "deploy/render-free/entrypoint.sh",
+      "bytes": 5150,
+      "sha256": "51f33fec1fe25e1498803cf9318a914404c6097070d3d0c047c98590c2d0cb27"
+    },
+    {
+      "path": "deploy/render-free/nginx.conf.template",
+      "bytes": 2545,
+      "sha256": "f46f49412d836cec97ff576e6bc781aaa1131e64dd5005b953c841425d138e40"
+    },
+    {
+      "path": "deploy/render-free/README.md",
+      "bytes": 5795,
+      "sha256": "92890d30c6762c02683eabbb673344b57d7d81ddbc05a1d950312ae41b3f0d37"
+    },
+    {
+      "path": "docker-compose.public.yml",
+      "bytes": 5595,
+      "sha256": "75cbe2c11908656ead6d50fccafb23bce75b32aa52a0ab4650e7f6e7b7c18d39"
+    },
+    {
+      "path": "docs/CONNECTED-PRODUCTION-DEPLOYMENT.md",
+      "bytes": 19872,
+      "sha256": "937421bd4433c32d440bf13e08c790a7138dc385ec5a2d7da66e781952f82955"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "bytes": 20347,
+      "sha256": "b6d3b1c6512e6ea46fe5156591769e4b7aea52230453b9d6e72b92706f379e58"
+    },
+    {
+      "path": "docs/DEV-RUNBOOK.md",
+      "bytes": 10852,
+      "sha256": "b5feb67a6c1f5fd67f4720232be6c4821be1f0d0970aaef531f789b9f3251fcf"
+    },
+    {
+      "path": "docs/UAT-CHECKLIST.md",
+      "bytes": 4072,
+      "sha256": "ede413ab6b14ed3243e24abe647adece70279f133666d73a5fd073ef8c3816ba"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 34493,
+      "sha256": "9d4130cd24c7d589cc41a797eea91086a70f3189037f4c89d443eaa723862b20"
+    },
+    {
+      "path": "package.json",
+      "bytes": 503,
+      "sha256": "6adcb521e4bf749098d7ca5b87e303d3e95d41bdf12c751835d5a478c20d7a6a"
+    },
+    {
+      "path": "scripts/deploy/api-base-resolution.test.cjs",
+      "bytes": 2589,
+      "sha256": "4ed002f51b5825d7901047f18f6a1e5352bcd8651383ec53bb2ed7138b953159"
+    },
+    {
+      "path": "scripts/deploy/assert-final-delivery-evidence.ps1",
+      "bytes": 4383,
+      "sha256": "ed356c481d8a09e9f08dfd22e941fa17f5eb2a462a74e7a12fc865fa02c4e4ec"
+    },
+    {
+      "path": "scripts/deploy/audit-production-readiness.ps1",
+      "bytes": 15921,
+      "sha256": "d127436ebaf321779299ce1ed3d75ec9e99358343ee36b5fb05961a2eac0b2a0"
+    },
+    {
+      "path": "scripts/deploy/backup-private.ps1",
+      "bytes": 1109,
+      "sha256": "ae455ebc55e7a6221ab3dc34e9153c67711125447e89f2a525e0d1cc40f9cd08"
+    },
+    {
+      "path": "scripts/deploy/backup-public.ps1",
+      "bytes": 6572,
+      "sha256": "370d6af7e176bfebea1571e756205f5273a8ab6d7035392f169822b0d63b5fa1"
+    },
+    {
+      "path": "scripts/deploy/backup-volume.sh",
+      "bytes": 1246,
+      "sha256": "b7afdfc9ec40d9a9dd53a750bb8bc01d9105eff51e23dfc0f2fedec3333de7b9"
+    },
+    {
+      "path": "scripts/deploy/build-public-release.ps1",
+      "bytes": 8794,
+      "sha256": "3e8ffd337278713ac669050a52b23cc78c1cd9abb2b192687888a3c7c5bf6167"
+    },
+    {
+      "path": "scripts/deploy/discover-delivery-capabilities.ps1",
+      "bytes": 15455,
+      "sha256": "0e9a5221ae57e907d8dbb66c49dccee701e5e81516c60a5d830bd2b85a74bb45"
+    },
+    {
+      "path": "scripts/deploy/discover-production-target.ps1",
+      "bytes": 11695,
+      "sha256": "7a216f1035fc4c6bf31f6522a559b0801504b4d5f1654839e72fd3b685a158fe"
+    },
+    {
+      "path": "scripts/deploy/init-private.ps1",
+      "bytes": 3394,
+      "sha256": "c58fcad37963e2a6797f742b5dabf2901a1806b7eae45d05b7da3d93f36dea81"
+    },
+    {
+      "path": "scripts/deploy/init-public.ps1",
+      "bytes": 10690,
+      "sha256": "7f1a1beb42a58e771ddd729846f49d6e56902bd47cf03a8043b129f8bb6f609c"
+    },
+    {
+      "path": "scripts/deploy/invoke-public-launch-gates.ps1",
+      "bytes": 10390,
+      "sha256": "b10672df176c850e240a2bf502db51f4cb372fd618f60d6da130e93668b524e0"
+    },
+    {
+      "path": "scripts/deploy/native-command.ps1",
+      "bytes": 3751,
+      "sha256": "853956723541953b2ab07f6542e20cc3b402257b0afc6e651dccb9910cf5160d"
+    },
+    {
+      "path": "scripts/deploy/plan-vercel-backend-rewrite.ps1",
+      "bytes": 15382,
+      "sha256": "6a53b780192670a87d555cdb191c4000e408b3fe7e781f5cb38995f449e787dc"
+    },
+    {
+      "path": "scripts/deploy/preflight-public-host.ps1",
+      "bytes": 16359,
+      "sha256": "8cf035f687f1d5d7c16f4a7a8b4650b2e47881c32fc6ac1f15c79c0b980a1099"
+    },
+    {
+      "path": "scripts/deploy/prepare-production-cutover-pack.ps1",
+      "bytes": 19181,
+      "sha256": "bbe366730f35da2a730b4a8bc7ace34585413d7967c83d040b24203581909621"
+    },
+    {
+      "path": "scripts/deploy/private-smoke.ps1",
+      "bytes": 6984,
+      "sha256": "61f4b2875423c76275b124a6529314380cb20e443d489b6df969a68438196c67"
+    },
+    {
+      "path": "scripts/deploy/production-config.ps1",
+      "bytes": 4252,
+      "sha256": "c0bd7d2f51d12a56fbb996bb767daac9836c1d9abf48e606f4144282b2089805"
+    },
+    {
+      "path": "scripts/deploy/report-final-delivery-evidence.ps1",
+      "bytes": 24175,
+      "sha256": "858730ab8de76f3295225b46d10a56b26a1ce54759955b564ae96c9ef2c50ce0"
+    },
+    {
+      "path": "scripts/deploy/report-production-cutover-readiness.ps1",
+      "bytes": 22614,
+      "sha256": "231dfdf9d6939028784cb1499616a9aa672f94a7c5b4c72bafd702969225ca09"
+    },
+    {
+      "path": "scripts/deploy/request-production-t3-approval.ps1",
+      "bytes": 12256,
+      "sha256": "2807d4564e9f04fe93770949dc61a059a494a9c59be1ae0a6643911d2a6deca9"
+    },
+    {
+      "path": "scripts/deploy/restore-drill-private.ps1",
+      "bytes": 7359,
+      "sha256": "a3fb48da326f72dd5288145b99cee9229d9a998a733b6a7c44011fe8b6fd4a11"
+    },
+    {
+      "path": "scripts/deploy/stop-public.ps1",
+      "bytes": 3755,
+      "sha256": "739af3d69dc3bccfcd385fed997df0d3cf114129cf264c38d9bd62832a6b88e7"
+    },
+    {
+      "path": "scripts/deploy/test-backend-origin-contract.ps1",
+      "bytes": 6469,
+      "sha256": "86e42332cd24c281bb885474e459b48786fe5daa08e616eedc6f1eb4aa3b2696"
+    },
+    {
+      "path": "scripts/deploy/test-public-release.ps1",
+      "bytes": 6021,
+      "sha256": "091bfac6b1ac54dff6bdaa5fdcc418ca09572d6c63aa86fe1f0b10776a285cf1"
+    },
+    {
+      "path": "scripts/deploy/test-vercel-connected-config.ps1",
+      "bytes": 8736,
+      "sha256": "1d04c21fa8fb26ff7828ef8fe92a9e66b4e41cc6d28347e84155a0f1d52baf30"
+    },
+    {
+      "path": "scripts/deploy/verify-connected-remote.ps1",
+      "bytes": 2625,
+      "sha256": "d03f4060e711a70b16cd78277178f99bd012f5480fb8a0249803732beed5a6f2"
+    },
+    {
+      "path": "scripts/deploy/verify-remote-browser-ui.cjs",
+      "bytes": 10614,
+      "sha256": "b9f4f92d8394df59ae4df020566cf1a4554a19b09e013d30e9d3b4c5ca281158"
+    },
+    {
+      "path": "scripts/deploy/verify-remote-browser-ui.ps1",
+      "bytes": 1846,
+      "sha256": "82935f5c8acb9dede9a8630f0f0cfd15a1297754cc8ae8cecb83db6031ad483f"
+    },
+    {
+      "path": "scripts/deploy/verify-remote-business-smoke.ps1",
+      "bytes": 1950,
+      "sha256": "8791218bb8902902f0120691ef0024f4b5bfd0da95c60931bc7fb0ff7356c623"
+    },
+    {
+      "path": "scripts/deploy/write-vercel-connected-config.ps1",
+      "bytes": 3417,
+      "sha256": "bb5d093e36130eecab77d4f1ca6a72b0e677118c2ce55b6a5f919e0dd2fb75e0"
+    },
+    {
+      "path": "scripts/frontend-build.mjs",
+      "bytes": 4736,
+      "sha256": "a7b93ad33d6c6ca326dca1c960be6abc46b76263fed497493e10f885ea2029ec"
+    },
+    {
+      "path": "src/ai-workflow.js",
+      "bytes": 3396,
+      "sha256": "c888f0c4d5b96db450ff6b5bfecfe7e92ffdd9a9a34ccf8c0f2833a009b880ea"
+    },
+    {
+      "path": "src/api.js",
+      "bytes": 18533,
+      "sha256": "808987bd3f8e5e5cb4fe04f3006ebde2420de00115616fabacb6caf846f06e22"
+    },
+    {
+      "path": "src/app.jsx",
+      "bytes": 24360,
+      "sha256": "28b189501468a785840ed9ca84533a794aaa2db034878e8e2b434b7a1bceb7bd"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/emergency-substitution-104.webp",
+      "bytes": 4054,
+      "sha256": "814f1e676e2f46a95e45e1fd295ad181aac6cc8412dacafc987420bcafb55554"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/emergency-substitution-156.webp",
+      "bytes": 6592,
+      "sha256": "11924af802bf401b9602f577a1fee9bf7e172686da28a1e87c344124cedac54f"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/exam-plan-calendar-104.webp",
+      "bytes": 3996,
+      "sha256": "a36ee1ef57a7613cea4eb2fc41ac5eae0a9b7a0d106770e6599444b9fd422221"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/exam-plan-calendar-156.webp",
+      "bytes": 6314,
+      "sha256": "cce53125377b1561e456558988bb3835d7b7a89ffd0264746a1b3d8754276a77"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/exam-room-building-104.webp",
+      "bytes": 4136,
+      "sha256": "cebf4c41047f34919b39ed9e9aed009892914058ce78b665d8360bdbc1557419"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/exam-room-building-156.webp",
+      "bytes": 6628,
+      "sha256": "f3321e914aa1dd875c8a4526c8334d80bf749b4d23a131666113921fafb31cb8"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/invigilator-badge-104.webp",
+      "bytes": 3642,
+      "sha256": "417cf0d7dad74215d1f5fa458ab75a88ed561f5fadddcf1f59ca861ac0222e6f"
+    },
+    {
+      "path": "src/assets/ceramic-exam-v1/invigilator-badge-156.webp",
+      "bytes": 5710,
+      "sha256": "6b86ed3bc7af107caf68513e9d064cf7ff78b6c9def4131314950f3300664127"
+    },
+    {
+      "path": "src/babel-script-scope.js",
+      "bytes": 1226,
+      "sha256": "4dd97234ab446dc265c7f5d8dad0fcb7959f6c57c83cd385b9740067c57770a5"
+    },
+    {
+      "path": "src/charts.jsx",
+      "bytes": 9433,
+      "sha256": "69a4e264583fdb9922f0808bc21908d9941761580d011c90b10dde1212afbc0a"
+    },
+    {
+      "path": "src/common.jsx",
+      "bytes": 31592,
+      "sha256": "1e518352f40edda6912a60169119817a6359553e20f0d068729b631277d9969e"
+    },
+    {
+      "path": "src/fluid-cursor.js",
+      "bytes": 10120,
+      "sha256": "26a9f393f636c6bb5647172c90f3883e12984cabcbc2d10df1e8c463a9d93a40"
+    },
+    {
+      "path": "src/glass-motion.js",
+      "bytes": 3556,
+      "sha256": "35c7cb4e83c194821edc813a013cc63e2eeceb56358b484c81434e5222283987"
+    },
+    {
+      "path": "src/icons.jsx",
+      "bytes": 21702,
+      "sha256": "3d4909ff362549005336663edd697c5a5c91077662cb3c5607ecda919784524e"
+    },
+    {
+      "path": "src/kpis.jsx",
+      "bytes": 9154,
+      "sha256": "dbe3c20f46eb35298a524a554ac6f556f62bf9bf884345ef335823c046466d91"
+    },
+    {
+      "path": "src/navigation.js",
+      "bytes": 5600,
+      "sha256": "ae0c88561815797d91ec34cfc55eaf2f9f9c9345ede54a717f6f912d2fa9fbc0"
+    },
+    {
+      "path": "src/onboarding.jsx",
+      "bytes": 34935,
+      "sha256": "f645de8499ff4d0baff0ff956bdb39a2c4ccb024a31dd63c0e00a81c7e97617b"
+    },
+    {
+      "path": "src/overlay.jsx",
+      "bytes": 18380,
+      "sha256": "9858caa71bf1ccb25e0694f682ad83194a90698fc356592762178a9ec123a149"
+    },
+    {
+      "path": "src/pages/ai-policy.jsx",
+      "bytes": 22053,
+      "sha256": "edafb53ae2438c56a0141e1e27583d981596d21ceb38bf06383ff2de28cff67a"
+    },
+    {
+      "path": "src/pages/classes-subjects.jsx",
+      "bytes": 33682,
+      "sha256": "00168b75abeaa7e202c2377099bb2f8fdc9623ae30103e2843ef3e89df9a1b66"
+    },
+    {
+      "path": "src/pages/classrooms.jsx",
+      "bytes": 24594,
+      "sha256": "0e22ecd1411ff3c7fc77fdbd983485fa0095a424a3b9469e5ea13bc51ee5dbcf"
+    },
+    {
+      "path": "src/pages/dashboard.jsx",
+      "bytes": 4681,
+      "sha256": "330daa41557f67f24d1e832d4495b404f4b8cf3448ed6b11e326ae232d59b36e"
+    },
+    {
+      "path": "src/pages/duty-workflow.jsx",
+      "bytes": 19758,
+      "sha256": "ee65adbf6ccf913ac1f5f9b151d51e6bba4fa211d6e158f6476142453a51e5fb"
+    },
+    {
+      "path": "src/pages/edit.jsx",
+      "bytes": 33681,
+      "sha256": "6192e40fbbfc17863570405526c46ce4edfd60b5f72e85a94e52a61f31c97fce"
+    },
+    {
+      "path": "src/pages/exam-plans.jsx",
+      "bytes": 83635,
+      "sha256": "da38427ee1f5fa76bbb312792e583d34ec7ca1c51bc9969a7db738b3501f7b8d"
+    },
+    {
+      "path": "src/pages/history.jsx",
+      "bytes": 17983,
+      "sha256": "0795395df12db1292b05c9bdeb7704273f6112c5352d7c647fc465b708a40d67"
+    },
+    {
+      "path": "src/pages/login.jsx",
+      "bytes": 79767,
+      "sha256": "db8a274173f6411ed886d694c5e6a279bf3622f6878555b3d88e43aa4b699e2c"
+    },
+    {
+      "path": "src/pages/operations-v6-approvals.jsx",
+      "bytes": 32065,
+      "sha256": "7afefc24c12a2dbdcfcc0b4ef8ea520435e19c3ca098c0ed12f9b83de7828c83"
+    },
+    {
+      "path": "src/pages/operations-v6-emergency.jsx",
+      "bytes": 21452,
+      "sha256": "30bc03596925072a05896d2edc987ca4f3a498e89d3facaa7517d87eead343a1"
+    },
+    {
+      "path": "src/pages/operations-workbench.jsx",
+      "bytes": 21580,
+      "sha256": "b741b3572a2d75a1a9392ba05f01d6bb21e4ea47483f916c901ccc977e06363f"
+    },
+    {
+      "path": "src/pages/people.jsx",
+      "bytes": 44480,
+      "sha256": "ca89b7e60bdad2e167237870faea2d070073ca93ea83034768cecd7c3a05f7db"
+    },
+    {
+      "path": "src/pages/quick-engine.jsx",
+      "bytes": 16194,
+      "sha256": "f0b961bee025a134d364e739e22a38f170c4236bd59bd5e064960061c1873134"
+    },
+    {
+      "path": "src/pages/quick-step1.jsx",
+      "bytes": 39291,
+      "sha256": "9c3b134c2d3e064649c53d433bca8b0dd9c6d80029afece828b5994ad219708e"
+    },
+    {
+      "path": "src/pages/quick-step2.jsx",
+      "bytes": 32278,
+      "sha256": "645c0c7c304e09aae9b0b76aa4c7cad43ae89cccca2472ca8d7579a1352d5811"
+    },
+    {
+      "path": "src/pages/quick-step3.jsx",
+      "bytes": 29083,
+      "sha256": "91727432a586672746eb54f9039e74bab0ea3c619d19752104c525f7770e65de"
+    },
+    {
+      "path": "src/pages/quick-step4.jsx",
+      "bytes": 39916,
+      "sha256": "f5765b96290663e075115ff803b4273edc378d528493178741d68cd8aa344d52"
+    },
+    {
+      "path": "src/pages/quick.jsx",
+      "bytes": 50990,
+      "sha256": "937feaa36fa80fefbccc4c8417103672ab64e1135751f7e8e704c199a1dea67c"
+    },
+    {
+      "path": "src/pages/settings.jsx",
+      "bytes": 40018,
+      "sha256": "4ca3d765d6392831ef4821b99edd5d154dd9067d98b7a7ef208c4a72ab0ee131"
+    },
+    {
+      "path": "src/pages/stats-supervise.jsx",
+      "bytes": 17428,
+      "sha256": "239f2daa8ecc8af0a023c17e518941c86482e34b5abd88e573686266cad8047d"
+    },
+    {
+      "path": "src/pages/super.jsx",
+      "bytes": 123357,
+      "sha256": "fe663c64e61aeb24f4e51e17c6777a97449ee8315f5ced8c1b6db43e006ee9d0"
+    },
+    {
+      "path": "src/pages/task-detail.jsx",
+      "bytes": 29938,
+      "sha256": "520c2a4183eb96561ec781ec9e953e5f61066dc92e4371a16687ff3099997bb7"
+    },
+    {
+      "path": "src/pages/tasks-page.jsx",
+      "bytes": 29321,
+      "sha256": "a0745afd9b6135f4c3f89e7b59a7e282e0fba43cb0ce20ee1b46606680b9d699"
+    },
+    {
+      "path": "src/quickactions.jsx",
+      "bytes": 3682,
+      "sha256": "7dc733e284a3132cad498a2189e7872d5bb099a35c1c2ef0decdae4749370626"
+    },
+    {
+      "path": "src/sidebar.jsx",
+      "bytes": 11471,
+      "sha256": "110d6d2e59553b2b156ee4cbe6ea9f1031bf72e446f2f93f67720b622610b7db"
+    },
+    {
+      "path": "src/styles/blueprint-v5.css",
+      "bytes": 4357,
+      "sha256": "2173bbdc8b4562bf4b2186f054dc4a3e99701850446d3c2bcbbb09aeba890081"
+    },
+    {
+      "path": "src/styles/duty-workflow.css",
+      "bytes": 2879,
+      "sha256": "f8cc8ecbf04e81025db36e9e740a626aa3705c04ffa2c1ae93721a8eb2a21a27"
+    },
+    {
+      "path": "src/styles/frontend-polish.css",
+      "bytes": 4650,
+      "sha256": "e7c8cc21ecff4436cf00beec6204215a45b4de7c5493b1a24f6ec6c452b3a028"
+    },
+    {
+      "path": "src/styles/glass-system.css",
+      "bytes": 54951,
+      "sha256": "a959168e686a68871c4be6c89356ff222981aa1a5fc8665cebcbcab116968759"
+    },
+    {
+      "path": "src/styles/manual-dispatch-v2.css",
+      "bytes": 7544,
+      "sha256": "5b707ddbdbbb90d107e56203063e11b9479f11e751c9b93559e0a93e5b168801"
+    },
+    {
+      "path": "src/styles/manual-v5.css",
+      "bytes": 11749,
+      "sha256": "645d534e258f72c842dccdecc674f10946dcfdb10ed6e765924829df5ecddbca"
+    },
+    {
+      "path": "src/styles/onboarding-learning.css",
+      "bytes": 8583,
+      "sha256": "f29c46d9394b2dc2e527bc003ed6f19a001e55c170151b7745d24a9330f9c235"
+    },
+    {
+      "path": "src/styles/operations-v5.css",
+      "bytes": 15067,
+      "sha256": "c444aec0892e479f5b45b24a768a980520a225b0728f42b5263a430bf00f806e"
+    },
+    {
+      "path": "src/styles/operations-v6-emergency.css",
+      "bytes": 15343,
+      "sha256": "3e3d6cb3b9aaffe3aa903f3344df50633d9649a7752181bd423cbfd3f4b9b79a"
+    },
+    {
+      "path": "src/styles/operations-v6.css",
+      "bytes": 11255,
+      "sha256": "4eb7866c60974bb9b84c35d6f71bb5666405c97e3a281770cff0aee942750c1b"
+    },
+    {
+      "path": "src/styles/plans-v5.css",
+      "bytes": 14714,
+      "sha256": "0d450108b772fde747f18abbf7c04a8b78799b51d4a805b52c98d8522a36257b"
+    },
+    {
+      "path": "src/styles/tailwind-build.css",
+      "bytes": 3725,
+      "sha256": "64e52648a05ba15d2dc1b01a8c8f141711e20742423545de65ba693ea322a714"
+    },
+    {
+      "path": "src/styles/task-workflow-v2.css",
+      "bytes": 5592,
+      "sha256": "5bbaa0f20d6709a648403b2db42aebce9dd9a73669a2ffa1f8c66be43f05b6e0"
+    },
+    {
+      "path": "src/styles/tasks-v5.css",
+      "bytes": 10978,
+      "sha256": "20feb5821c4fe4f0383a75e6dc2b5ecbb0e484c529f3057b5ca93529605f1c4d"
+    },
+    {
+      "path": "src/styles/theme-system.css",
+      "bytes": 7724,
+      "sha256": "c368ae0e70e6a400cbc1c4a89d53cf320bcb15b28c065153cc51f16f86740bdc"
+    },
+    {
+      "path": "src/styles/usability-20260905.css",
+      "bytes": 11533,
+      "sha256": "ada75ad3ff471febd271d7a57ff7b7477e9355580b49e80eae0a954b7e02867a"
+    },
+    {
+      "path": "src/styles/workflow-v2.css",
+      "bytes": 7871,
+      "sha256": "6ddd7892e0537acd3f9b495a8b1fba460e3741574ecb06fed3ffaa815a1fbf48"
+    },
+    {
+      "path": "src/super-ui.jsx",
+      "bytes": 13788,
+      "sha256": "3bce3dae0bb6e674246b636025e29494bb0880f4da2a4c4633250a01c9f12eb6"
+    },
+    {
+      "path": "src/tasks.jsx",
+      "bytes": 9114,
+      "sha256": "14d0bf353658e6829a51190c978defe94db0f30fbf141cb305999c4f5ccd8bf9"
+    },
+    {
+      "path": "src/theme.js",
+      "bytes": 6795,
+      "sha256": "5838aafcdb1537b786c0923edfff4cba6dab6c1af8366c7d36b1559bf968d408"
+    },
+    {
+      "path": "src/timeline.jsx",
+      "bytes": 48976,
+      "sha256": "bf6a9277d6efbeeabe2b0087212718fe0ebdd5a69bd5bddfe4cfa09d8e0f0646"
+    },
+    {
+      "path": "src/topbar.jsx",
+      "bytes": 55048,
+      "sha256": "8e451704136fcc3861f1614cc8e0921f76099595432734cb5ba99510ba79eb4b"
+    },
+    {
+      "path": "src/tweaks-panel.jsx",
+      "bytes": 23885,
+      "sha256": "34fb14d0ea874af0ec15b668d6fe6be36b1a5fe824bc9346ee3593fd3d23b7e3"
+    },
+    {
+      "path": "src/ui/blueprint-v5.jsx",
+      "bytes": 7707,
+      "sha256": "b907e9406f04583a12cbf8bea6a740914d5dfc39788f1cc9012b0af9f35d8749"
+    },
+    {
+      "path": "src/ui/glass-primitives.jsx",
+      "bytes": 4028,
+      "sha256": "b3adff230d1a676b846e180301f7dbd960ac7d3063010197f6d486ca42dd2960"
+    },
+    {
+      "path": "src/ui/operations-v6-assets.jsx",
+      "bytes": 940,
+      "sha256": "f9a56ddcee7e33f69d45e2fa4e7be90c2f3c139eb2c1dfeebe8359e44bcece4d"
+    },
+    {
+      "path": "tailwind.config.cjs",
+      "bytes": 297,
+      "sha256": "34282e2daca62836e1f1c8d563b87500ba27957e76d48a769f1c62b62b17fdda"
+    },
+    {
+      "path": "vercel.json",
+      "bytes": 288,
+      "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
+    }
+  ]
+}

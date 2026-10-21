@@ -1,0 +1,43 @@
+# Dockerfile-specific allowlist. Never send repository history, workstation secrets,
+# uploaded documents, existing JARs, node_modules, reports or local test outputs.
+**
+!backend/
+!backend/pom.xml
+!backend/src/
+!backend/src/**
+!package.json
+!package-lock.json
+!Dashboard.html
+!tailwind.config.cjs
+!assets/
+!assets/**
+!src/
+!src/**
+!scripts/
+!scripts/frontend-build.mjs
+!deploy/
+!deploy/render-free/
+!deploy/render-free/Dockerfile
+!deploy/render-free/Dockerfile.dockerignore
+!deploy/render-free/entrypoint.sh
+!deploy/render-free/nginx.conf.template
+# These exclusions have final precedence even if accidentally placed under source.
+**/.env
+**/.env.*
+**/.git
+**/.git/**
+**/node_modules
+**/node_modules/**
+**/target
+**/target/**
+**/evidence
+**/evidence/**
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.dump
+**/*.bak
+**/*cookies*.json
+**/*cookies*.txt
+**/*storage-state*.json

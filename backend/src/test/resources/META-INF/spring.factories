@@ -1,0 +1,3 @@
+# Test runtime only. Boot 3.4 removed context.initializer.classes support.
+# Protect every SpringApplication before beans, even if a test omits its profile.
+org.springframework.context.ApplicationContextInitializer=com.jkxt.security.TestDatabaseIsolationGuard

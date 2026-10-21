@@ -1,0 +1,6 @@
+# Only source and its build descriptor enter the isolated build context.
+*
+!Dockerfile
+!pom.xml
+!src/
+!src/**

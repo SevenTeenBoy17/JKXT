@@ -1,0 +1,26 @@
+.env
+.env.*
+!.env.example
+!.env.private.example
+!.env.public.example
+!.env.saas.example
+
+backend/target/
+dist/
+node_modules/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# 构建产物 / 发布包（勿入库）
+*.zip
+
+*.log
+logs/
+
+.idea/
+.vscode/
+*.iml
+
+.DS_Store
+Thumbs.db
+
+.vercel
