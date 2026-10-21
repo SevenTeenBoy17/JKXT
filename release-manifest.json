@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
-  "deploymentRoute": "single-host",
-  "generatedAt": "2026-10-21T01:51:22-07:00",
+  "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
+  "generatedAt": "2026-10-21T11:11:02.186Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 646,
-  "totalBytes": 50203475.0,
+  "fileCount": 651,
+  "totalBytes": 50233762,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -57,8 +57,23 @@
     },
     {
       "path": ".gitignore",
-      "bytes": 279,
-      "sha256": "4f6bb8a2b9dc075028dd547007a79e862618d05ddbec72cc856a03bf402d1dcb"
+      "bytes": 354,
+      "sha256": "4824623775f7a413c8e817176d3dec32f9a9e2be649d97a0e3ddce8510c3dd21"
+    },
+    {
+      "path": "Dashboard.html",
+      "bytes": 17459,
+      "sha256": "78651508539c301d98dbb2dbcd9185053cd747516f610cfdd6c0ccb75c3a352e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3907,
+      "sha256": "2487bfe97f100f9b730b81c4518ccc03fa2889d4f71e515726975f9bd9ec4b24"
+    },
+    {
+      "path": "assets/blueprint-v5/README.md",
+      "bytes": 1415,
+      "sha256": "6d84763318ad5af4bc44527ad6bd3544e514b9ddad9d52731750fe8f91480dcf"
     },
     {
       "path": "assets/blueprint-v5/controls-green.png",
@@ -79,11 +94,6 @@
       "path": "assets/blueprint-v5/prompts.json",
       "bytes": 3936,
       "sha256": "9b2e16080ef35b8c37719c826f66675ed6a7a28d2a15ba7aed3b78b14d321408"
-    },
-    {
-      "path": "assets/blueprint-v5/README.md",
-      "bytes": 1415,
-      "sha256": "6d84763318ad5af4bc44527ad6bd3544e514b9ddad9d52731750fe8f91480dcf"
     },
     {
       "path": "assets/blueprint-v5/symbols-clean-transparent.png",
@@ -129,6 +139,16 @@
       "path": "assets/brand/source/seat-matrix-q-imagegen-concept.png",
       "bytes": 842640,
       "sha256": "d9033df693782126c923acf06ccf9926675b47cadf8ea4e363a08ca5b4df1b5d"
+    },
+    {
+      "path": "assets/fonts/README.md",
+      "bytes": 1109,
+      "sha256": "25cac0910f11c85a8792ba7fb2376824a8fbed0f0a05fdca6da22bfd048d1fcc"
+    },
+    {
+      "path": "assets/fonts/geist/LICENSE",
+      "bytes": 4486,
+      "sha256": "71609cbb5c78b5870d712eab73a31d76622635c6ed034ab5cee3b9ecbda8685f"
     },
     {
       "path": "assets/fonts/geist/files/geist-cyrillic-ext-wght-italic.woff2",
@@ -181,11 +201,6 @@
       "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
     },
     {
-      "path": "assets/fonts/geist/LICENSE",
-      "bytes": 4486,
-      "sha256": "71609cbb5c78b5870d712eab73a31d76622635c6ed034ab5cee3b9ecbda8685f"
-    },
-    {
       "path": "assets/fonts/geist/metadata.json",
       "bytes": 833,
       "sha256": "9c7e431f953ddc391b63d3e4c76f1c0ba6c61cc10ec601f9d65970cb7feb44a1"
@@ -194,6 +209,11 @@
       "path": "assets/fonts/geist/wght.css",
       "bytes": 1841,
       "sha256": "97fe28a6688629d5a016347a47282efabffc85e5dd49bd953217d048e47c6872"
+    },
+    {
+      "path": "assets/fonts/noto-sans-sc/LICENSE",
+      "bytes": 4314,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
     },
     {
       "path": "assets/fonts/noto-sans-sc/files/noto-sans-sc-100-wght-normal.woff2",
@@ -701,11 +721,6 @@
       "sha256": "cba3d00c8db989f0f0c3c7c48b1672468d9cb3c8c06514fc5cf1bb82ddccae7e"
     },
     {
-      "path": "assets/fonts/noto-sans-sc/LICENSE",
-      "bytes": 4314,
-      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
-    },
-    {
       "path": "assets/fonts/noto-sans-sc/metadata.json",
       "bytes": 628,
       "sha256": "893dbc7ecfa9a8a469457b521507bb090a7fb46299264165b156c2e2883147a9"
@@ -714,11 +729,6 @@
       "path": "assets/fonts/noto-sans-sc/wght.css",
       "bytes": 101698,
       "sha256": "5cb273ad9fdbf39e6043d7f3523e5796b126a7db072c398a8709cefe9d3818a1"
-    },
-    {
-      "path": "assets/fonts/README.md",
-      "bytes": 1109,
-      "sha256": "25cac0910f11c85a8792ba7fb2376824a8fbed0f0a05fdca6da22bfd048d1fcc"
     },
     {
       "path": "assets/login-bg.mp4",
@@ -816,6 +826,16 @@
       "sha256": "0d5fe1351f8d289e88a9c249a64cac92f73bb36a6ba2f60c4e5165eaccefb27d"
     },
     {
+      "path": "assets/vendor/SHEETJS-LICENSE.txt",
+      "bytes": 11355,
+      "sha256": "4d2a38ac35cda06a555c84074a819d413339cd3691b822cae50f8f322fe01f64"
+    },
+    {
+      "path": "assets/vendor/SHEETJS-PROVENANCE.md",
+      "bytes": 1611,
+      "sha256": "1b2f4352d3d27c151b1da66a7a475cf7a1f6b17f2a67ce095bf5914009de4a24"
+    },
+    {
       "path": "assets/vendor/anime.4.5.0.LICENSE.md",
       "bytes": 1075,
       "sha256": "3f3e835a9952cfc2a6ca836fb95b3257c981f24fa3ef51249055acb09931897b"
@@ -856,16 +876,6 @@
       "sha256": "28348fef6cb0ed8b2ceeb22deaf824428fd13875d84c73d38f77dd216fc24e7f"
     },
     {
-      "path": "assets/vendor/SHEETJS-LICENSE.txt",
-      "bytes": 11355,
-      "sha256": "4d2a38ac35cda06a555c84074a819d413339cd3691b822cae50f8f322fe01f64"
-    },
-    {
-      "path": "assets/vendor/SHEETJS-PROVENANCE.md",
-      "bytes": 1611,
-      "sha256": "1b2f4352d3d27c151b1da66a7a475cf7a1f6b17f2a67ce095bf5914009de4a24"
-    },
-    {
       "path": "assets/vendor/tailwindcss-cdn.js",
       "bytes": 407279,
       "sha256": "176e894661aa9cdc9a5cba6c720044cbbf7b8bd80d1c9a142a7c24b1b6c50d15"
@@ -891,6 +901,11 @@
       "sha256": "45e47747e48c786cd0c1e86a04682c66d2bbfe55b9c6f188bc7412654fcb4208"
     },
     {
+      "path": "backend/README.md",
+      "bytes": 2106,
+      "sha256": "1e287e7c1cfcee28b0bc51e38e1da745598d4f4d42713f845cbb9b7925d09cca"
+    },
+    {
       "path": "backend/mvnw",
       "bytes": 199,
       "sha256": "4f39fde46a84ad0f247e12fc5d9a2279feb1c254fb55e9612d49d16f48e1ae18"
@@ -906,9 +921,9 @@
       "sha256": "efe3f5cd554baeff25bf7b2837d80c52f5ddf38f920351887882534ffefff31a"
     },
     {
-      "path": "backend/README.md",
-      "bytes": 2106,
-      "sha256": "1e287e7c1cfcee28b0bc51e38e1da745598d4f4d42713f845cbb9b7925d09cca"
+      "path": "backend/src/main/java/com/jkxt/JkxtBackendApplication.java",
+      "bytes": 314,
+      "sha256": "6dba639617f70d2dee7cdf832e7a550bb129827bfd2b0dd9dedf4d1014929352"
     },
     {
       "path": "backend/src/main/java/com/jkxt/ai/api/AiDtos.java",
@@ -1156,6 +1171,11 @@
       "sha256": "8651405987aa7a7e1a8b17fd9d77fe6479c58c095a642540302c49dc87341a6a"
     },
     {
+      "path": "backend/src/main/java/com/jkxt/examops/api/PlanRevisionResourceController.java",
+      "bytes": 5140,
+      "sha256": "363699f336428fe321e272b896fbf6c368992e54ff4601959b02968ac240a8b2"
+    },
+    {
       "path": "backend/src/main/java/com/jkxt/examops/api/PlanningJobController.java",
       "bytes": 2599,
       "sha256": "0ccbb8a4508978d6d7c03616e5a8929515934e9638a001be8641a93b44d5d19c"
@@ -1164,11 +1184,6 @@
       "path": "backend/src/main/java/com/jkxt/examops/api/PlanningJobDtos.java",
       "bytes": 812,
       "sha256": "1e9cd0a98865e256e83b78b87ef9ce08bc7f174656759ee0f50ede74c501a46d"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/examops/api/PlanRevisionResourceController.java",
-      "bytes": 5140,
-      "sha256": "363699f336428fe321e272b896fbf6c368992e54ff4601959b02968ac240a8b2"
     },
     {
       "path": "backend/src/main/java/com/jkxt/examops/api/RevisionResourceWriteDtos.java",
@@ -1314,11 +1329,6 @@
       "path": "backend/src/main/java/com/jkxt/importer/service/ImportValidationService.java",
       "bytes": 38338,
       "sha256": "da334136b64549a34d2e6ea6d70dd9b87c6670ea5c4da5a194bd80223c8d3844"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/JkxtBackendApplication.java",
-      "bytes": 314,
-      "sha256": "6dba639617f70d2dee7cdf832e7a550bb129827bfd2b0dd9dedf4d1014929352"
     },
     {
       "path": "backend/src/main/java/com/jkxt/masterdata/api/ClassroomController.java",
@@ -1641,6 +1651,41 @@
       "sha256": "85a47e058fba0965eee0499e25983bdc4c5c7687ad4bdfd0097514be5c85e1e5"
     },
     {
+      "path": "backend/src/main/java/com/jkxt/security/DemoAccountSecurityGuard.java",
+      "bytes": 3059,
+      "sha256": "b3afd02d3d23040c2248bd72b4314597689ed23b989b05262d0fc8246e22596a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/DemoRosterSecurityGuard.java",
+      "bytes": 3460,
+      "sha256": "a4109bdf41f5deec9f8ed30ce223514660fa5f5e72a3868d84c41e4cf43af5d0"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorCli.java",
+      "bytes": 6530,
+      "sha256": "5951266c7d179b283e714f37dc01d73f1b3b25ddaf54b7b3623080178fd639f5"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorProvisioner.java",
+      "bytes": 6886,
+      "sha256": "4cbeea885bac0a5aa52ddea0360c27d67d1ece47e86338569610b247f12e925c"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/ProductionSecurityGate.java",
+      "bytes": 5586,
+      "sha256": "c24ca57f3fd0384b369af29ca4509f3e2cfae4effd1989fde37700e9489b055e"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/SecurityConfig.java",
+      "bytes": 9801,
+      "sha256": "d7223ddc6742b5f07bfa7b3d517a9c5991c6b70b0e6261daf98f7afd262bdb6a"
+    },
+    {
+      "path": "backend/src/main/java/com/jkxt/security/SpaCsrfTokenRequestHandler.java",
+      "bytes": 1734,
+      "sha256": "d88658ffb6e0b1fd9cc5771eae88f34119cb2dfe9c76754b2a9509d79e970fc9"
+    },
+    {
       "path": "backend/src/main/java/com/jkxt/security/api/AuthController.java",
       "bytes": 5104,
       "sha256": "d8eb7867dbd954bd3e9f50a1b13209eb75e7a071dce4ba9543ade9d82d89e172"
@@ -1711,34 +1756,9 @@
       "sha256": "7ba9a039f710f03751f1a45255cd68882864846b7cdaf90f85762813a242684e"
     },
     {
-      "path": "backend/src/main/java/com/jkxt/security/DemoAccountSecurityGuard.java",
-      "bytes": 3059,
-      "sha256": "b3afd02d3d23040c2248bd72b4314597689ed23b989b05262d0fc8246e22596a"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/security/DemoRosterSecurityGuard.java",
-      "bytes": 3460,
-      "sha256": "a4109bdf41f5deec9f8ed30ce223514660fa5f5e72a3868d84c41e4cf43af5d0"
-    },
-    {
       "path": "backend/src/main/java/com/jkxt/security/domain/UserAccount.java",
       "bytes": 3355,
       "sha256": "5f9b6ff4a76f1f9a8fb5d4afe35ea9eb4664e655c76163fb3f6276bf9ea8c394"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorCli.java",
-      "bytes": 6530,
-      "sha256": "5951266c7d179b283e714f37dc01d73f1b3b25ddaf54b7b3623080178fd639f5"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/security/InitialOperatorProvisioner.java",
-      "bytes": 6886,
-      "sha256": "4cbeea885bac0a5aa52ddea0360c27d67d1ece47e86338569610b247f12e925c"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/security/ProductionSecurityGate.java",
-      "bytes": 5586,
-      "sha256": "c24ca57f3fd0384b369af29ca4509f3e2cfae4effd1989fde37700e9489b055e"
     },
     {
       "path": "backend/src/main/java/com/jkxt/security/repo/UserAccountRepository.java",
@@ -1746,19 +1766,9 @@
       "sha256": "9a1698a7d2a57685e8bce6dc5cea6ba8438756c35272be3324c223751e023d01"
     },
     {
-      "path": "backend/src/main/java/com/jkxt/security/SecurityConfig.java",
-      "bytes": 9801,
-      "sha256": "d7223ddc6742b5f07bfa7b3d517a9c5991c6b70b0e6261daf98f7afd262bdb6a"
-    },
-    {
       "path": "backend/src/main/java/com/jkxt/security/service/UserPreferencesService.java",
       "bytes": 4799,
       "sha256": "9773d264a48306c6a3cab685cf964e05dc3c86a9ca6611a294c8d16c7ada1bee"
-    },
-    {
-      "path": "backend/src/main/java/com/jkxt/security/SpaCsrfTokenRequestHandler.java",
-      "bytes": 1734,
-      "sha256": "d88658ffb6e0b1fd9cc5771eae88f34119cb2dfe9c76754b2a9509d79e970fc9"
     },
     {
       "path": "backend/src/main/java/com/jkxt/tasks/api/ExamTaskController.java",
@@ -1816,11 +1826,6 @@
       "sha256": "257eee3a6fb9f4885595f24b6d9dcca59cc82064328a043cc9a68e0b7ae802ee"
     },
     {
-      "path": "backend/src/main/resources/db/migration/V1__p1_baseline.sql",
-      "bytes": 330,
-      "sha256": "928c9a18b0638cf79e49d6e632df94f592c1d0cb1c2f9ca5dfaa0066e2887bea"
-    },
-    {
       "path": "backend/src/main/resources/db/migration/V10__p13_demo_login_accounts.sql",
       "bytes": 3012,
       "sha256": "87d39b8c5dd1e7b1f4f65bd81a6c8744af79aa4174c09c9db2f75a1103a52bbe"
@@ -1871,9 +1876,9 @@
       "sha256": "a415376103274859357c4399cb8c5003cd8ff645938c2ff599d26e5ea46fbb06"
     },
     {
-      "path": "backend/src/main/resources/db/migration/V2__p2_core_schema.sql",
-      "bytes": 16774,
-      "sha256": "1e21c22099c9d1453f7ab649f002ae139a1746e202c24c7ce3886760d963e600"
+      "path": "backend/src/main/resources/db/migration/V1__p1_baseline.sql",
+      "bytes": 330,
+      "sha256": "928c9a18b0638cf79e49d6e632df94f592c1d0cb1c2f9ca5dfaa0066e2887bea"
     },
     {
       "path": "backend/src/main/resources/db/migration/V20__exam_operations_execution.sql",
@@ -1926,9 +1931,9 @@
       "sha256": "bf88e58cb2a1d447d1f541655dc1ca92e6ea5715192fd85e757eac3516ca3293"
     },
     {
-      "path": "backend/src/main/resources/db/migration/V3__p2_demo_seed.sql",
-      "bytes": 2300,
-      "sha256": "ee0fead5dd20ef43af53f44282e812a803bd8ba20a5461d5f8b14714cd13dc1f"
+      "path": "backend/src/main/resources/db/migration/V2__p2_core_schema.sql",
+      "bytes": 16774,
+      "sha256": "1e21c22099c9d1453f7ab649f002ae139a1746e202c24c7ce3886760d963e600"
     },
     {
       "path": "backend/src/main/resources/db/migration/V30__legacy_task_plan_adapter.sql",
@@ -1964,6 +1969,11 @@
       "path": "backend/src/main/resources/db/migration/V36__published_duty_teacher_snapshot.sql",
       "bytes": 3975,
       "sha256": "615c68ef4fd40cc0fc4779eeb3c0e20d19d26b8dc236f8bee4c7fe6cfd987459"
+    },
+    {
+      "path": "backend/src/main/resources/db/migration/V3__p2_demo_seed.sql",
+      "bytes": 2300,
+      "sha256": "ee0fead5dd20ef43af53f44282e812a803bd8ba20a5461d5f8b14714cd13dc1f"
     },
     {
       "path": "backend/src/main/resources/db/migration/V4__p3_auth_seed.sql",
@@ -2136,11 +2146,6 @@
       "sha256": "ca15ee70ca8790d4194c5bc1ae8e17c4095af1af7b9550f75972ad00e09d8932"
     },
     {
-      "path": "backend/src/test/java/com/jkxt/examops/joint/DeterministicJointPlannerTest.java",
-      "bytes": 35759,
-      "sha256": "ecc19ed72d64e27e802a0565f99ed771a4b0d6ed3b481ce779a1a001f6cd2462"
-    },
-    {
       "path": "backend/src/test/java/com/jkxt/examops/JointInputApiIntegrationTest.java",
       "bytes": 11237,
       "sha256": "8e0c97d06ddc5ee0b471f422e0eac94b0075c1f0eca6c90f3e716e01d820cd7b"
@@ -2191,21 +2196,6 @@
       "sha256": "e20fdd08b3cfae04332676980c212135922c720fac6b8ce813db5e484ff3d057"
     },
     {
-      "path": "backend/src/test/java/com/jkxt/examops/service/DeterministicInvigilatorAllocatorTest.java",
-      "bytes": 13793,
-      "sha256": "3b14f59d0ff16a64b57e163c07182d713479d4ffff8518c77b300b9d0eebfcb3"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/examops/service/ExamOperationsHardConstraintsTest.java",
-      "bytes": 5208,
-      "sha256": "ade0d8f1f4dc15ff2a96666725dedbd507c94fb38ab8e987e0e3072bc22fd1db"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/examops/service/ExamPlanPlanningServiceJointStatusTest.java",
-      "bytes": 7521,
-      "sha256": "446283374353019696d8dd39b2fbfad4b9a64b81a4c3ef2f22aa63a287c69fb1"
-    },
-    {
       "path": "backend/src/test/java/com/jkxt/examops/SubstitutionConcurrencyIntegrationTest.java",
       "bytes": 14659,
       "sha256": "c83e562055d2105fd0b56a012daba5cd58905a8ada3ce17037106ad05ec0688e"
@@ -2224,6 +2214,26 @@
       "path": "backend/src/test/java/com/jkxt/examops/SubstitutionOwnershipIntegrationTest.java",
       "bytes": 32442,
       "sha256": "dc02ba825acb8d2577b7fa5650fb4c280f201916a36ed86fc6ca3d3030edc165"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/joint/DeterministicJointPlannerTest.java",
+      "bytes": 35759,
+      "sha256": "ecc19ed72d64e27e802a0565f99ed771a4b0d6ed3b481ce779a1a001f6cd2462"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/DeterministicInvigilatorAllocatorTest.java",
+      "bytes": 13793,
+      "sha256": "3b14f59d0ff16a64b57e163c07182d713479d4ffff8518c77b300b9d0eebfcb3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/ExamOperationsHardConstraintsTest.java",
+      "bytes": 5208,
+      "sha256": "ade0d8f1f4dc15ff2a96666725dedbd507c94fb38ab8e987e0e3072bc22fd1db"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/examops/service/ExamPlanPlanningServiceJointStatusTest.java",
+      "bytes": 7521,
+      "sha256": "446283374353019696d8dd39b2fbfad4b9a64b81a4c3ef2f22aa63a287c69fb1"
     },
     {
       "path": "backend/src/test/java/com/jkxt/importer/ExamRoomOccupancyValidationTest.java",
@@ -2356,21 +2366,6 @@
       "sha256": "05a15da3ed5e8424b8a5f74a4424146cfb2c3d56ec4a15527890fa7e99fe4be3"
     },
     {
-      "path": "backend/src/test/java/com/jkxt/platform/service/AdminAccountSecurityProjectionTest.java",
-      "bytes": 3238,
-      "sha256": "04ed8e1eecffc27fac36321fc99ed56bdbb795ef6ab07aa2a67fa41319a32849"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/platform/service/BackupArtifactValidationTest.java",
-      "bytes": 2725,
-      "sha256": "856d0729547a38328c0bf942bf7d93006a0ff1cbedbfdefdcc4d078ce829b032"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/platform/service/SystemMetricValueTest.java",
-      "bytes": 1113,
-      "sha256": "be972f2ef60c198ed0e8136b0d2c02faa231fe0ea14fceaf53b688dc6d0ffef7"
-    },
-    {
       "path": "backend/src/test/java/com/jkxt/platform/SystemHealthAndAuditWindowTest.java",
       "bytes": 7253,
       "sha256": "1cd4899d29e7f9d47506f38288aee12e75202250c3824df2c48b7edcd526b57d"
@@ -2389,6 +2384,21 @@
       "path": "backend/src/test/java/com/jkxt/platform/TenantInitialTermSeedTest.java",
       "bytes": 5630,
       "sha256": "a9e5198beab4a0b2f234efc3fdeff326e5d6c49a361fdbcf861ea29446ac0b5b"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/AdminAccountSecurityProjectionTest.java",
+      "bytes": 3238,
+      "sha256": "04ed8e1eecffc27fac36321fc99ed56bdbb795ef6ab07aa2a67fa41319a32849"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/BackupArtifactValidationTest.java",
+      "bytes": 2725,
+      "sha256": "856d0729547a38328c0bf942bf7d93006a0ff1cbedbfdefdcc4d078ce829b032"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/platform/service/SystemMetricValueTest.java",
+      "bytes": 1113,
+      "sha256": "be972f2ef60c198ed0e8136b0d2c02faa231fe0ea14fceaf53b688dc6d0ffef7"
     },
     {
       "path": "backend/src/test/java/com/jkxt/release/RegisteredApiInventoryTest.java",
@@ -2456,6 +2466,11 @@
       "sha256": "2d0f6acbea0ea0348dbfd2fcf45d6805d6947bf6ad2a59fb32ec37e2a3fe15f3"
     },
     {
+      "path": "backend/src/test/java/com/jkxt/scheduling/SolverDiagnosticsAcceptanceTest.java",
+      "bytes": 4396,
+      "sha256": "61f698983969509c5f37df3ba6b9324c8f5b45f493895b225dba0b82ef1d2498"
+    },
+    {
       "path": "backend/src/test/java/com/jkxt/scheduling/service/ScheduleExecutorSaturationTest.java",
       "bytes": 1948,
       "sha256": "3b5e048f774d58c1d0dfa6c5f6da16d69454fbbf0c2dfa7ecf1bd34a6b24b2d9"
@@ -2469,31 +2484,6 @@
       "path": "backend/src/test/java/com/jkxt/scheduling/service/SchedulePolicyBindingIntegrationTest.java",
       "bytes": 7300,
       "sha256": "c48f44f09bfc538566bab1ec64c5a75e6cd6e3cf2498b91049398ce464d3bb62"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/scheduling/SolverDiagnosticsAcceptanceTest.java",
-      "bytes": 4396,
-      "sha256": "61f698983969509c5f37df3ba6b9324c8f5b45f493895b225dba0b82ef1d2498"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/security/auth/CaptchaImageSecurityTest.java",
-      "bytes": 3519,
-      "sha256": "a2b2c2ac372c83564d108ae7962f9e92bd2128b2f1d408b41226d4914d7befe3"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/security/auth/PortalSessionIsolationIntegrationTest.java",
-      "bytes": 9716,
-      "sha256": "0eadf51f84eb151f1f5d9228c4bf6a8cd9d3534a3fa1a251672687c7c6b2a205"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/security/auth/SessionAbsoluteExpiryIntegrationTest.java",
-      "bytes": 2604,
-      "sha256": "4b490bfc756256ba0930a3b8205423f604566c89506d2e4e6dbc9b2542abe568"
-    },
-    {
-      "path": "backend/src/test/java/com/jkxt/security/auth/SessionBoundaryRegressionTest.java",
-      "bytes": 6680,
-      "sha256": "168db0770f5384dfa7f7141da6180fa48c4d4ef9cf192bcbb35804387f4c0dfc"
     },
     {
       "path": "backend/src/test/java/com/jkxt/security/AuthHardeningIntegrationTest.java",
@@ -2601,6 +2591,26 @@
       "sha256": "910e3ee534e4fdfb09ccfbec0228e542541ca106f00c32df9a0f33124f489031"
     },
     {
+      "path": "backend/src/test/java/com/jkxt/security/auth/CaptchaImageSecurityTest.java",
+      "bytes": 3519,
+      "sha256": "a2b2c2ac372c83564d108ae7962f9e92bd2128b2f1d408b41226d4914d7befe3"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/PortalSessionIsolationIntegrationTest.java",
+      "bytes": 9716,
+      "sha256": "0eadf51f84eb151f1f5d9228c4bf6a8cd9d3534a3fa1a251672687c7c6b2a205"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/SessionAbsoluteExpiryIntegrationTest.java",
+      "bytes": 2604,
+      "sha256": "4b490bfc756256ba0930a3b8205423f604566c89506d2e4e6dbc9b2542abe568"
+    },
+    {
+      "path": "backend/src/test/java/com/jkxt/security/auth/SessionBoundaryRegressionTest.java",
+      "bytes": 6680,
+      "sha256": "168db0770f5384dfa7f7141da6180fa48c4d4ef9cf192bcbb35804387f4c0dfc"
+    },
+    {
       "path": "backend/src/test/java/com/jkxt/support/CsrfMockMvcTestDefaults.java",
       "bytes": 2133,
       "sha256": "4ed88a1f87e7fc93f4cf9df192d49898edd4d20dc06cbf379261bbd82fbc8daf"
@@ -2636,19 +2646,14 @@
       "sha256": "528bf06d3f508b22ba043fe7ea54557503f0b11814884ecb699e3615aff6ab6c"
     },
     {
-      "path": "backend/src/test/resources/application-test.yml",
-      "bytes": 1104,
-      "sha256": "90b3305d2167f32c7f4449364a78bfef49031f52b46012b1be30d43215726744"
-    },
-    {
       "path": "backend/src/test/resources/META-INF/spring.factories",
       "bytes": 260,
       "sha256": "23636960449febf1dfde984ea81180a57dc0c9a357e59fcfc00e491664645022"
     },
     {
-      "path": "Dashboard.html",
-      "bytes": 17459,
-      "sha256": "78651508539c301d98dbb2dbcd9185053cd747516f610cfdd6c0ccb75c3a352e"
+      "path": "backend/src/test/resources/application-test.yml",
+      "bytes": 1104,
+      "sha256": "90b3305d2167f32c7f4449364a78bfef49031f52b46012b1be30d43215726744"
     },
     {
       "path": "deploy/caddy/Caddyfile",
@@ -2659,6 +2664,11 @@
       "path": "deploy/frontend.Dockerfile",
       "bytes": 649,
       "sha256": "051f0f62a82699110f6a86a4eab91b2e8b6a27e6dc39e2831ac3b3b87cbd9278"
+    },
+    {
+      "path": "deploy/netlify/README.md",
+      "bytes": 6125,
+      "sha256": "f570d658236ce7ce338cabf13fe7b04fb1d9ceddcdc611b469e24ab1fdcc9c57"
     },
     {
       "path": "deploy/nginx/private-tls.conf",
@@ -2691,19 +2701,19 @@
       "sha256": "85e77a50d8f98a73ae494f0c7567bd98251e853af3db04ffbd03b0554c416f1a"
     },
     {
+      "path": "deploy/render-free/README.md",
+      "bytes": 6004,
+      "sha256": "b638aa7916d5b7c4321d1823e1a5c2b93b0fc86a387074b5cd7a499d25171c6f"
+    },
+    {
       "path": "deploy/render-free/entrypoint.sh",
-      "bytes": 5150,
-      "sha256": "51f33fec1fe25e1498803cf9318a914404c6097070d3d0c047c98590c2d0cb27"
+      "bytes": 5229,
+      "sha256": "5eecd2c9331ffca55a81ff3d6f2347f320510d613f8bbdfeac9756d60fb38306"
     },
     {
       "path": "deploy/render-free/nginx.conf.template",
       "bytes": 2545,
       "sha256": "f46f49412d836cec97ff576e6bc781aaa1131e64dd5005b953c841425d138e40"
-    },
-    {
-      "path": "deploy/render-free/README.md",
-      "bytes": 5795,
-      "sha256": "92890d30c6762c02683eabbb673344b57d7d81ddbc05a1d950312ae41b3f0d37"
     },
     {
       "path": "docker-compose.public.yml",
@@ -2729,6 +2739,11 @@
       "path": "docs/UAT-CHECKLIST.md",
       "bytes": 4072,
       "sha256": "ede413ab6b14ed3243e24abe647adece70279f133666d73a5fd073ef8c3816ba"
+    },
+    {
+      "path": "netlify.toml",
+      "bytes": 710,
+      "sha256": "eee4f1b6799fe31257bea1b267f40c4fe80d0f69ee9c1f8ad25ce3869fe8ab8f"
     },
     {
       "path": "package-lock.json",
@@ -2816,6 +2831,11 @@
       "sha256": "8cf035f687f1d5d7c16f4a7a8b4650b2e47881c32fc6ac1f15c79c0b980a1099"
     },
     {
+      "path": "scripts/deploy/prepare-netlify.mjs",
+      "bytes": 7433,
+      "sha256": "9abc1117991ffc8bb0dcf8b25f386cd2b7aae71b1c895c3a37f1b090449ca931"
+    },
+    {
       "path": "scripts/deploy/prepare-production-cutover-pack.ps1",
       "bytes": 19181,
       "sha256": "bbe366730f35da2a730b4a8bc7ace34585413d7967c83d040b24203581909621"
@@ -2899,6 +2919,11 @@
       "path": "scripts/frontend-build.mjs",
       "bytes": 4736,
       "sha256": "a7b93ad33d6c6ca326dca1c960be6abc46b76263fed497493e10f885ea2029ec"
+    },
+    {
+      "path": "scripts/netlify-deploy.test.mjs",
+      "bytes": 11749,
+      "sha256": "e258a06ca5b67a8a2a21f70a93bbc2f67e466c7e9e42323e01ddcb4ece634627"
     },
     {
       "path": "src/ai-workflow.js",
@@ -3275,5 +3300,7 @@
       "bytes": 288,
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
-  ]
+  ],
+  "baseCommit": "dd7d5e687d70521645485717c55e92c3a75581b9",
+  "scope": "Tracked source files excluding this generated manifest; not business acceptance"
 }

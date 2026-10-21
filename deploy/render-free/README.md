@@ -11,7 +11,7 @@
 - 公开端口只允许 nginx `${PORT}`（默认 10000）；Java 只监听 `127.0.0.1:8080`。平台健康检查路径必须为 `/actuator/health/readiness`，不能改为静态首页。它同时检查 PostgreSQL 和 Redis。
 - nginx 同源转发 `/api/v1/`，已有两类 SSE 端点关闭缓冲并保留长读超时。必须实际验证 Cookie、CSRF、登录门户、SSE、下载，不能以静态首页 200 代替。
 - 镜像不含数据库、Redis、密钥、旧测试报告、备份或用户上传。现有 `uploads` 目录只有 `.gitkeep`，当前 UI 图片引用 `assets`；因此没有复制整个 uploads 目录，也不提供该目录的公开读取。
-- 512 MiB 起始预算：192 MiB heap、128 MiB metaspace、32 MiB code cache、24 MiB direct memory；使用 SerialGC，HTTP 线程上限 24，数据库连接上限 6。**只是启动参数，不是已通过负载测试**；OR-Tools 等本地内存不受 heap 上限保护。真实启动/排班/导出发生 OOM 或持续超时则停止验收，不降断言。
+- 512 MiB 试运行预算：160 MiB heap、192 MiB metaspace、32 MiB code cache、24 MiB direct memory；使用 SerialGC，HTTP 线程上限 24，数据库连接上限 6。原 128 MiB metaspace 在云端首次验证码请求时真实耗尽，因此提高类元数据上限并降低 heap，显式四项合计 408 MiB，剩余约 104 MiB 仍需容纳其他本地内存和 nginx。**只是启动参数，不是已通过负载测试**；OR-Tools 等本地内存不受 heap 上限保护。真实启动/排班/导出发生 OOM 或持续超时则停止验收，不降断言。
 
 ## 仅由运行环境注入
 

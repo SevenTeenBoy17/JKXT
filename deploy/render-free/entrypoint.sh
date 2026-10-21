@@ -68,8 +68,9 @@ trap 'shutdown 143' TERM
 trap 'shutdown 130' INT
 
 printf '%s\n' 'JKXT temporary validation: strict security; no external AI/email/SMS; no durable backup volume.'
-# Conservative 512 MiB starting budget, NOT proof of business-load capacity.
-java -Xms64m -Xmx192m -XX:MaxMetaspaceSize=128m -XX:ReservedCodeCacheSize=32m \
+# The first cloud CAPTCHA request exhausted the 128 MiB metaspace limit.
+# Rebalance the 512 MiB trial budget; this is NOT proof of business-load capacity.
+java -Xms64m -Xmx160m -XX:MaxMetaspaceSize=192m -XX:ReservedCodeCacheSize=32m \
   -XX:MaxDirectMemorySize=24m -XX:+UseSerialGC -Xss512k -XX:+ExitOnOutOfMemoryError \
   -Djava.awt.headless=true -jar /app/jkxt-backend.jar \
   --server.address=127.0.0.1 --server.port=8080 --server.forward-headers-strategy=none \
