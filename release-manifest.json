@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
   "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
-  "generatedAt": "2026-10-21T11:11:02.186Z",
+  "generatedAt": "2026-10-21T11:26:18.684Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 651,
-  "totalBytes": 50233762,
+  "fileCount": 653,
+  "totalBytes": 50255763,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -2756,6 +2756,11 @@
       "sha256": "6adcb521e4bf749098d7ca5b87e303d3e95d41bdf12c751835d5a478c20d7a6a"
     },
     {
+      "path": "scripts/api-error-response.test.cjs",
+      "bytes": 7039,
+      "sha256": "395cbd346fc0453c379b103f45d2d4a1d0f825eb9a97644b598e515fa28fa1ea"
+    },
+    {
       "path": "scripts/deploy/api-base-resolution.test.cjs",
       "bytes": 2589,
       "sha256": "4ed002f51b5825d7901047f18f6a1e5352bcd8651383ec53bb2ed7138b953159"
@@ -2921,6 +2926,11 @@
       "sha256": "a7b93ad33d6c6ca326dca1c960be6abc46b76263fed497493e10f885ea2029ec"
     },
     {
+      "path": "scripts/login-backend-availability.test.cjs",
+      "bytes": 13998,
+      "sha256": "7315e0e758444d830200d7434cfc904b6a0b4c7f1ff2dd0222be69fe5cb8f97a"
+    },
+    {
       "path": "scripts/netlify-deploy.test.mjs",
       "bytes": 11749,
       "sha256": "e258a06ca5b67a8a2a21f70a93bbc2f67e466c7e9e42323e01ddcb4ece634627"
@@ -2932,8 +2942,8 @@
     },
     {
       "path": "src/api.js",
-      "bytes": 18533,
-      "sha256": "808987bd3f8e5e5cb4fe04f3006ebde2420de00115616fabacb6caf846f06e22"
+      "bytes": 19090,
+      "sha256": "e5e5d38f691dca3b17fb744396b43906f4069fbfc9646e64afb6830221937d35"
     },
     {
       "path": "src/app.jsx",
@@ -3072,8 +3082,8 @@
     },
     {
       "path": "src/pages/login.jsx",
-      "bytes": 79767,
-      "sha256": "db8a274173f6411ed886d694c5e6a279bf3622f6878555b3d88e43aa4b699e2c"
+      "bytes": 80174,
+      "sha256": "16bc43df0258c88f935a9be56e63394dea57306f64114acec0b48dcf5febd468"
     },
     {
       "path": "src/pages/operations-v6-approvals.jsx",
@@ -3301,6 +3311,6 @@
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
   ],
-  "baseCommit": "dd7d5e687d70521645485717c55e92c3a75581b9",
+  "baseCommit": "4b661968a6825daba2fb2b2f76732ae3fd588fc9",
   "scope": "Tracked source files excluding this generated manifest; not business acceptance"
 }

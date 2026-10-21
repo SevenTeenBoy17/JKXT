@@ -658,32 +658,10 @@ function LoginPandaMascot({ covering, size = 184 }) {
   );
 }
 
-const LOCAL_CAPTCHA_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-function randomLocalCaptchaCode() {
-  const values = new Uint32Array(5);
-  if (window.crypto?.getRandomValues) window.crypto.getRandomValues(values);
-  else for (let i = 0; i < values.length; i++) values[i] = Math.floor(Math.random() * 100000);
-  return Array.from(values, (value) => LOCAL_CAPTCHA_ALPHABET[value % LOCAL_CAPTCHA_ALPHABET.length]).join('');
-}
-
-function localCaptchaImage(code) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="132" height="44" viewBox="0 0 132 44">
-    <rect width="132" height="44" rx="12" fill="#EEF6FF"/>
-    <path d="M10 34 C30 8 58 50 86 12 S118 30 126 10" fill="none" stroke="#93C5FD" stroke-width="2" opacity=".7"/>
-    <path d="M8 14 L124 32" fill="none" stroke="#BFDBFE" stroke-width="1.5" opacity=".55"/>
-    <text x="66" y="29" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="24" font-weight="800" letter-spacing="4" fill="#1D4ED8">${code}</text>
-  </svg>`;
-  return 'data:image/svg+xml;base64,' + window.btoa(svg);
-}
-
 function normalizeCaptchaImage(value) {
-  if (!value) return '';
-  const text = String(value);
-  if (text.trim().startsWith('<svg')) {
-    return 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(text)));
-  }
-  return text.startsWith('data:') ? text : 'data:image/svg+xml;base64,' + text;
+  // CaptchaService returns a PNG data URI, never HTML, a URL or a local preview.
+  return typeof value === 'string' && /^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/.test(value)
+    ? value : '';
 }
 
 function LoginPage({ onSuccess, sessionError }) {
@@ -776,50 +754,81 @@ function LoginPage({ onSuccess, sessionError }) {
   const [captchaImage, setCaptchaImage] = React.useState('');
   const [captchaLoading, setCaptchaLoading] = React.useState(false);
   const [errors, setErrors] = React.useState({});
+  const captchaRequest = React.useRef(null);
+  const captchaReadyId = React.useRef('');
   const clearError = React.useCallback((k) => setErrors((prev) => (prev[k] ? { ...prev, [k]: undefined } : prev)), []);
-  const useLocalCaptcha = React.useCallback((opts = {}) => {
-    const code = randomLocalCaptchaCode();
-    setCaptchaId(`local-${Date.now()}`);
-    setCaptchaImage(localCaptchaImage(code));
-    setCaptcha(code);
-    clearError('captcha');
-    if (opts.toast) window.ui?.toast('已显示本地验证码预览', { kind: 'info' });
-  }, [clearError]);
   const loadCaptcha = React.useCallback(async (opts = {}) => {
-    if (!window.api?.auth?.captcha) {
-      useLocalCaptcha(opts);
-      return;
-    }
-    setCaptchaLoading(true);
+    // The ref closes the gap before React renders the disabled refresh button.
+    if (captchaRequest.current) return;
     const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-    const timeoutId = controller ? window.setTimeout(() => controller.abort(), 1800) : 0;
+    const request = { controller, timeoutId: 0, cancel: null };
+    captchaRequest.current = request;
+    captchaReadyId.current = '';
+    setCaptchaId('');
+    setCaptchaImage('');
+    setCaptcha('');
+    clearError('captcha');
+    setCaptchaLoading(true);
     try {
-      const res = window.api?.post
-        ? await window.api.post('/auth/captcha', {}, controller ? { signal: controller.signal } : {})
-        : await window.api.auth.captcha();
+      if (typeof window.api?.post !== 'function') throw new Error('CAPTCHA_API_UNAVAILABLE');
+      // A deadline also settles adapters that ignore abort; late results cannot change state.
+      const interrupted = new Promise((_, reject) => {
+        request.cancel = () => reject(new Error('CAPTCHA_REQUEST_CANCELLED'));
+        request.timeoutId = window.setTimeout(() => {
+          reject(new Error('CAPTCHA_TIMEOUT'));
+          controller?.abort();
+        }, 20000);
+      });
+      const res = await Promise.race([
+        window.api.post('/auth/captcha', {}, controller ? { signal: controller.signal } : {}),
+        interrupted,
+      ]);
+      if (captchaRequest.current !== request) return;
       const image = normalizeCaptchaImage(res?.imageBase64);
-      if (!res?.captchaId || !image) throw new Error('CAPTCHA_IMAGE_MISSING');
-      setCaptchaId(res?.captchaId || '');
+      const id = typeof res?.captchaId === 'string' ? res.captchaId.trim() : '';
+      if (!id || id.startsWith('local-') || !image) throw new Error('CAPTCHA_RESPONSE_INVALID');
+      captchaReadyId.current = id;
+      setCaptchaId(id);
       setCaptchaImage(image);
       setCaptcha('');
       clearError('captcha');
       if (opts.toast) window.ui?.toast('验证码已刷新', { kind: 'info' });
     } catch (error) {
-      useLocalCaptcha(opts);
+      if (captchaRequest.current !== request) return;
+      const message = error?.message === 'CAPTCHA_TIMEOUT'
+        ? '验证码服务连接超时，服务可能正在启动，请稍后点击验证码刷新。'
+        : '暂未连接验证码服务，请稍后点击验证码刷新。';
+      captchaReadyId.current = '';
+      setCaptchaId('');
+      setCaptchaImage('');
+      setCaptcha('');
+      setErrors((prev) => ({ ...prev, captcha: message }));
+      if (opts.toast) window.ui?.toast(message, { kind: 'warning' });
     } finally {
-      if (timeoutId) window.clearTimeout(timeoutId);
-      setCaptchaLoading(false);
+      window.clearTimeout(request.timeoutId);
+      if (captchaRequest.current === request) {
+        captchaRequest.current = null;
+        setCaptchaLoading(false);
+      }
     }
-  }, [clearError, useLocalCaptcha]);
+  }, [clearError]);
   const refreshCaptcha = () => loadCaptcha({ toast: true });
+  const handleCaptchaImageError = () => {
+    if (!captchaId || captchaReadyId.current !== captchaId) return;
+    captchaReadyId.current = '';
+    setCaptchaId('');
+    setCaptchaImage('');
+    setCaptcha('');
+    setErrors((prev) => ({ ...prev, captcha: '验证码图片加载失败，请稍后点击验证码刷新。' }));
+  };
   const serviceStatus = React.useMemo(() => {
-    if (captchaLoading || !captchaId) {
-      return { label: '连接检测中', color: '#64748B' };
+    if (captchaLoading) {
+      return { label: '正在连接验证码服务', color: '#64748B' };
     }
-    if (String(captchaId).startsWith('local-')) {
-      return { label: '静态预览 · 未接通后端', color: '#F97316' };
+    if (!captchaId) {
+      return { label: '验证码服务暂未连接', color: '#F97316' };
     }
-    return { label: '系统在线 · 服务正常', color: '#10B981' };
+    return { label: '验证码服务已连接', color: '#10B981' };
   }, [captchaId, captchaLoading]);
   const [pwFocused, setPwFocused] = React.useState(false);
   const [userFocused, setUserFocused] = React.useState(false);
@@ -980,6 +989,16 @@ function LoginPage({ onSuccess, sessionError }) {
     setCaptcha('');
     setErrors({});
     loadCaptcha();
+    return () => {
+      const request = captchaRequest.current;
+      captchaRequest.current = null;
+      captchaReadyId.current = '';
+      if (request) {
+        window.clearTimeout(request.timeoutId);
+        request.controller?.abort();
+        request.cancel?.();
+      }
+    };
   }, [defaultUsername, loadCaptcha]);
 
   const pad = (n) => String(n).padStart(2, '0');
@@ -1010,22 +1029,15 @@ function LoginPage({ onSuccess, sessionError }) {
     else if (password.length < 6) errs.password = '密码至少需 6 位';
 
     if (!captcha.trim()) errs.captcha = '请输入验证码';
-    if (!captchaId) errs.captcha = '验证码未加载，请点击刷新';
+    if (captchaRequest.current || !captchaId || captchaReadyId.current !== captchaId) {
+      errs.captcha = '验证码未就绪，请稍后点击刷新';
+    }
 
     if (Object.keys(errs).length) {
       setErrors(errs);
       setShake(true);
       setTimeout(() => setShake(false), 500);
       window.ui?.toast(errs.username || errs.password || errs.captcha, { kind: 'warning' });
-      return;
-    }
-
-    if (String(captchaId).startsWith('local-')) {
-      const message = '当前静态预览环境未连接后端，验证码仅用于显示预览';
-      setErrors({ captcha: message });
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-      window.ui?.toast(message, { kind: 'warning' });
       return;
     }
 
@@ -1545,10 +1557,11 @@ function LoginPage({ onSuccess, sessionError }) {
                 className="login-captcha-button h-12 min-w-[108px] px-2 rounded-lg font-mono text-[13px] font-bold transition-colors hover:opacity-85 select-none relative overflow-hidden inline-flex items-center justify-center"
                 style={{ background: '#1F1F1F', color: '#FAF6E9' }}
                 onClick={refreshCaptcha}
+                disabled={captchaLoading || loading}
                 title="刷新验证码"
                 aria-label="刷新验证码">
                 {captchaImage ? (
-                  <img className="login-captcha-img" src={captchaImage} alt="验证码图片" style={{ height: 34, width: 102, maxWidth: '100%', display: 'block', objectFit: 'contain' }} />
+                  <img className="login-captcha-img" src={captchaImage} alt="验证码图片" onError={handleCaptchaImageError} style={{ height: 34, width: 102, maxWidth: '100%', display: 'block', objectFit: 'contain' }} />
                 ) : (
                   <span style={{ pointerEvents: 'none' }}>{captchaLoading ? '...' : '验证码'}</span>
                 )}
@@ -1563,7 +1576,7 @@ function LoginPage({ onSuccess, sessionError }) {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || captchaLoading || !captchaId}
               className="w-full h-12 rounded-lg text-[14.5px] font-semibold inline-flex items-center justify-center gap-2 transition-all"
               style={{
                 background: loading ? '#94908A' : '#1F1F1F',

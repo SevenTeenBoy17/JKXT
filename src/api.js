@@ -43,7 +43,18 @@
     const text = await response.text();
     if (!text) return null;
     try { return JSON.parse(text); }
-    catch { return { message: text }; }
+    catch {
+      // A proxy's HTML error page is not a user-facing backend message.
+      // Preserve real JSON business errors; never place raw proxy output in the login form.
+      if (!response.ok) {
+        const unavailable = [502, 503, 504].includes(response.status);
+        return {
+          code: unavailable ? 'SERVICE_UNAVAILABLE' : 'API_INVALID_RESPONSE',
+          message: unavailable ? '服务暂未就绪或连接超时，请稍后重试。' : `请求失败（HTTP ${response.status}），服务未返回有效响应。`,
+        };
+      }
+      return { message: text };
+    }
   }
 
   function normalizeError(response, payload) {
