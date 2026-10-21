@@ -94,6 +94,8 @@ test('real portal resolver keeps the original query-based school and platform en
   for (const [pathname, search, expected] of [
     ['/', '', 'school'], ['/Dashboard.html', '', 'school'],
     ['/', '?portal=super', 'platform'], ['/Dashboard.html', '?portal=super', 'platform'],
+    ['/dashboard', '', 'school'], ['/dashboard', '?portal=super', 'platform'],
+    ['/dashboard/', '?portal=super', 'platform'],
     ['/Dashboard.html', '?login=SuPeR', 'platform'], ['/Dashboard.html', '?entry=super', 'platform'],
     ['/Dashboard.html', '?portal=admin&entry=super', 'school'],
   ]) {
@@ -116,6 +118,28 @@ test('static headers keep legacy inline code usable and cache only hashed compil
   assert.match(headers, /\/assets\/\*\n  Cache-Control: public, max-age=300, must-revalidate/);
   assert.match(headers, /\/Dashboard\.html\n  Cache-Control: no-store/);
   assert.doesNotMatch(headers, /\/api\//);
+});
+
+test('canonical CDN dashboard URL keeps no-store after HTML and case normalization', t => {
+  const f = fixture(t);
+  prepareNetlify({ appRoot: f.root, apiOrigin: origin });
+  const blocks = new Map();
+  let current;
+  for (const line of fs.readFileSync(path.join(f.dist, '_headers'), 'utf8').split('\n')) {
+    if (!line || line.startsWith('#')) continue;
+    if (!line.startsWith(' ')) blocks.set(current = line, new Map());
+    else {
+      const [name, ...value] = line.trim().split(':');
+      blocks.get(current).set(name.toLowerCase(), value.join(':').trim());
+    }
+  }
+  // The real CDN redirected /Dashboard.html and /Dashboard to /dashboard,
+  // preserving ?portal=super. Verify the final request path, not just the file name.
+  for (const entry of ['/', '/?portal=super', '/Dashboard.html?portal=super',
+    '/dashboard', '/dashboard?portal=super', '/dashboard/?portal=super']) {
+    const pathname = new URL(entry, 'https://site.invalid').pathname;
+    assert.equal(blocks.get(pathname)?.get('cache-control'), 'no-store', entry);
+  }
 });
 
 test('missing origin fails before touching a valid build', t => {

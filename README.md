@@ -25,6 +25,6 @@ The added [Netlify adapter](deploy/netlify/README.md) publishes only the existin
 
 Set an explicitly verified `JKXT_API_ORIGIN` at build time, and set Render `APP_BASE_URL` to the Netlify HTTPS origin. Never put database credentials in Netlify frontend files. This is an app-only export: Netlify's base directory is the repository root, not `JKXT V2.0`.
 
-Local adapter/build/portal checks: 28 tests passed, zero failures or skipped tests on 2026-10-21. These checks do not prove CDN proxying, Cookie/CSRF behavior, cloud login, solver capacity or production acceptance. Cloud delivery remains incomplete until those separate checks pass.
+Local adapter/build/portal checks: 29 tests passed, zero failures or skipped tests on 2026-10-21. A live draft exposed canonical `/dashboard` HTML caching; the minimal header fix and a new regression test passed, and a second draft confirmed `no-store` on both query login entries. These checks do not prove backend CDN proxying, Cookie/CSRF behavior, cloud login, solver capacity or production acceptance. Cloud delivery remains incomplete until those separate checks pass.
 
 `release-manifest.json` remains the immutable original 646-file export inventory from commit `15992e4`. This update adds four Netlify files and revises `.gitignore` and this README; its Git commit identifies the updated snapshot. It does not overwrite the development checkout or merge any historical login-isolation branch.

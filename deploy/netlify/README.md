@@ -24,6 +24,7 @@ For a manual deployment, run the build and adapter successfully before selecting
 | --- | --- |
 | `/` and `/Dashboard.html` | Existing school login |
 | `/?portal=super` and `/Dashboard.html?portal=super` | Existing platform login |
+| `/dashboard` and `/dashboard?portal=super` | CDN-normalized equivalents, with the same portal query |
 | `/Dashboard.html?login=super` or `?entry=super` | Existing legacy platform query aliases |
 | `/api/v1` and `/api/v1/*` | Forced HTTPS proxy to the same path on Render |
 | Missing assets, unknown pages, `/api/v2/*` | No HTML success fallback; normal missing-path response |
@@ -32,7 +33,9 @@ Portal selection remains query-based; the application does not recognize `/schoo
 
 The proxy preserves the API prefix. `200!` declares a forced proxy rewrite, not an instruction to replace every upstream response status with 200. An unknown `/api/v1/*` must be rejected by the actual backend and must never return the Dashboard HTML. Local rule tests do not prove this behavior at the deployed CDN.
 
-Static headers prevent MIME sniffing and framing while leaving legacy inline styles, inline handlers and scripts executable. Only manifest-verified hashed files under `/compiled/` receive immutable caching; unhashed assets receive short caching and HTML is not stored. Netlify's static header rules do **not** apply to proxy responses; Render must provide API security/cache headers. Post-processing is disabled to preserve the named HTML entry and build bytes.
+Static headers prevent MIME sniffing and framing while leaving legacy inline styles, inline handlers and scripts executable. Only manifest-verified hashed files under `/compiled/` receive immutable caching; unhashed assets receive short caching and HTML is not stored. Netlify's static header rules do **not** apply to proxy responses; Render must provide API security/cache headers. Post-processing is disabled to preserve build bytes, but the CDN can still normalize `/Dashboard.html` and `/Dashboard` to `/dashboard` while retaining the query. Cache headers therefore cover the original HTML path, `/dashboard` and `/dashboard/`; no redirect is added to fight CDN normalization.
+
+The first live draft on 2026-10-21 exposed this header gap: `GET /Dashboard.html?portal=super` returned `301 Location: /dashboard?portal=super`, then `200 Cache-Control: public,max-age=0,must-revalidate`, while the root already returned `no-store`. The added canonical-path regression first failed with 13/14 passing (`/dashboard` had no cache rule). This failure is retained; local success after the fix requires a new draft and a separate live HTTP recheck before declaring the deployed cache policy corrected.
 
 ## Verification and known limits
 

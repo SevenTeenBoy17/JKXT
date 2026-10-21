@@ -104,6 +104,12 @@ const staticHeaders = [
   '  Cache-Control: no-store',
   '/Dashboard.html',
   '  Cache-Control: no-store',
+  // Live Netlify normalizes Dashboard.html / Dashboard to /dashboard, even
+  // when build post-processing is skipped. Headers must match the final URL.
+  '/dashboard',
+  '  Cache-Control: no-store',
+  '/dashboard/',
+  '  Cache-Control: no-store',
   '/build-manifest.json',
   '  Cache-Control: no-store',
   '/compiled/*',
