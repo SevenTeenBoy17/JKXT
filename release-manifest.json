@@ -1,11 +1,11 @@
 {
   "releaseName": "jkxt-public-render-free-verify-20261021",
   "deploymentRoute": "netlify-proxy-render-free-neon-singapore-trial",
-  "generatedAt": "2026-10-21T14:21:02.791Z",
+  "generatedAt": "2026-10-21T14:31:57.185Z",
   "sourceRoot": "D:\\VB\\JKXT-release-20261008\\JKXT V2.0",
   "includesUploads": false,
-  "fileCount": 659,
-  "totalBytes": 50361448,
+  "fileCount": 660,
+  "totalBytes": 50367221,
   "forbiddenChecked": [
     ".env",
     ".env.private",
@@ -2761,6 +2761,11 @@
       "sha256": "6af498fde17a27327c5a67b23fda5dbf2b0c53b9e8a6f22a8821f353003fb0ea"
     },
     {
+      "path": "scripts/approval-duty-roles.test.cjs",
+      "bytes": 5578,
+      "sha256": "44ef4e4518a7f1a5628e15501122a4fe380416ca15dab68e268f5ca31197768d"
+    },
+    {
       "path": "scripts/approval-self-review.test.cjs",
       "bytes": 9952,
       "sha256": "21f7ef14509c3886768f5e5c600379e3a728063c396b79a2f1a86bbb49fe5d7d"
@@ -3117,8 +3122,8 @@
     },
     {
       "path": "src/pages/operations-v6-approvals.jsx",
-      "bytes": 32779,
-      "sha256": "ca4d4330a0e68f859b6a23efff63235251885d4da0ef451d67b38b03d8d9ff56"
+      "bytes": 32974,
+      "sha256": "1b1f121a59158ee6dc8eda1ae094f795e26238131f3e0ebb9fad367e3c9e5482"
     },
     {
       "path": "src/pages/operations-v6-emergency.jsx",
@@ -3341,6 +3346,6 @@
       "sha256": "172b90cc705f32fbe132f5e0b4bcb0c13f452eefe6a8f1576a60bcca6b3c58ec"
     }
   ],
-  "baseCommit": "8c1ced2ecd205f2a9522ed7c4675fb42f39cc44c",
+  "baseCommit": "d75f6273ae8a04ce830f2a17f6343783840bd7a3",
   "scope": "Source export only; frontend runtime matches tested candidate. This is not full production acceptance."
 }

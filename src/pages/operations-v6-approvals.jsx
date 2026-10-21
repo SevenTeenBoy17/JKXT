@@ -10,6 +10,13 @@ function ops6WriteResult(value,item,kind){
   return revision;
 }
 const ops6Version=value=>Number.isInteger(value)?`第 ${value} 版`:'版次未提供';
+function ops6DutyRoleLabel(value) {
+  const raw=value==null?'':String(value).trim();
+  if(!raw)return '角色未提供';
+  const labels={CHIEF:'主监考',INVIGILATOR:'监考',ASSISTANT:'副监考',ROAMING:'巡考',RESERVE:'备用监考',MAIN:'主监考'};
+  const code=raw.toUpperCase();
+  return Object.prototype.hasOwnProperty.call(labels,code)?labels[code]:`未识别岗位（${raw}）`;
+}
 const ops6Date=value=>window.opsDate?window.opsDate(value):(!value?'未提供':Number.isNaN(Date.parse(value))?'时间格式异常':new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(value)));
 const ops6Day=value=>!value || Number.isNaN(Date.parse(value))?'':new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));
 function ops6Stage(item) {
@@ -91,10 +98,9 @@ function ops6DutyDiff(before,after) {
 }
 function Ops6DutyComparison({data,revision}) {
   const {changed,uncomparable}=ops6DutyDiff(data.before,data.after);
-  const roleLabel={MAIN:'主监考',ASSISTANT:'副监考',main:'主监考',assistant:'副监考'};
   return <>
     {uncomparable>0&&<p className="ops6-warning">{uncomparable} 条安排缺少场次、时段、角色或教师工号，未纳入自动对比，请核对来源。</p>}
-    {changed.length?<table className="ops6-table ops6-diff-table"><thead><tr><th>变更范围</th><th>来源{ops6Version(data.source.revisionNo)}</th><th>当前{ops6Version(revision.revisionNo)}</th></tr></thead><tbody>{changed.map(g=><tr key={g.key}><td data-label="变更范围"><strong>{g.session} · {roleLabel[g.role]||g.role}</strong><small>{ops6Date(g.starts)} 至 {ops6Date(g.ends)}</small><small>{g.room?`考场 ${g.room}`:'考场：当前接口未提供'}</small></td><td data-label="来源版本">{g.before.length?g.before.map(x=>x.label).join('、'):'该组无安排'}</td><td data-label="当前版本"><strong>{g.after.length?g.after.map(x=>x.label).join('、'):'该组无安排'}</strong></td></tr>)}</tbody></table>:<p>已返回的可比字段未发现人员变化；不代表完整安排完全相同。</p>}
+    {changed.length?<table className="ops6-table ops6-diff-table"><thead><tr><th>变更范围</th><th>来源{ops6Version(data.source.revisionNo)}</th><th>当前{ops6Version(revision.revisionNo)}</th></tr></thead><tbody>{changed.map(g=><tr key={g.key}><td data-label="变更范围"><strong>{g.session} · {ops6DutyRoleLabel(g.role)}</strong><small>{ops6Date(g.starts)} 至 {ops6Date(g.ends)}</small><small>{g.room?`考场 ${g.room}`:'考场：当前接口未提供'}</small></td><td data-label="来源版本">{g.before.length?g.before.map(x=>x.label).join('、'):'该组无安排'}</td><td data-label="当前版本"><strong>{g.after.length?g.after.map(x=>x.label).join('、'):'该组无安排'}</strong></td></tr>)}</tbody></table>:<p>已返回的可比字段未发现人员变化；不代表完整安排完全相同。</p>}
     <p className="ops6-note">按场次、时段、角色及已提供的考场分组比较人员名单，不把同组人员逐一推断为替换关系。</p>
     <details><summary>展开两版原始安排</summary><div className="ops6-raw-compare"><section><h3>来源版本</h3><pre>{JSON.stringify(data.before,null,2)}</pre></section><section><h3>当前版本</h3><pre>{JSON.stringify(data.after,null,2)}</pre></section></div></details>
   </>;
@@ -142,10 +148,9 @@ function Ops6VersionArrangement({item,revision,onClose}) {
     return ops6List(await window.api.examPlans.assignments(item.revisionId));
   },[item.planId,item.revisionId]);
   const [state,reload]=useLiveResource(load,[load]);
-  const role={main:'主监考',assistant:'副监考',MAIN:'主监考',ASSISTANT:'副监考'};
   return <window.BlueprintDrawer className="ops6 ops6-version-drawer" title={`${ops6Version(revision.revisionNo)} · 监考安排`} description="只读核查此版本，不跳转或自动切换最新版。" onClose={onClose} footer={<Button onClick={onClose}>返回版本审阅</Button>}>
     <div className="ops6-object"><strong>{item.planName}</strong><p>{ops6Version(revision.revisionNo)} · {OPS6_STATUS[revision.status]||revision.status}</p></div>
-    {state.status!=='ready'?<Ops6State state={state} onRetry={reload} label="版本安排"/>:!state.data.length?<p className="ops6-empty">此版本未返回监考安排。</p>:<table className="ops6-table"><thead><tr><th>场次与时段</th><th>监考教师</th><th>岗位</th></tr></thead><tbody>{state.data.map((x,i)=><tr key={x.id||i}><td data-label="场次与时段"><strong>{x.session_external_code||x.sessionCode||'场次未提供'}</strong><small>{ops6Date(x.starts_at||x.startsAt)} 至 {ops6Date(x.ends_at||x.endsAt)}</small></td><td data-label="监考教师">{x.teacher_name||x.teacherName||'姓名未提供'}<small>{x.teacher_no||x.teacherNo||'工号未提供'}</small></td><td data-label="岗位">{role[x.duty_role||x.dutyRole||x.role]||'角色未提供'}</td></tr>)}</tbody></table>}
+    {state.status!=='ready'?<Ops6State state={state} onRetry={reload} label="版本安排"/>:!state.data.length?<p className="ops6-empty">此版本未返回监考安排。</p>:<table className="ops6-table"><thead><tr><th>场次与时段</th><th>监考教师</th><th>岗位</th></tr></thead><tbody>{state.data.map((x,i)=><tr key={x.id||i}><td data-label="场次与时段"><strong>{x.session_external_code||x.sessionCode||'场次未提供'}</strong><small>{ops6Date(x.starts_at||x.startsAt)} 至 {ops6Date(x.ends_at||x.endsAt)}</small></td><td data-label="监考教师">{x.teacher_name||x.teacherName||'姓名未提供'}<small>{x.teacher_no||x.teacherNo||'工号未提供'}</small></td><td data-label="岗位">{ops6DutyRoleLabel(x.duty_role||x.dutyRole||x.role)}</td></tr>)}</tbody></table>}
     <p className="ops6-note">考场关联当前接口未提供。安排仅为当前查询到的版本记录，不表示教师已接受岗位。</p>
   </window.BlueprintDrawer>;
 }
